@@ -1,18 +1,6 @@
-asgiref
-attrs
-backports.zoneinfo
-Django
-flake8
-gunicorn
-iniconfig
-mccabe
-packaging
-pluggy
-py
-pycodestyle
-pyflakes
-pyparsing
-pytest
-python-dotenv
-sqlparse
-toml
+python = "3.8"
+Django = "4.0"
+python-dotenv = "0.19.2"
+pytest = "6.2.5"
+flake8 = "4.0.1"
+gunicorn = "20.1.0"
