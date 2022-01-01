@@ -9,6 +9,7 @@ packages = [{include = 'task_manager'}]
 python = "^3.8"
 Django = "^4.0"
 python-dotenv = "^0.19.2"
+django-bootstrap4 = "^21.2"
 
 
 [tool.poetry.dev-dependencies]
