@@ -2,10 +2,6 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% block content %}
-
-  <h1 class="my-4">
-      {% translate title %}
-  </h1>
 <form method="post">
     {% csrf_token %}
     {% for f in form %}

@@ -1,30 +1,47 @@
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, ListView
 
 from task_manager.forms import RegisterUserForm, LoginUserForm
 
 
-class Index(TemplateView):
-    template_name = 'main.html'
+class Users(ListView):
+    model = User
+    template_name = 'users.html'
+    context_object_name = 'users'
 
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Users"
+        return context
 
-def users(request):
-    return HttpResponse('Users')
+    def get_queryset(self):
+        return self.model.objects.all()
 
 def statuses(request):
     return HttpResponse('Statuses')
 
+
 def labels(request):
     return HttpResponse('Labels')
 
+
 def tasks(request):
     return HttpResponse('Tasks')
+
+
+def user_update(request, id):
+    return HttpResponse('Update user')
+
+
+def user_delete(request, id):
+    return HttpResponse('Delete user')
 
 
 class RegisterUser(CreateView):

@@ -15,16 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
+
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.Index.as_view(), name='home'),
-    path('users/', views.users, name='users'),
+    path('', TemplateView.as_view(template_name='main.html'), name='home'),
+    path('users/', views.Users.as_view(), name='users'),
     path('login/', views.LoginUser.as_view(), name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('users/create/', views.RegisterUser.as_view(), name='registration'),
     path('statuses/', views.statuses, name='statuses'),
     path('labels/', views.labels, name='labels'),
-    path('tasks/', views.tasks, name='tasks')
+    path('tasks/', views.tasks, name='tasks'),
+    path('users/<int:id>/update', views.user_update, name='update_user'),
+    path('users/<int:id>/delete', views.user_delete, name='delete_user')
 ]

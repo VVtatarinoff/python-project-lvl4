@@ -133,3 +133,15 @@ msgstr "Метки"
 
 msgid "Tasks"
 msgstr "Задачи"
+
+msgid "Full name"
+msgstr "Полное имя"
+
+msgid "Creation date"
+msgstr "Дата создания"
+
+msgid "Change"
+msgstr "Изменить"
+
+msgid "Delete"
+msgstr "Удалить"

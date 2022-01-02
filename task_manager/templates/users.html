@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% block content %}
+<table class="table table-stripped">
+    <thead>
+    <th>{% translate 'ID' %}</th>
+    <th>{% translate 'User name' %}</th>
+    <th>{% translate 'Full name' %}</th>
+    <th>{% translate 'Creation date' %}</th>
+    <th></th>
+    </thead>
+    <tbody>
+    {% for u in users %}
+    <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username}}</td>
+        <td>{{ u.first_name}} {{ u.last_name }}</td>
+        <td>{{ u.date_joined }}</td>
+        <td>
+            <a href={% url 'update_user' u.id %}>{% translate 'Change' %}</a>
+            <br>
+            <a href={% url 'delete_user' u.id %}>{% translate 'Delete' %}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
