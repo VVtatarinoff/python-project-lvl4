@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% block content %}
+
+  <h1 class="my-4">
+      {% translate title %}
+  </h1>
+<form method="post">
+    {% csrf_token %}
+    {% for f in form %}
+        <div class="form-group">
+        <label class="form-label" for ="{{ f.id_for_label }}">{{ f.label }}</label>
+            {{ f }}
+        {% if f.help_text %}
+        <small class="form-text text-muted">{{ f.help_text }}</small>
+        {% endif %}
+        <div class="form-error">{{ f.errors }}</div>
+        </div>
+    {% endfor %}
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value={% translate btn_name %}>
+    </div>
+</form>
+
+
+{% endblock content %}

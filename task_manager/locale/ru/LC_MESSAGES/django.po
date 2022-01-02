@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-31 16:10+0300\n"
+"POT-Creation-Date: 2022-01-02 17:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,27 +20,116 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: templates/base.html:6 templates/main.html:6
+#: forms.py:11 forms.py:13
+msgid "Name"
+msgstr "Имя"
+
+#: forms.py:14 forms.py:18
+msgid "Last name"
+msgstr "Фамилия"
+
+#: forms.py:19 forms.py:26 forms.py:47 forms.py:50
+msgid "User name"
+msgstr "Имя пользователя"
+
+#: forms.py:21
+msgid ""
+"Required field. Not more than 150 symbols, only letters, numbers and symbols "
+"@/./+/-/_."
+msgstr ""
+"Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./"
+"+/-/_."
+
+#: forms.py:27 forms.py:32 forms.py:51 forms.py:54
+msgid "Password"
+msgstr ""
+
+#: forms.py:28
+msgid "Your password should be at least 3 symbols"
+msgstr "Ваш пароль должен содержать как минимум 3 символа."
+
+#: forms.py:33 forms.py:38
+msgid "Confirmation of password"
+msgstr "Подтверждение пароля"
+
+#: forms.py:34
+msgid "Please repeat your password for confirmation"
+msgstr "Для подтверждения введите, пожалуйста, пароль ещё раз."
+
+#: settings.py:115
+msgid "English"
+msgstr ""
+
+#: settings.py:116
+msgid "Russian"
+msgstr ""
+
+#: templates/base.html:12
 msgid "Task manager Hexlet"
 msgstr "Менеджер задач Hexlet"
 
+#: templates/base.html:23
 msgid "Task manager"
 msgstr "Менеджер задач"
 
+#: templates/base.html:26
 msgid "Users"
 msgstr "Пользователи"
 
-msgid "Enter"
+#: templates/base.html:37
+msgid "Logout"
+msgstr "Выход"
+
+#: templates/base.html:43
+msgid "Login"
 msgstr "Вход"
 
+#: templates/base.html:46
 msgid "Register"
 msgstr "Регистрация"
 
+#: templates/login.html:22
+msgid "Enter"
+msgstr "Войти"
+
+#: templates/main.html:5
 msgid "Hello from Hexlet!"
 msgstr "Привет от Хекслета!"
 
+#: templates/main.html:7
 msgid "Practical courses for coding"
 msgstr "Практические курсы по программированию."
 
+#: templates/main.html:8
 msgid "Learn more"
 msgstr "Узнать больше"
+
+#: templates/registration.html:22
+msgid "Register user"
+msgstr "Зарегистрировать"
+
+#: views.py:45
+msgid "Successful registration"
+msgstr "Пользователь успешно зарегистрирован"
+
+#: views.py:58
+msgid "Successful login"
+msgstr "Вы залогинены"
+
+msgid "Registration"
+msgstr "Регистрация"
+
+msgid "Authorization"
+msgstr "Вход"
+
+msgid "You are logged out"
+msgstr "Вы разлогинены"
+
+msgid "Statuses"
+msgstr "Статусы"
+
+msgid "Labels"
+msgstr "Метки"
+
+msgid "Tasks"
+msgstr "Задачи"
