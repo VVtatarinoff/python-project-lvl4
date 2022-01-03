@@ -1,11 +1,11 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
-from django.contrib.auth.views import LoginView
+from django.forms import ModelForm
 from django.utils.translation import gettext as _
 
 
-class RegisterUserForm(UserCreationForm):
+class UserMixin(ModelForm):
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': _('Name')}),
@@ -41,6 +41,20 @@ class RegisterUserForm(UserCreationForm):
         model = User
         fields = ('first_name', 'last_name',
                   'username', 'password1', 'password2')
+
+
+class RegisterUserForm(UserMixin, UserCreationForm):
+    pass
+
+
+class ChangeUserForm(UserMixin, UserChangeForm):
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
 
 
 class LoginUserForm(AuthenticationForm):

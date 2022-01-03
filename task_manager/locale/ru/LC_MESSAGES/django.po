@@ -145,3 +145,18 @@ msgstr "Изменить"
 
 msgid "Delete"
 msgstr "Удалить"
+
+msgid "You are not authorized. Please log in"
+msgstr "Вы не авторизованы! Пожалуйста, выполните вход."
+
+msgid "You have no authorization to handle this action"
+msgstr "У вас нет прав для изменения другого пользователя."
+
+msgid "Invalid pair user-password"
+msgstr "Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут быть чувствительны к регистру."
+
+msgid "User data was changed"
+msgstr "Пользователь успешно изменён"
+
+msgid "Change user data"
+msgstr "Изменение пользователя "

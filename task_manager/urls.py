@@ -24,11 +24,11 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='main.html'), name='home'),
     path('users/', views.Users.as_view(), name='users'),
     path('login/', views.LoginUser.as_view(), name='login'),
-    path('logout/', views.logout_user, name='logout'),
+    path('logout/', views.LogOut.as_view(), name='logout'),
     path('users/create/', views.RegisterUser.as_view(), name='registration'),
-    path('statuses/', views.statuses, name='statuses'),
-    path('labels/', views.labels, name='labels'),
-    path('tasks/', views.tasks, name='tasks'),
-    path('users/<int:id>/update', views.user_update, name='update_user'),
-    path('users/<int:id>/delete', views.user_delete, name='delete_user')
+    path('statuses/', views.Statuses.as_view(), name='statuses'),
+    path('labels/', views.Labels.as_view(), name='labels'),
+    path('tasks/', views.Tasks.as_view(), name='tasks'),
+    path('users/<int:pk>/update', views.UserUpdate.as_view(), name='update_user'),
+    path('users/<int:pk>/delete', views.UserDelete.as_view(), name='delete_user')
 ]

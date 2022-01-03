@@ -1,14 +1,33 @@
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, TemplateView, ListView
+from django.views.generic import CreateView, ListView, TemplateView, UpdateView
+from task_manager.forms import RegisterUserForm, LoginUserForm, ChangeUserForm
 
-from task_manager.forms import RegisterUserForm, LoginUserForm
+
+class LoginRequiredMessage(AccessMixin):
+    login_url = 'home'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(self.request, _('You are not authorized. Please log in'))
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class UserCanEditProfile(AccessMixin):
+    login_url = 'home'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser and kwargs['pk'] != self.request.user.id:
+            messages.error(self.request, _('You have no authorization to handle this action'))
+            return redirect(self.login_url)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class Users(ListView):
@@ -24,40 +43,59 @@ class Users(ListView):
     def get_queryset(self):
         return self.model.objects.all()
 
-def statuses(request):
-    return HttpResponse('Statuses')
+
+class Statuses(LoginRequiredMessage, ListView):
+    template_name = 'main.html'
 
 
-def labels(request):
-    return HttpResponse('Labels')
+class Labels(LoginRequiredMessage, ListView):
+    template_name = 'main.html'
 
 
-def tasks(request):
-    return HttpResponse('Tasks')
+class Tasks(LoginRequiredMessage, ListView):
+    template_name = 'main.html'
 
 
-def user_update(request, id):
-    return HttpResponse('Update user')
+class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
+    form_class = ChangeUserForm
+    template_name = 'authorization.html'
+    model = User
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Change user data"
+        context['btn_name'] = "Change"
+        return context
+
+    #def get_queryset(self):
+    #    return self.model.objects.filter(id=self.request.user.id)
+
+    def get_success_url(self):
+        messages.success(self.request, _('User data was changed'))
+        logout(self.request)
+        return reverse_lazy('home')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return
 
 
-def user_delete(request, id):
-    return HttpResponse('Delete user')
+class UserDelete(LoginRequiredMessage, UserCanEditProfile, TemplateView):
+    template_name = 'main.html'
 
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'authorization.html'
-    # success_url = reverse_lazy('login')
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Registration"
         context['btn_name'] = "Register user"
         return context
-        # context = super().get_context_data(**kwargs)
-    #    c_def = self.get_user_context(title="Registration")
-        # return dict(list(context.items()) + list(c_def.items()))
-    #    return c_def
 
     def get_success_url(self):
         messages.success(self.request, _('Successful registration'))
@@ -78,8 +116,12 @@ class LoginUser(LoginView):
         messages.success(self.request, _('Successful login'))
         return reverse_lazy('home')
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('Invalid pair user-password'))
+        return super().form_invalid(form)
 
-def logout_user(request):
-    logout(request)
-    messages.info(request, _('You are logged out'))
-    return redirect('home')
+
+class LogOut(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(self.request, _('You are logged out'))
+        return super().dispatch(request, *args, **kwargs)
