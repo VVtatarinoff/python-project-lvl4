@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% block content %}
+<table class="table table-stripped">
+    <thead>
+    {% for t_head in table_heads %}
+    <th>{{ t_head }}</th>
+    {% endfor %}
+    <th></th>
+    </thead>
+    <tbody>
+    {% for u in table %}
+    <tr>
+        {% for c in u %}
+        <td>{{ c }}</td>
+        {% endfor %}
+        <td>
+            <a href={% url update_link u.id %}>{% translate 'Change' %}</a>
+            <br>
+            <a href={% url delete_link  u.id %}>{% translate 'Delete' %}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

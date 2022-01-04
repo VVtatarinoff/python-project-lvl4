@@ -3,6 +3,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
@@ -34,16 +36,24 @@ class UserCanEditProfile(AccessMixin):
 
 class Users(ListView):
     model = User
-    template_name = 'users.html'
-    context_object_name = 'users'
+    template_name = 'table.html'
+    context_object_name = 'table'
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Users"
+        context['update_link'] = 'update_user'
+        context['delete_link'] = 'delete_user'
+        context['table_heads'] = ('ID', _('User name'),
+                                  _('Full name'), _('Creation date'))
         return context
 
     def get_queryset(self):
-        return self.model.objects.all()
+        q = self.model.objects.values_list('id', 'username',
+                                           Concat('first_name',
+                                                  Value(' '), 'last_name'),
+                                           'date_joined', named=True)
+        return q
 
 
 class Statuses(LoginRequiredMessage, ListView):
@@ -77,18 +87,10 @@ class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
         logout(self.request)
         return reverse_lazy('home')
 
-#    def save(self, commit=True):
-#        user = super().save(commit=False)
-#        user.set_password(self.cleaned_data["password1"])
-#        if commit:
-#            user.save()
-#        return
-
 
 class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
     template_name = 'delete_user.html'
     model = User
-    # form_class = DeleteUserForm
     user_to_delete = None
     id_to_delete = None
 
