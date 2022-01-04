@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
 from django.utils.translation import gettext_lazy as _
 
@@ -27,10 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-ENGINE = os.getenv("ENGINE")
-DB_NAME = os.getenv("DB_NAME")
+# ENGINE = os.getenv("ENGINE")
+# DB_NAME = os.getenv("DB_NAME")
+DEBUG = bool(os.getenv('DEBUG', True))
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
                  'ancient-gorge-78100.herokuapp.com',
@@ -83,13 +85,16 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+db_from_env = dj_database_url.config(conn_max_age=500)
 
 DATABASES = {
     'default': {
-        'ENGINE': ENGINE,
-        'NAME': BASE_DIR / DB_NAME,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# Heroku: Update database configuration from $DATABASE_URL.
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
