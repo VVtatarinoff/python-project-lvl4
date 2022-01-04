@@ -28,14 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-# ENGINE = os.getenv("ENGINE")
-# DB_NAME = os.getenv("DB_NAME")
-DEBUG = bool(os.getenv('DEBUG', True))
+DEBUG = (os.getenv('DEBUG') == 'True')
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
                  'ancient-gorge-78100.herokuapp.com',
+                 'www.ancient-gorge-78100.herokuapp.com',
                  '127.0.0.1']
 
 # Application definition
@@ -80,7 +79,11 @@ TEMPLATES = [
         },
     },
 ]
-
+OPTIONS = {
+    'libraries': {
+        'admin.urls': 'django.contrib.admin.templatetags.admin_urls',
+    },
+}
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 # Database
