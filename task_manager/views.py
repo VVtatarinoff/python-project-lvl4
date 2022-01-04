@@ -8,8 +8,8 @@ from django.db.models.functions import Concat
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, ListView, TemplateView, UpdateView
-from django.views.generic.edit import FormView, DeleteView
+from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic.edit import DeleteView
 
 from task_manager.forms import RegisterUserForm, LoginUserForm, ChangeUserForm
 
@@ -52,7 +52,9 @@ class Users(ListView):
         q = self.model.objects.values_list('id', 'username',
                                            Concat('first_name',
                                                   Value(' '), 'last_name'),
-                                           'date_joined', named=True)
+                                           'date_joined',
+                                           named=True).exclude(
+            is_superuser=True)
         return q
 
 

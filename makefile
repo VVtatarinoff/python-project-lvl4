@@ -2,7 +2,8 @@ install:
 	poetry install
 
 tests:
-	poetry run pytest -vv
+	poetry run python manage.py test -v2
+
 
 coverage:
 	poetry run pytest --cov=page_loader
@@ -19,8 +20,8 @@ lint:
 	poetry run flake8 page_loader
 
 translate:
-    django-admin makemessages -l ru
-    django-admin compilemessages
+	django-admin makemessages -l ru
+	django-admin compilemessages
 
 command_prompt:
 	export PS1="\W ($(git branch 2>/dev/null | grep '^*' | colrm 1 2)) $ "
