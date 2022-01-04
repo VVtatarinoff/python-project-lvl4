@@ -2,13 +2,14 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% block content %}
+<p>{{ message }}</p>
 <form method="post">
     {% csrf_token %}
     {% for f in form %}
         <div class="form-group">
         <label class="form-label" for ="{{ f.id_for_label }}">{{ f.label }}</label>
             {{ f }}
-            <div class="form-error text-error">{{ f.errors }}</div>
+            <div class="form-error text-danger">{{ f.errors }}</div>
         {% if f.help_text %}
         <small class="form-text text-muted">{{ f.help_text }}</small>
         {% endif %}
@@ -16,7 +17,7 @@
         </div>
     {% endfor %}
     <div class="form-group">
-        <input class="btn btn-primary" type="submit" value={% translate btn_name %}>
+        <input class="btn btn-primary" type="submit" value='{% translate btn_name %}'>
     </div>
 </form>
 

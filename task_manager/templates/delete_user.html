@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% block content %}
+<p>{{ message }}</p>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <input class="btn btn-danger" type="submit" value='{% translate btn_name %}'>
+    </div>
+</form>
+{% endblock content %}

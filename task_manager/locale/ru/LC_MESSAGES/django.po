@@ -159,4 +159,16 @@ msgid "User data was changed"
 msgstr "Пользователь успешно изменён"
 
 msgid "Change user data"
-msgstr "Изменение пользователя "
+msgstr "Изменение пользователя"
+
+msgid "Delete user"
+msgstr "Удаление пользователя"
+
+msgid "Yes, delete"
+msgstr "Да, удалить"
+
+msgid "Are you sure you want to delete"
+msgstr "Вы уверены, что хотите удалить"
+
+msgid "User was successfully deleted"
+msgstr "Пользователь успешно удалён"
