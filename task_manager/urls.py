@@ -17,18 +17,21 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from . import views
+import task_manager.views.users as users
+import task_manager.views.labels as labels
+import task_manager.views.statuses as statuses
+import task_manager.views.tasks as tasks
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='main.html'), name='home'),
-    path('users/', views.Users.as_view(), name='users'),
-    path('login/', views.LoginUser.as_view(), name='login'),
-    path('logout/', views.LogOut.as_view(), name='logout'),
-    path('users/create/', views.RegisterUser.as_view(), name='registration'),
-    path('statuses/', views.Statuses.as_view(), name='statuses'),
-    path('labels/', views.Labels.as_view(), name='labels'),
-    path('tasks/', views.Tasks.as_view(), name='tasks'),
-    path('users/<int:pk>/update', views.UserUpdate.as_view(), name='update_user'),
-    path('users/<int:pk>/delete', views.UserDelete.as_view(), name='delete_user')
+    path('users/', users.Users.as_view(), name='users'),
+    path('login/', users.LoginUser.as_view(), name='login'),
+    path('logout/', users.LogOut.as_view(), name='logout'),
+    path('users/create/', users.RegisterUser.as_view(), name='registration'),
+    path('statuses/', statuses.Statuses.as_view(), name='statuses'),
+    path('labels/', labels.Labels.as_view(), name='labels'),
+    path('tasks/', tasks.Tasks.as_view(), name='tasks'),
+    path('users/<int:pk>/update', users.UserUpdate.as_view(), name='update_user'),
+    path('users/<int:pk>/delete', users.UserDelete.as_view(), name='delete_user')
 ]
