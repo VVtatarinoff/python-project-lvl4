@@ -2,31 +2,34 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
 from task_manager.forms.statuses_forms import CreateStatusForm
 from task_manager.views.general import LoginRequiredMessage
 from task_manager.models import Status
-from task_manager.views.general import TableView
+from task_manager.views.general import QUARIES, TITLES, TABLE_HEADS
+from task_manager.views.general import CREATE_LINKS, UPDATE_LINKS,DELETE_LINKS
 
 
-class Statuses(LoginRequiredMessage, TableView):
-    def __init__(self):
-        kwargs = dict()
-        kwargs['model'] = Status
-        kwargs['title'] = "Statuses"
-        kwargs['update_link'] = 'update_status'
-        kwargs['delete_link'] = 'delete_status'
-        kwargs['table_heads'] = ('ID', _('Name'), _('Creation date'))
-        kwargs['create_link'] = 'create_status'
-        kwargs['create_title'] = _('Create status')
-        super().__init__(**kwargs)
+class Statuses(LoginRequiredMessage,ListView):
+    model = Status
+    template_name = 'table.html'
+    context_object_name = 'table'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        category = 'statuses'
+        context = super().get_context_data(**kwargs)
+        context['title'] = TITLES[category]
+        context['table_heads'] = TABLE_HEADS[category]
+        context['create_path'] = CREATE_LINKS[category]['name']
+        context['create_path_name'] = CREATE_LINKS[category]['title']
+        context['update_link'] = UPDATE_LINKS[category]
+        context['delete_link'] = DELETE_LINKS[category]
+        context['cat'] = category
+        return context
 
     def get_queryset(self):
-        q = self.model.objects.values_list('id', 'name',
-                                           'creation_date',
-                                           named=True)
-        return q
+        return QUARIES['statuses']
 
 
 class CreateStatus(CreateView):

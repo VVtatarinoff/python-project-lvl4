@@ -3,7 +3,10 @@ from django.contrib.auth.mixins import AccessMixin
 from django.shortcuts import redirect
 from django.utils.translation import gettext as _
 from django.views.generic import ListView
-
+from task_manager.models import Status, Label, Task
+from django.contrib.auth.models import User
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 class LoginRequiredMessage(AccessMixin):
     login_url = 'home'
@@ -25,25 +28,81 @@ class UserCanEditProfile(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
+STATUS_CATEGORY = 'statuses'
+LABEL_CATEGORY = 'labels'
+TASK_CATEGORY = 'tasks'
+USER_CATEGORY = 'users'
+
+TITLES = {STATUS_CATEGORY: _("Statuses"),
+          LABEL_CATEGORY: _("Labels"),
+          TASK_CATEGORY: _("Tasks"),
+          USER_CATEGORY: _("Users")}
+
+TABLE_HEADS = {STATUS_CATEGORY: ('ID', _('Name'), _('Creation date')),
+               LABEL_CATEGORY: ('ID', _('Name'), _('Creation date')),
+               TASK_CATEGORY: ('ID', _('Name'), _('Status'), _('Author'), _('Executor'), _('Creation date')),
+               USER_CATEGORY: ('ID', _('User name'),
+                               _('Full name'), _('Creation date'))}
+
+CREATE_LINKS = {STATUS_CATEGORY: {'name': 'create_status', 'title': _('Create status')},
+                LABEL_CATEGORY: {'name': 'create_label', 'title': _('Create label')},
+                TASK_CATEGORY: {'name': 'create_task', 'title': _('Create task')},
+                USER_CATEGORY: {'name': '', 'title': ''}}
+DELETE_LINKS = {STATUS_CATEGORY: 'delete_status',
+                LABEL_CATEGORY: 'delete_label',
+                TASK_CATEGORY: 'delete_task',
+                USER_CATEGORY: 'delete_user'}
+UPDATE_LINKS = {STATUS_CATEGORY: 'update_status',
+                LABEL_CATEGORY: 'update_label',
+                TASK_CATEGORY: 'update_task',
+                USER_CATEGORY: 'update_user'}
+MODELS = {STATUS_CATEGORY: Status,
+          LABEL_CATEGORY: Label,
+          TASK_CATEGORY: Task,
+          USER_CATEGORY: User}
+
+QUARIES = {STATUS_CATEGORY: Status.objects.values_list('id', 'name',
+                                           'creation_date',
+                                           named=True),
+           LABEL_CATEGORY: Label.objects.values_list('id', 'name',
+                                           'creation_date',
+                                           named=True),
+           TASK_CATEGORY: Task.objects.values_list('id', 'name', 'status__name',
+                                           Concat('author__first_name',
+                                                  Value(' '), 'author__last_name'),
+                                           Concat('executor__first_name',
+                                                  Value(' '), 'executor__last_name'),
+                                           'creation_date',
+                                           named=True),
+           USER_CATEGORY: User.objects.values_list('id', 'username',
+                                           Concat('first_name',
+                                                  Value(' '), 'last_name'),
+                                           'date_joined',
+                                           named=True).exclude(
+            is_superuser=True)
+           }
+
+def get_content_for_list_vew(category):
+    return {'title': TITLES[category],
+            'table_heads': TABLE_HEADS[category],
+            'create_path': CREATE_LINKS[category]['name'],
+            'create_path_name': CREATE_LINKS[category]['title'],
+            'update_link': UPDATE_LINKS[category],
+            'delete_link': DELETE_LINKS[category]}
+
 class TableView(ListView):
-    def __init__(self, model, title, update_link, delete_link, table_heads, create_link=None, create_title=None):
+    def __init__(self, update_link,
+                 delete_link, category=None):
         super().__init__()
-        self.model = model
         self.template_name = 'table.html'
         self.context_object_name = 'table'
-        self.title = title
         self.update_link = update_link
         self.delete_link = delete_link
-        self.table_heads = table_heads
-        self.create_link = create_link
-        self.create_title = create_title
+        self.cat = category
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = self.title
         context['update_link'] = self.update_link
         context['delete_link'] = self.delete_link
-        context['create_link'] = self.create_link
-        context['create_title'] = self.create_title
-        context['table_heads'] = self.table_heads
+        context['cat'] = self.cat
         return context

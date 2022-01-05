@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load bootstrap4 %}
 {% bootstrap_css %}
-{% load my_tags %}
+{% load menu_tags %}
 <html>
 <head>
 
@@ -46,11 +46,26 @@
 {% endblock mainmenu %}
 <div class="container mt-5 pt-4">
     {% bootstrap_messages %}
+        {% block title %}
+
      <h1 class="my-4">{% translate title %}</h1>
+        {% endblock title %}
  </div>
 <div class="container wrapper flex-grow-1">
 
 {% block content %}
+
+    {% block filter %}
+    {% endblock filter %}
+
+    {% block creationlink %}
+    {% endblock creationlink %}
+
+    {% block tablehead %}
+    {% endblock tablehead %}
+
+    {% block tablecontent %}
+    {% endblock tablecontent %}
 
 {% endblock content %}
 </div>

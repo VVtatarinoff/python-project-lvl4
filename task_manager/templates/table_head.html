@@ -1,0 +1,11 @@
+{% load bootstrap4 %}
+        {% block title %}
+
+     <h1 class="my-4">{{ title }}</h1>
+        {% endblock title %}
+    <thead>
+        {% for t_head in table_heads %}
+        <th>{{ t_head }}</th>
+        {% endfor %}
+        <th></th>
+    </thead>

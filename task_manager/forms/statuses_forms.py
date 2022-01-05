@@ -38,5 +38,5 @@ class CreateTaskForm(ModelForm):
 
     class Meta:
         model = Task
-        fields = ('name', 'description', 'status', 'executor', 'author')
+        fields = ('name', 'description', 'status', 'executor', 'author', 'labels')
         # exclude = ('author',)

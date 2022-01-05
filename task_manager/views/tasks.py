@@ -1,32 +1,37 @@
 from django.contrib import messages
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
 from task_manager.forms.statuses_forms import CreateStatusForm, CreateLabelForm, CreateTaskForm
 from task_manager.views.general import LoginRequiredMessage
 from task_manager.models import Task
-from task_manager.views.general import TableView
+from task_manager.views.general import QUARIES, TITLES, TABLE_HEADS
+from task_manager.views.general import CREATE_LINKS, UPDATE_LINKS,DELETE_LINKS
 
 
-class Tasks(LoginRequiredMessage, TableView):
-    def __init__(self):
-        kwargs = dict()
-        kwargs['model'] = Task
-        kwargs['title'] = "Tasks"
-        kwargs['update_link'] = 'update_task'
-        kwargs['delete_link'] = 'delete_task'
-        kwargs['table_heads'] = ('ID', _('Name'), _('Status'), _('Author'), _('Executor'), _('Creation date'))
-        kwargs['create_link'] = 'create_task'
-        kwargs['create_title'] = _('Create task')
-        super().__init__(**kwargs)
+class Tasks(LoginRequiredMessage, ListView):
+    model = Task
+    template_name = 'table.html'
+    context_object_name = 'table'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        category = 'tasks'
+        context = super().get_context_data(**kwargs)
+        context['title'] = TITLES[category]
+        context['table_heads'] = TABLE_HEADS[category]
+        context['create_path'] = CREATE_LINKS[category]['name']
+        context['create_path_name'] = CREATE_LINKS[category]['title']
+        context['update_link'] = UPDATE_LINKS[category]
+        context['delete_link'] = DELETE_LINKS[category]
+        context['cat'] = category
+        return context
 
     def get_queryset(self):
-        q = self.model.objects.values_list('id', 'name', 'status', 'author', 'executor',
-                                           'creation_date',
-                                           named=True)
-        return q
+        return QUARIES['tasks']
 
 
 class CreateTask(CreateView):
@@ -51,6 +56,7 @@ class CreateTask(CreateView):
         print(kwargs)
         kwargs['id'] = self.request.user.id
         return kwargs
+
 
 def del_task(request):
     return render(request, "main.html")
