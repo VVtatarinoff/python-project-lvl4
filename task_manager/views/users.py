@@ -6,27 +6,26 @@ from django.db.models import Value
 from django.db.models.functions import Concat
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, UpdateView
 from django.views.generic.edit import DeleteView
 
-from task_manager.forms.user_form import RegisterUserForm
-from task_manager.forms.user_form import LoginUserForm, ChangeUserForm
+from task_manager.forms.users_forms import RegisterUserForm
+from task_manager.forms.users_forms import LoginUserForm, ChangeUserForm
 from task_manager.views.general import LoginRequiredMessage, UserCanEditProfile
+from task_manager.views.general import TableView
 
 
-class Users(ListView):
-    model = User
-    template_name = 'table.html'
-    context_object_name = 'table'
+class Users(TableView):
 
-    def get_context_data(self, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Users"
-        context['update_link'] = 'update_user'
-        context['delete_link'] = 'delete_user'
-        context['table_heads'] = ('ID', _('User name'),
-                                  _('Full name'), _('Creation date'))
-        return context
+    def __init__(self):
+        kwargs = dict()
+        kwargs['model'] = User
+        kwargs['title'] = "Users"
+        kwargs['update_link'] = 'update_user'
+        kwargs['delete_link'] = 'delete_user'
+        kwargs['table_heads'] = ('ID', _('User name'),
+                                 _('Full name'), _('Creation date'))
+        super().__init__(**kwargs)
 
     def get_queryset(self):
         q = self.model.objects.values_list('id', 'username',

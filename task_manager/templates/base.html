@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load bootstrap4 %}
 {% bootstrap_css %}
-
+{% load my_tags %}
 <html>
 <head>
 
@@ -19,55 +19,37 @@
         <div class="col-md align-self-center">
             <div class="d-flex flex-row bd-highlight">
                 <nav class="nav nav-tabs">
+                    {% main_menu authorized=request.user.is_authenticated as menu %}
+                    {% for m in menu %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'home' %}">{% translate 'Task manager' %}</a>
+                        <a class="nav-link {{ m.active }}" href="{% url m.path %}">{{ m.title }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users' %}">{% translate 'Users' %}</a>
-                    </li>
-                    {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'statuses' %}">{% translate 'Statuses' %}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'labels' %}">{% translate 'Labels' %}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tasks' %}">{% translate 'Tasks' %}</a>
-                    </li>
-                    {% endif %}
+                    {% endfor %}
                 </nav>
             </div>
         </div>
 
         <div class="col-sm">
             <div class="d-flex flex-row-reverse bd-highlight">
-                {% if request.user.is_authenticated %}
                 <nav class="nav nav-tabs">
+                    {% login_menu authorized=request.user.is_authenticated as l_menu %}
+                    {% for m in l_menu %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">{% translate 'Logout' %}</a>
+                        <a class="nav-link" href="{% url m.path %}">{{ m.title }}</a>
                     </li>
+                    {% endfor %}
                 </nav>
-                {% else %}
-                <nav class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">{% translate 'Login' %}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'registration' %}">{% translate 'Register' %}</a>
-                    </li>
-                </nav>
-                {% endif %}
             </div>
         </div>
     </div>
 </div>
 {% endblock mainmenu %}
 <div class="container mt-5 pt-4">
+    {% bootstrap_messages %}
      <h1 class="my-4">{% translate title %}</h1>
  </div>
 <div class="container wrapper flex-grow-1">
-    {% bootstrap_messages %}
+
 {% block content %}
 
 {% endblock content %}

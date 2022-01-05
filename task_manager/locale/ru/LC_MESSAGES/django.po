@@ -172,3 +172,27 @@ msgstr "Вы уверены, что хотите удалить"
 
 msgid "User was successfully deleted"
 msgstr "Пользователь успешно удалён"
+
+msgid "Create status"
+msgstr "Создать статус"
+
+msgid "Status was successfully created"
+msgstr "Статус успешно создан"
+
+msgid "Change status"
+msgstr "Изменение статуса"
+
+msgid "Status was successfully changed"
+msgstr "Статус успешно изменён"
+
+msgid "Label was successfully created"
+msgstr "Метка успешно создана"
+
+msgid "Label was successfully changed"
+msgstr "Метка успешно изменена"
+
+msgid "Create label"
+msgstr "Создать метку"
+
+msgid "Change label"
+msgstr "Изменение метки"

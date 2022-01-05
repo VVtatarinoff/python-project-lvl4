@@ -2,6 +2,9 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% block content %}
+{% if create_link %}
+<a class="nav-link" href={% url create_link %}>{% translate create_title %}</a>
+{% endif %}
 <table class="table table-striped">
     <thead>
     {% for t_head in table_heads %}
