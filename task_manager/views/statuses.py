@@ -8,7 +8,6 @@ from task_manager.forms.statuses_forms import CreateStatusForm
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Status
 from task_manager.views.general import STATUS_CATEGORY
-from task_manager.views.general import CREATE_LINKS, UPDATE_LINKS,DELETE_LINKS
 
 
 class Statuses(LoginRequiredMessage, SimpleTableView):

@@ -41,7 +41,23 @@ class CreateTaskForm(ModelForm):
         fields = ('name', 'description', 'status', 'executor', 'author', 'labels')
         # exclude = ('author',)
 
+
 class FilterTaskForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(FilterTaskForm, self).__init__(*args, **kwargs)
+        print('In filter form: ', kwargs)
+        print(args)
+        print(kwargs)
+        st_choices = [('', '-------------')] + list(Status.objects.values_list('id', 'name', named=True).all())
+        self.fields['status'] = forms.ChoiceField(label=_('Status'), required=False,
+                                   widget=forms.Select(attrs={'class': 'form-control'}, ),
+                                   choices=st_choices,
+                                                  initial=kwargs['initial']['status'])
+        self.fields['executor'].required = False
+        self.fields['labels'].required = False
+        self.fields['author'].required = False
+
     class Meta:
         model = Task
         fields = ('status', 'executor', 'labels', 'author')

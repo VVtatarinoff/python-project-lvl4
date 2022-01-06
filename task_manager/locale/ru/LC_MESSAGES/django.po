@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-02 17:02+0300\n"
+"POT-Creation-Date: 2022-01-06 14:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,19 +20,30 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: forms.py:11 forms.py:13
+#: task_manager/forms.py:12 task_manager/forms.py:14
+#: task_manager/forms/statuses_forms.py:11
+#: task_manager/forms/statuses_forms.py:13
+#: task_manager/forms/statuses_forms.py:23
+#: task_manager/forms/statuses_forms.py:25 task_manager/forms/users_forms.py:12
+#: task_manager/forms/users_forms.py:14 task_manager/views/general.py:41
+#: task_manager/views/general.py:42 task_manager/views/general.py:43
 msgid "Name"
 msgstr "Имя"
 
-#: forms.py:14 forms.py:18
+#: task_manager/forms.py:15 task_manager/forms.py:19
+#: task_manager/forms/users_forms.py:15 task_manager/forms/users_forms.py:19
 msgid "Last name"
 msgstr "Фамилия"
 
-#: forms.py:19 forms.py:26 forms.py:47 forms.py:50
+#: task_manager/forms.py:20 task_manager/forms.py:27 task_manager/forms.py:75
+#: task_manager/forms.py:78 task_manager/forms/users_forms.py:20
+#: task_manager/forms/users_forms.py:27 task_manager/forms/users_forms.py:75
+#: task_manager/forms/users_forms.py:78 task_manager/views.py:47
+#: task_manager/views/general.py:44
 msgid "User name"
 msgstr "Имя пользователя"
 
-#: forms.py:21
+#: task_manager/forms.py:22 task_manager/forms/users_forms.py:22
 msgid ""
 "Required field. Not more than 150 symbols, only letters, numbers and symbols "
 "@/./+/-/_."
@@ -40,159 +51,211 @@ msgstr ""
 "Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./"
 "+/-/_."
 
-#: forms.py:27 forms.py:32 forms.py:51 forms.py:54
+#: task_manager/forms.py:28 task_manager/forms.py:33 task_manager/forms.py:79
+#: task_manager/forms.py:82 task_manager/forms/users_forms.py:28
+#: task_manager/forms/users_forms.py:33 task_manager/forms/users_forms.py:79
+#: task_manager/forms/users_forms.py:82
 msgid "Password"
 msgstr ""
 
-#: forms.py:28
+#: task_manager/forms.py:29 task_manager/forms/users_forms.py:29
 msgid "Your password should be at least 3 symbols"
 msgstr "Ваш пароль должен содержать как минимум 3 символа."
 
-#: forms.py:33 forms.py:38
+#: task_manager/forms.py:34 task_manager/forms.py:39
+#: task_manager/forms/users_forms.py:34 task_manager/forms/users_forms.py:39
 msgid "Confirmation of password"
 msgstr "Подтверждение пароля"
 
-#: forms.py:34
+#: task_manager/forms.py:35 task_manager/forms/users_forms.py:35
 msgid "Please repeat your password for confirmation"
 msgstr "Для подтверждения введите, пожалуйста, пароль ещё раз."
 
-#: settings.py:115
+#: task_manager/forms.py:61 task_manager/forms/users_forms.py:61
+msgid "The two password fields didn’t match."
+msgstr ""
+
+#: task_manager/forms/statuses_forms.py:52 task_manager/views/general.py:43
+msgid "Status"
+msgstr "Статус"
+
+#: task_manager/settings.py:126
 msgid "English"
 msgstr ""
 
-#: settings.py:116
+#: task_manager/settings.py:127
 msgid "Russian"
 msgstr ""
 
-#: templates/base.html:12
+#: task_manager/templates/base.html:12
 msgid "Task manager Hexlet"
 msgstr "Менеджер задач Hexlet"
 
-#: templates/base.html:23
-msgid "Task manager"
-msgstr "Менеджер задач"
-
-#: templates/base.html:26
-msgid "Users"
-msgstr "Пользователи"
-
-#: templates/base.html:37
-msgid "Logout"
-msgstr "Выход"
-
-#: templates/base.html:43
-msgid "Login"
-msgstr "Вход"
-
-#: templates/base.html:46
-msgid "Register"
-msgstr "Регистрация"
-
-#: templates/login.html:22
-msgid "Enter"
-msgstr "Войти"
-
-#: templates/main.html:5
+#: task_manager/templates/main.html:5
 msgid "Hello from Hexlet!"
 msgstr "Привет от Хекслета!"
 
-#: templates/main.html:7
+#: task_manager/templates/main.html:7
 msgid "Practical courses for coding"
 msgstr "Практические курсы по программированию."
 
-#: templates/main.html:8
+#: task_manager/templates/main.html:8
 msgid "Learn more"
 msgstr "Узнать больше"
 
-#: templates/registration.html:22
-msgid "Register user"
-msgstr "Зарегистрировать"
-
-#: views.py:45
-msgid "Successful registration"
-msgstr "Пользователь успешно зарегистрирован"
-
-#: views.py:58
-msgid "Successful login"
-msgstr "Вы залогинены"
-
-msgid "Registration"
-msgstr "Регистрация"
-
-msgid "Authorization"
-msgstr "Вход"
-
-msgid "You are logged out"
-msgstr "Вы разлогинены"
-
-msgid "Statuses"
-msgstr "Статусы"
-
-msgid "Labels"
-msgstr "Метки"
-
-msgid "Tasks"
-msgstr "Задачи"
-
-msgid "Full name"
-msgstr "Полное имя"
-
-msgid "Creation date"
-msgstr "Дата создания"
-
+#: task_manager/templates/table.html:53
 msgid "Change"
 msgstr "Изменить"
 
+#: task_manager/templates/table.html:55
 msgid "Delete"
 msgstr "Удалить"
 
+#: task_manager/templatetags/menu_tags.py:6
+msgid "Task manager"
+msgstr "Менеджер задач"
+
+#: task_manager/templatetags/menu_tags.py:7 task_manager/views/general.py:39
+msgid "Users"
+msgstr "Пользователи"
+
+#: task_manager/templatetags/menu_tags.py:8 task_manager/views/general.py:36
+msgid "Statuses"
+msgstr "Статусы"
+
+#: task_manager/templatetags/menu_tags.py:9 task_manager/views/general.py:37
+msgid "Labels"
+msgstr "Метки"
+
+#: task_manager/templatetags/menu_tags.py:10 task_manager/views/general.py:38
+msgid "Tasks"
+msgstr "Задачи"
+
+#: task_manager/templatetags/menu_tags.py:12
+msgid "Login"
+msgstr "Вход"
+
+#: task_manager/templatetags/menu_tags.py:13
+msgid "Register"
+msgstr "Регистрация"
+
+#: task_manager/templatetags/menu_tags.py:15
+msgid "Logout"
+msgstr "Выход"
+
+#: task_manager/views.py:22 task_manager/views/general.py:16
 msgid "You are not authorized. Please log in"
 msgstr "Вы не авторизованы! Пожалуйста, выполните вход."
 
+#: task_manager/views.py:32 task_manager/views/general.py:26
 msgid "You have no authorization to handle this action"
 msgstr "У вас нет прав для изменения другого пользователя."
 
-msgid "Invalid pair user-password"
-msgstr "Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут быть чувствительны к регистру."
+#: task_manager/views.py:48 task_manager/views/general.py:45
+msgid "Full name"
+msgstr "Полное имя"
 
+#: task_manager/views.py:48 task_manager/views/general.py:41
+#: task_manager/views/general.py:42 task_manager/views/general.py:43
+#: task_manager/views/general.py:45
+msgid "Creation date"
+msgstr "Дата создания"
+
+#: task_manager/views.py:88 task_manager/views/users.py:33
 msgid "User data was changed"
 msgstr "Пользователь успешно изменён"
 
-msgid "Change user data"
-msgstr "Изменение пользователя"
-
-msgid "Delete user"
-msgstr "Удаление пользователя"
-
-msgid "Yes, delete"
-msgstr "Да, удалить"
-
+#: task_manager/views.py:106 task_manager/views/users.py:51
 msgid "Are you sure you want to delete"
 msgstr "Вы уверены, что хотите удалить"
 
+#: task_manager/views.py:111 task_manager/views/users.py:56
 msgid "User was successfully deleted"
 msgstr "Пользователь успешно удалён"
 
+#: task_manager/views.py:127 task_manager/views/users.py:72
+msgid "Successful registration"
+msgstr "Пользователь успешно зарегистрирован"
+
+#: task_manager/views.py:142 task_manager/views/users.py:87
+msgid "Successful login"
+msgstr "Вы залогинены"
+
+#: task_manager/views.py:146 task_manager/views/users.py:91
+msgid "Invalid pair user-password"
+msgstr ""
+"Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут "
+"быть чувствительны к регистру."
+
+#: task_manager/views.py:152 task_manager/views/users.py:97
+msgid "You are logged out"
+msgstr "Вы разлогинены"
+
+#: task_manager/views/general.py:43
+msgid "Author"
+msgstr "Автор"
+
+#: task_manager/views/general.py:43
+msgid "Executor"
+msgstr "Исполнитель"
+
+#: task_manager/views/general.py:47
 msgid "Create status"
 msgstr "Создать статус"
 
-msgid "Status was successfully created"
-msgstr "Статус успешно создан"
-
-msgid "Change status"
-msgstr "Изменение статуса"
-
-msgid "Status was successfully changed"
-msgstr "Статус успешно изменён"
-
-msgid "Label was successfully created"
-msgstr "Метка успешно создана"
-
-msgid "Label was successfully changed"
-msgstr "Метка успешно изменена"
-
+#: task_manager/views/general.py:48
 msgid "Create label"
 msgstr "Создать метку"
 
-msgid "Change label"
-msgstr "Изменение метки"
+#: task_manager/views/general.py:49
+msgid "Create task"
+msgstr "Создать задачу"
+
+#: task_manager/views/labels.py:29
+msgid "Label was successfully created"
+msgstr "Метка успешно создана"
+
+#: task_manager/views/labels.py:49 task_manager/views/tasks.py:73
+msgid "Label was successfully changed"
+msgstr "Метка успешно изменена"
+
+#: task_manager/views/statuses.py:29
+msgid "Status was successfully created"
+msgstr "Статус успешно создан"
+
+#: task_manager/views/statuses.py:49
+msgid "Status was successfully changed"
+msgstr "Статус успешно изменён"
+
+#: task_manager/views/tasks.py:44
+#, fuzzy
+#| msgid "Status was successfully created"
+msgid "Task was successfully created"
+msgstr "Статус успешно создан"
+
+#~ msgid "Enter"
+#~ msgstr "Войти"
+
+#~ msgid "Register user"
+#~ msgstr "Зарегистрировать"
+
+#~ msgid "Registration"
+#~ msgstr "Регистрация"
+
+#~ msgid "Authorization"
+#~ msgstr "Вход"
+
+#~ msgid "Change user data"
+#~ msgstr "Изменение пользователя"
+
+#~ msgid "Delete user"
+#~ msgstr "Удаление пользователя"
+
+#~ msgid "Yes, delete"
+#~ msgstr "Да, удалить"
+
+#~ msgid "Change status"
+#~ msgstr "Изменение статуса"
+
+#~ msgid "Change label"
+#~ msgstr "Изменение метки"
