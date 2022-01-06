@@ -2,8 +2,6 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
-from django.db.models import Value
-from django.db.models.functions import Concat
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, UpdateView, ListView
@@ -11,30 +9,13 @@ from django.views.generic.edit import DeleteView
 
 from task_manager.forms.users_forms import RegisterUserForm
 from task_manager.forms.users_forms import LoginUserForm, ChangeUserForm
-from task_manager.views.general import LoginRequiredMessage, UserCanEditProfile
-from task_manager.views.general import QUARIES, TITLES, TABLE_HEADS
-from task_manager.views.general import CREATE_LINKS, UPDATE_LINKS,DELETE_LINKS
+from task_manager.views.general import LoginRequiredMessage, UserCanEditProfile, SimpleTableView
+from task_manager.views.general import USER_CATEGORY
 
 
-class Users(ListView):
-    model = User
-    template_name = 'table.html'
-    context_object_name = 'table'
-
-    def get_context_data(self, object_list=None, **kwargs):
-        category = 'users'
-        context = super().get_context_data(**kwargs)
-        context['title'] = TITLES[category]
-        context['table_heads'] = TABLE_HEADS[category]
-        context['create_path'] = CREATE_LINKS[category]['name']
-        context['create_path_name'] = CREATE_LINKS[category]['title']
-        context['update_link'] = UPDATE_LINKS[category]
-        context['delete_link'] = DELETE_LINKS[category]
-        context['cat'] = category
-        return context
-
-    def get_queryset(self):
-        return QUARIES['users']
+class Users(SimpleTableView):
+    def __init__(self,*arg, **kwargs):
+        super(Users, self).__init__(USER_CATEGORY, *arg, **kwargs)
 
 
 class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):

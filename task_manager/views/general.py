@@ -106,3 +106,23 @@ class TableView(ListView):
         context['delete_link'] = self.delete_link
         context['cat'] = self.cat
         return context
+
+class SimpleTableView(ListView):
+    def __init__(self, category, *arg, **kwargs):
+        super(SimpleTableView,self).__init__(*arg, **kwargs)
+        self.template_name = 'table.html'
+        self.context_object_name = 'table'
+        self.category = category
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = TITLES[self.category]
+        context['table_heads'] = TABLE_HEADS[self.category]
+        context['create_path'] = CREATE_LINKS[self.category]['name']
+        context['create_path_name'] = CREATE_LINKS[self.category]['title']
+        context['update_link'] = UPDATE_LINKS[self.category]
+        context['delete_link'] = DELETE_LINKS[self.category]
+        return context
+
+    def get_queryset(self):
+        return QUARIES[self.category].all()

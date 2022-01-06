@@ -1,19 +1,50 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% load i18n %}
-{% load table_tags %}
+
 
 {% block content %}
+
+
 {% if create_path %}
 <a class="nav-link" href={% url create_path %}>{{ create_path_name }}</a>
 {% endif %}
+    {% block filter %}
+{% if filter %}
+<div class="card mb-3">
+    <div class="card-body bg-light">
+        <form class="form-inline center" method="get">
+            <div class="form-group">
+                <label for="id_status">
+                    Status
+                </label>
+                <div class="ml-2 mr-3">
+                    <select id="id_status" class="form-control" name="status">
+                        <option value=''> ----------- </option>
+                        {% for o in filter.statuses %}
+                        <option value={{ o.status }}>{{ o.status__name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Show">
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+    {% endblock filter %}
 <table class="table table-striped">
+    {% block tablehead %}
         <thead>
         {% for t_head in table_heads %}
         <th>{{ t_head }}</th>
         {% endfor %}
         <th></th>
     </thead>
+    {% endblock tablehead %}
+    {% block tablecontent %}
     <tbody>
     {% for u in table %}
     <tr>
@@ -28,5 +59,6 @@
     </tr>
     {% endfor %}
     </tbody>
+    {% endblock tablecontent %}
 </table>
 {% endblock content %}

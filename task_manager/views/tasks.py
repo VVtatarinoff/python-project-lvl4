@@ -1,37 +1,33 @@
 from django.contrib import messages
-from django.db.models import Value
-from django.db.models.functions import Concat
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, FormView
 
-from task_manager.forms.statuses_forms import CreateStatusForm, CreateLabelForm, CreateTaskForm
-from task_manager.views.general import LoginRequiredMessage
+from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
+from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Task
-from task_manager.views.general import QUARIES, TITLES, TABLE_HEADS
-from task_manager.views.general import CREATE_LINKS, UPDATE_LINKS,DELETE_LINKS
+from django.db.models import Value
+from django.db.models.functions import Concat
+from task_manager.views.general import TASK_CATEGORY
 
-
-class Tasks(LoginRequiredMessage, ListView):
+class FilterTaskMixin(LoginRequiredMessage, FormView):
     model = Task
-    template_name = 'table.html'
-    context_object_name = 'table'
+    form_class =  FilterTaskForm
+    pass
 
-    def get_context_data(self, object_list=None, **kwargs):
-        category = 'tasks'
-        context = super().get_context_data(**kwargs)
-        context['title'] = TITLES[category]
-        context['table_heads'] = TABLE_HEADS[category]
-        context['create_path'] = CREATE_LINKS[category]['name']
-        context['create_path_name'] = CREATE_LINKS[category]['title']
-        context['update_link'] = UPDATE_LINKS[category]
-        context['delete_link'] = DELETE_LINKS[category]
-        context['cat'] = category
-        return context
+class Tasks(FilterTaskMixin, SimpleTableView):
 
-    def get_queryset(self):
-        return QUARIES['tasks']
+    def __init__(self, *arg, **kwargs):
+        super(Tasks, self).__init__(TASK_CATEGORY,*arg, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        print(request.method)
+        print(request.GET)
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs)
 
 
 class CreateTask(CreateView):

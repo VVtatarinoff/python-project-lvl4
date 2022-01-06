@@ -2,34 +2,18 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView
 
 from task_manager.forms.statuses_forms import CreateStatusForm
-from task_manager.views.general import LoginRequiredMessage
+from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Status
-from task_manager.views.general import QUARIES, TITLES, TABLE_HEADS
+from task_manager.views.general import STATUS_CATEGORY
 from task_manager.views.general import CREATE_LINKS, UPDATE_LINKS,DELETE_LINKS
 
 
-class Statuses(LoginRequiredMessage,ListView):
-    model = Status
-    template_name = 'table.html'
-    context_object_name = 'table'
-
-    def get_context_data(self, object_list=None, **kwargs):
-        category = 'statuses'
-        context = super().get_context_data(**kwargs)
-        context['title'] = TITLES[category]
-        context['table_heads'] = TABLE_HEADS[category]
-        context['create_path'] = CREATE_LINKS[category]['name']
-        context['create_path_name'] = CREATE_LINKS[category]['title']
-        context['update_link'] = UPDATE_LINKS[category]
-        context['delete_link'] = DELETE_LINKS[category]
-        context['cat'] = category
-        return context
-
-    def get_queryset(self):
-        return QUARIES['statuses']
+class Statuses(LoginRequiredMessage, SimpleTableView):
+    def __init__(self,*arg, **kwargs):
+        super(Statuses, self).__init__(STATUS_CATEGORY, *arg, **kwargs)
 
 
 class CreateStatus(CreateView):
