@@ -233,29 +233,38 @@ msgstr "Статус успешно изменён"
 msgid "Task was successfully created"
 msgstr "Статус успешно создан"
 
-#~ msgid "Enter"
-#~ msgstr "Войти"
+msgid "Enter"
+msgstr "Войти"
 
-#~ msgid "Register user"
-#~ msgstr "Зарегистрировать"
+msgid "Register user"
+msgstr "Зарегистрировать"
 
-#~ msgid "Registration"
-#~ msgstr "Регистрация"
+msgid "Registration"
+msgstr "Регистрация"
 
-#~ msgid "Authorization"
-#~ msgstr "Вход"
+msgid "Authorization"
+msgstr "Вход"
 
-#~ msgid "Change user data"
-#~ msgstr "Изменение пользователя"
+msgid "Change user data"
+msgstr "Изменение пользователя"
 
-#~ msgid "Delete user"
-#~ msgstr "Удаление пользователя"
+msgid "Delete user"
+msgstr "Удаление пользователя"
 
-#~ msgid "Yes, delete"
-#~ msgstr "Да, удалить"
+msgid "Yes, delete"
+msgstr "Да, удалить"
 
-#~ msgid "Change status"
-#~ msgstr "Изменение статуса"
+msgid "Change status"
+msgstr "Изменение статуса"
+
+msgid "Only my tasks"
+msgstr "Только свои задачи"
+
+msgid "Label"
+msgstr "Метка"
+
+msgid "Show"
+msgstr "Показать"
 
 #~ msgid "Change label"
 #~ msgstr "Изменение метки"

@@ -32,6 +32,7 @@ urlpatterns = [
     path('statuses/', statuses.Statuses.as_view(), name='statuses'),
     path('labels/', labels.Labels.as_view(), name='labels'),
     path('tasks/', tasks.Tasks.as_view(), name='tasks'),
+    path('tasks/<int:pk>', tasks.TasksDetail.as_view(), name='tasks_detail'),
     path('users/<int:pk>/update', users.UserUpdate.as_view(), name='update_user'),
     path('users/<int:pk>/delete', users.UserDelete.as_view(), name='delete_user'),
     path('statuses/<int:pk>/update', statuses.ChangeStatus.as_view(), name='update_status'),

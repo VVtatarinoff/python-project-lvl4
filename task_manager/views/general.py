@@ -81,7 +81,16 @@ QUARIES = {STATUS_CATEGORY: Status.objects.values_list('id', 'name',
                                            named=True).exclude(
             is_superuser=True)
            }
+DETAIL_VIEW = {STATUS_CATEGORY: None,
+          LABEL_CATEGORY: None,
+          TASK_CATEGORY: 2,
+          USER_CATEGORY: None}
+DETAIL_VIEW_PATH = {STATUS_CATEGORY: None,
+          LABEL_CATEGORY: None,
+          TASK_CATEGORY: 'tasks_detail',
+          USER_CATEGORY: None}
 
+"""
 def get_content_for_list_vew(category):
     return {'title': TITLES[category],
             'table_heads': TABLE_HEADS[category],
@@ -105,7 +114,8 @@ class TableView(ListView):
         context['update_link'] = self.update_link
         context['delete_link'] = self.delete_link
         context['cat'] = self.cat
-        return context
+        return context"""
+
 
 class SimpleTableView(ListView):
     def __init__(self, category, *arg, **kwargs):
@@ -122,6 +132,8 @@ class SimpleTableView(ListView):
         context['create_path_name'] = CREATE_LINKS[self.category]['title']
         context['update_link'] = UPDATE_LINKS[self.category]
         context['delete_link'] = DELETE_LINKS[self.category]
+        context['detail'] = DETAIL_VIEW[self.category]
+        context['detail_path'] = DETAIL_VIEW_PATH[self.category]
         return context
 
     def get_queryset(self):

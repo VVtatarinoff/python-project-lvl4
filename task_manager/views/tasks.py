@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView, FormView
+from django.views.generic import CreateView, UpdateView, FormView, DetailView
 
 from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
@@ -17,32 +17,35 @@ class FilterTaskMixin(LoginRequiredMessage, FormView):
     filter_Q = {'status': Q(),
                 'executor': Q(),
                 'labels': Q(),
-                'author': Q()}
-    filter_data = {'status': '',
+                'self_tasks': Q()}
+    filtered_data = {'status': '',
                 'executor': '',
                 'labels': '',
-                'author': ''}
+                'self_tasks': False}
 
     def get_form_kwargs(self):
-        kwargs = super(FilterTaskMixin,self).get_form_kwargs()
-        print('get form kwargs - kwargs', kwargs)
-        kwargs['initial'].update(self.filter_data)
-        kwargs['initial']['status'] = self.filter_data['status']
+        kwargs = super(FilterTaskMixin, self).get_form_kwargs()
+        kwargs['initial'].update(self.filtered_data)
         return kwargs
 
     def get(self, request, *args, **kwargs):
-        print(request.method)
-        print(request.GET)
-        filter_data = request.GET
-        for key, value in request.GET.items():
-            self.filter_data[key] = value if not value else int(value)
-        if filter_data:
-            self.filter_Q['status'] = Q(status=self.filter_data['status']) if self.filter_data['status'] else Q()
+        for key, value in self.filtered_data.items():
+            if key == 'self_tasks':
+                self.filtered_data[key] = bool(request.GET.get(key, 0))
+            else:
+                self.filtered_data[key] = request.GET.get(key, 0)
+        self.filter_Q['status'] = Q(status=self.filtered_data['status']) if self.filtered_data['status'] else Q()
+        self.filter_Q['executor'] = Q(executor=self.filtered_data['executor']) if self.filtered_data['executor'] else Q()
+        self.filter_Q['labels'] = Q(labels=self.filtered_data['labels']) if self.filtered_data['labels'] else Q()
+        self.filter_Q['self_tasks'] = Q(author=request.user.id) if self.filtered_data['self_tasks'] else Q()
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self, *args, **kwargs):
         status_query = super().get_queryset(*args, **kwargs)
         status_query = status_query.filter(self.filter_Q['status'])
+        status_query = status_query.filter(self.filter_Q['executor'])
+        status_query = status_query.filter(self.filter_Q['labels'])
+        status_query = status_query.filter(self.filter_Q['self_tasks'])
         return status_query
 
 
@@ -50,10 +53,6 @@ class Tasks(FilterTaskMixin, SimpleTableView):
 
     def __init__(self, *arg, **kwargs):
         super(Tasks, self).__init__(TASK_CATEGORY, *arg, **kwargs)
-
-
-
-
 
 
 class CreateTask(CreateView):
@@ -84,6 +83,9 @@ def del_task(request):
     return render(request, "main.html")
 
 
+class TasksDetail(DetailView):
+    model = Task
+
 class ChangeTask(UpdateView):
     form_class = CreateTaskForm
     template_name = 'authorization.html'
@@ -91,10 +93,10 @@ class ChangeTask(UpdateView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Change label"
+        context['title'] = "Change task"
         context['btn_name'] = "Change"
         return context
 
     def get_success_url(self):
-        messages.success(self.request, _('Label was successfully changed'))
-        return reverse_lazy('labels')
+        messages.success(self.request, _('Task was successfully changed'))
+        return reverse_lazy('tasks')
