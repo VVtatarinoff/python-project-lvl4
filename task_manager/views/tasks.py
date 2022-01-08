@@ -8,7 +8,7 @@ from django.views.generic import CreateView, UpdateView, FormView, DetailView
 from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Task
-from task_manager.views.general import TASK_CATEGORY
+from task_manager.views.general import TASK_CATEGORY, UPDATE_LINKS, DELETE_LINKS
 
 
 class FilterTaskMixin(LoginRequiredMessage, FormView):
@@ -19,9 +19,9 @@ class FilterTaskMixin(LoginRequiredMessage, FormView):
                 'labels': Q(),
                 'self_tasks': Q()}
     filtered_data = {'status': '',
-                'executor': '',
-                'labels': '',
-                'self_tasks': False}
+                     'executor': '',
+                     'labels': '',
+                     'self_tasks': False}
 
     def get_form_kwargs(self):
         kwargs = super(FilterTaskMixin, self).get_form_kwargs()
@@ -35,7 +35,8 @@ class FilterTaskMixin(LoginRequiredMessage, FormView):
             else:
                 self.filtered_data[key] = request.GET.get(key, 0)
         self.filter_Q['status'] = Q(status=self.filtered_data['status']) if self.filtered_data['status'] else Q()
-        self.filter_Q['executor'] = Q(executor=self.filtered_data['executor']) if self.filtered_data['executor'] else Q()
+        self.filter_Q['executor'] = Q(executor=self.filtered_data['executor']) if self.filtered_data[
+            'executor'] else Q()
         self.filter_Q['labels'] = Q(labels=self.filtered_data['labels']) if self.filtered_data['labels'] else Q()
         self.filter_Q['self_tasks'] = Q(author=request.user.id) if self.filtered_data['self_tasks'] else Q()
         return super().get(request, *args, **kwargs)
@@ -85,6 +86,16 @@ def del_task(request):
 
 class TasksDetail(DetailView):
     model = Task
+    template_name = 'detail_view.html'
+    context_object_name = 'task'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Task page"
+        context['update_link'] = UPDATE_LINKS[TASK_CATEGORY]
+        context['delete_link'] = DELETE_LINKS[TASK_CATEGORY]
+        return context
+
 
 class ChangeTask(UpdateView):
     form_class = CreateTaskForm

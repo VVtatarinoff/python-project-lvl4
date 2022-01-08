@@ -266,5 +266,8 @@ msgstr "Метка"
 msgid "Show"
 msgstr "Показать"
 
-#~ msgid "Change label"
-#~ msgstr "Изменение метки"
+msgid "Change label"
+msgstr "Изменение метки"
+
+msgid "Task page"
+msgstr "Просмотр задачи"
