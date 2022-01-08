@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import logging
 from pathlib import Path
 import os
 import dj_database_url
@@ -61,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 ROOT_URLCONF = 'task_manager.urls'
 
@@ -147,17 +146,24 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#
-# LOGGING = {
-#    "version": 1,
-#    "disable_existing_loggers": False,
-#    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
-#    "handlers": {
-#        "mail_admins": {
-#            "level": "ERROR",
-#            "filters": ["require_debug_false"],
-#            "class": "django.utils.log.AdminEmailHandler",
-#        }
-#    },
-#    "loggers": {"django.request": {"handlers": ["mail_admins"], "level": "ERROR", "propagate": True}},
-# }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+        }
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True},
+        "task_manager": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True},
+    }
+}

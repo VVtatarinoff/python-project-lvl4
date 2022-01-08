@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render
@@ -9,6 +11,8 @@ from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Task
 from task_manager.views.general import TASK_CATEGORY, UPDATE_LINKS, DELETE_LINKS
+
+logger = logging.getLogger(__name__)
 
 
 class FilterTaskMixin(LoginRequiredMessage, FormView):
@@ -57,7 +61,7 @@ class Tasks(FilterTaskMixin, SimpleTableView):
 
 
 class CreateTask(CreateView):
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     form_class = CreateTaskForm
 
     def get_context_data(self, object_list=None, **kwargs):
@@ -75,7 +79,7 @@ class CreateTask(CreateView):
          This is necessary to only display members that belong to a given user"""
 
         kwargs = super(CreateTask, self).get_form_kwargs()
-        print(kwargs)
+        logger.info('CreateTask get_form_kwargs:', kwargs)
         kwargs['id'] = self.request.user.id
         return kwargs
 
@@ -99,7 +103,7 @@ class TasksDetail(DetailView):
 
 class ChangeTask(UpdateView):
     form_class = CreateTaskForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     model = Task
 
     def get_context_data(self, object_list=None, **kwargs):

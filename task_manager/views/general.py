@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.mixins import AccessMixin
 from django.shortcuts import redirect
@@ -7,6 +9,9 @@ from task_manager.models import Status, Label, Task
 from django.contrib.auth.models import User
 from django.db.models import Value
 from django.db.models.functions import Concat
+
+logger = logging.getLogger(__name__)
+
 
 class LoginRequiredMessage(AccessMixin):
     login_url = 'home'
@@ -90,36 +95,10 @@ DETAIL_VIEW_PATH = {STATUS_CATEGORY: None,
           TASK_CATEGORY: 'tasks_detail',
           USER_CATEGORY: None}
 
-"""
-def get_content_for_list_vew(category):
-    return {'title': TITLES[category],
-            'table_heads': TABLE_HEADS[category],
-            'create_path': CREATE_LINKS[category]['name'],
-            'create_path_name': CREATE_LINKS[category]['title'],
-            'update_link': UPDATE_LINKS[category],
-            'delete_link': DELETE_LINKS[category]}
-
-class TableView(ListView):
-    def __init__(self, update_link,
-                 delete_link, category=None):
-        super().__init__()
-        self.template_name = 'table.html'
-        self.context_object_name = 'table'
-        self.update_link = update_link
-        self.delete_link = delete_link
-        self.cat = category
-
-    def get_context_data(self, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['update_link'] = self.update_link
-        context['delete_link'] = self.delete_link
-        context['cat'] = self.cat
-        return context"""
-
 
 class SimpleTableView(ListView):
     def __init__(self, category, *arg, **kwargs):
-        super(SimpleTableView,self).__init__(*arg, **kwargs)
+        super(SimpleTableView, self).__init__(*arg, **kwargs)
         self.template_name = 'table.html'
         self.context_object_name = 'table'
         self.category = category

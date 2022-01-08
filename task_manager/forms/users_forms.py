@@ -1,9 +1,13 @@
+import logging
+
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.translation import gettext as _
+
+logger = logging.getLogger(__name__)
 
 
 class UserMixin(ModelForm):

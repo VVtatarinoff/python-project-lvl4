@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -12,6 +14,7 @@ from task_manager.forms.users_forms import LoginUserForm, ChangeUserForm
 from task_manager.views.general import LoginRequiredMessage, UserCanEditProfile, SimpleTableView
 from task_manager.views.general import USER_CATEGORY
 
+logger = logging.getLogger(__name__)
 
 class Users(SimpleTableView):
     def __init__(self,*arg, **kwargs):
@@ -20,7 +23,7 @@ class Users(SimpleTableView):
 
 class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
     form_class = ChangeUserForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     model = User
 
     def get_context_data(self, object_list=None, **kwargs):
@@ -60,7 +63,7 @@ class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,7 +78,7 @@ class RegisterUser(CreateView):
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 from django.db.models import Value, F, Func
 from django.db.models.functions import Concat
@@ -6,6 +8,8 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 
 from task_manager.models import Status, Label, Task
+
+logger = logging.getLogger(__name__)
 
 
 class CreateStatusForm(ModelForm):
@@ -37,7 +41,7 @@ class CreateTaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.aor_id = kwargs.pop('id', None)
         super(CreateTaskForm, self).__init__(*args, **kwargs)
-        print(self.fields)
+        logger.info(self.fields)
 
     class Meta:
         model = Task

@@ -72,7 +72,7 @@ class Tasks(LoginRequiredMessage, ListView):
 
 class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
     form_class = ChangeUserForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     model = User
 
     def get_context_data(self, object_list=None, **kwargs):
@@ -115,7 +115,7 @@ class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,7 +130,7 @@ class RegisterUser(CreateView):
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

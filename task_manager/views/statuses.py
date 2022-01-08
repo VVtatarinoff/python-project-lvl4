@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -9,6 +11,8 @@ from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Status
 from task_manager.views.general import STATUS_CATEGORY
 
+logger = logging.getLogger(__name__)
+
 
 class Statuses(LoginRequiredMessage, SimpleTableView):
     def __init__(self,*arg, **kwargs):
@@ -16,7 +20,7 @@ class Statuses(LoginRequiredMessage, SimpleTableView):
 
 
 class CreateStatus(CreateView):
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     form_class = CreateStatusForm
 
     def get_context_data(self, object_list=None, **kwargs):
@@ -36,7 +40,7 @@ def del_status(request):
 
 class ChangeStatus(UpdateView):
     form_class = CreateStatusForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     model = Status
 
     def get_context_data(self, object_list=None, **kwargs):

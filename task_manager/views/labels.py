@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -9,6 +11,8 @@ from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.models import Label
 from task_manager.views.general import LABEL_CATEGORY
 
+logger = logging.getLogger(__name__)
+
 
 class Labels(LoginRequiredMessage, SimpleTableView):
     def __init__(self, *args, **kwargs):
@@ -16,7 +20,7 @@ class Labels(LoginRequiredMessage, SimpleTableView):
 
 
 class CreateLabel(CreateView):
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     form_class = CreateLabelForm
 
     def get_context_data(self, object_list=None, **kwargs):
@@ -36,7 +40,7 @@ def del_label(request):
 
 class ChangeLabel(UpdateView):
     form_class = CreateLabelForm
-    template_name = 'authorization.html'
+    template_name = 'form_view.html'
     model = Label
 
     def get_context_data(self, object_list=None, **kwargs):
