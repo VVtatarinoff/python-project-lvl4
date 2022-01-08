@@ -2,10 +2,10 @@ import logging
 
 from django.contrib import messages
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView, FormView, DetailView
+from django.views.generic import CreateView, UpdateView, FormView, DetailView, DeleteView
 
 from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
@@ -79,14 +79,32 @@ class CreateTask(CreateView):
          This is necessary to only display members that belong to a given user"""
 
         kwargs = super(CreateTask, self).get_form_kwargs()
-        logger.info('CreateTask get_form_kwargs:', kwargs)
         kwargs['id'] = self.request.user.id
         return kwargs
 
 
-def del_task(request):
-    return render(request, "main.html")
+class DeleteTask(LoginRequiredMessage, DeleteView):
+    model = Task
+    template_name = 'delete_page.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser and self.get_object().author_id != self.request.user.id:
+            messages.error(self.request, _('The task may be deleted only by author'))
+            return redirect('tasks')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Delete task"
+        context['btn_name'] = 'Yes, delete'
+        name = self.get_object().name
+        msg = _('Are you sure you want to delete') + ' ' + name + '?'
+        context['message'] = msg
+        return context
+
+    def get_success_url(self):
+        messages.success(self.request, _('Task was successfully deleted'))
+        return reverse_lazy('tasks')
 
 class TasksDetail(DetailView):
     model = Task
@@ -115,3 +133,11 @@ class ChangeTask(UpdateView):
     def get_success_url(self):
         messages.success(self.request, _('Task was successfully changed'))
         return reverse_lazy('tasks')
+
+    def get_form_kwargs(self):
+        """ Passes the request object to the form class.
+         This is necessary to only display members that belong to a given user"""
+
+        kwargs = super(ChangeTask, self).get_form_kwargs()
+        kwargs['id'] = self.request.user.id
+        return kwargs

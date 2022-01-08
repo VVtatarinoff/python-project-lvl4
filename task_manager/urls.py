@@ -42,7 +42,7 @@ urlpatterns = [
     path('labels/<int:pk>/delete/', labels.del_label, name='delete_label'),
     path('labels/create/', labels.CreateLabel.as_view(), name='create_label'),
     path('tasks/<int:pk>/update/', tasks.ChangeTask.as_view(), name='update_task'),
-    path('tasks/<int:pk>/delete/', tasks.del_task, name='delete_task'),
+    path('tasks/<int:pk>/delete/', tasks.DeleteTask.as_view(), name='delete_task'),
     path('tasks/create/', tasks.CreateTask.as_view(), name='create_task'),
 
 ]

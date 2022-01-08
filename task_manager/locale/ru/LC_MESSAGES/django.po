@@ -271,3 +271,24 @@ msgstr "Изменение метки"
 
 msgid "Task page"
 msgstr "Просмотр задачи"
+
+msgid "Task was successfully changed"
+msgstr "Задача успешно изменена"
+
+msgid "Change task"
+msgstr "Изменение задачи"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Delete task"
+msgstr "Удаление задачи"
+
+msgid "The task may be deleted only by author"
+msgstr "Задачу может удалить только её автор"
+
+msgid "Task was successfully deleted"
+msgstr "Задача успешно удалена"

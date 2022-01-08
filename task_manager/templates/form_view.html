@@ -2,7 +2,6 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% block content %}
-<p>{{ message }}</p>
 <form method="post">
     {% csrf_token %}
     {% for f in form %}

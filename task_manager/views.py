@@ -91,7 +91,7 @@ class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
 
 
 class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
-    template_name = 'delete_user.html'
+    template_name = 'delete_page.html'
     model = User
     user_to_delete = None
     id_to_delete = None

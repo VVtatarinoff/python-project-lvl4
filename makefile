@@ -20,7 +20,6 @@ lint:
 	poetry run flake8 page_loader
 
 translate:
-	django-admin makemessages -l ru
 	django-admin compilemessages
 
 command_prompt:

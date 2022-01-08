@@ -39,7 +39,7 @@ class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
 
 
 class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
-    template_name = 'delete_user.html'
+    template_name = 'delete_page.html'
     model = User
     user_to_delete = None
     id_to_delete = None
@@ -49,8 +49,7 @@ class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
         context['title'] = "Delete user"
         context['btn_name'] = 'Yes, delete'
         self.user_to_delete = self.get_object()
-        full_name = f'{self.user_to_delete.first_name} ' \
-                    f'{self.user_to_delete.last_name}'
+        full_name = self.get_object().get_full_name()
         msg = _('Are you sure you want to delete') + ' ' + full_name + '?'
         context['message'] = msg
         return context
