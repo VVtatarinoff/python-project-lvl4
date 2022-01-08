@@ -292,3 +292,12 @@ msgstr "Задачу может удалить только её автор"
 
 msgid "Task was successfully deleted"
 msgstr "Задача успешно удалена"
+
+msgid "Delete label"
+msgstr "Удаление метки"
+
+msgid "Label was successfully deleted"
+msgstr "Метка успешно удалена"
+
+msgid "Unable to delete label as it is in use"
+msgstr "Невозможно удалить метку, потому что она используется"
