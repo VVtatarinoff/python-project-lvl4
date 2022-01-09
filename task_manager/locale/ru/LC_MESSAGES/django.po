@@ -301,3 +301,15 @@ msgstr "Метка успешно удалена"
 
 msgid "Unable to delete label as it is in use"
 msgstr "Невозможно удалить метку, потому что она используется"
+
+msgid "Unable to delete user as it is in use"
+msgstr "Невозможно удалить пользователя, потому что он используется"
+
+msgid "Delete status"
+msgstr "Удаление статуса"
+
+msgid "Status was successfully deleted"
+msgstr "Статус успешно удалён"
+
+msgid "Unable to delete status as it is in use"
+msgstr "Невозможно удалить статус, потому что он используется"

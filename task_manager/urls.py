@@ -14,13 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import path
 from django.views.generic import TemplateView
 
 import task_manager.views.users as users
 import task_manager.views.labels as labels
 import task_manager.views.statuses as statuses
 import task_manager.views.tasks as tasks
+import task_manager.views.general as general
+from task_manager.views.constants import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,10 +38,12 @@ urlpatterns = [
     path('users/<int:pk>/update/', users.UserUpdate.as_view(), name='update_user'),
     path('users/<int:pk>/delete/', users.UserDelete.as_view(), name='delete_user'),
     path('statuses/<int:pk>/update/', statuses.ChangeStatus.as_view(), name='update_status'),
-    path('statuses/<int:pk>/delete/', statuses.del_status, name='delete_status'),
+    path('statuses/<int:pk>/delete/', general.SimpleDelete.as_view(),
+         kwargs={'category': STATUS_CATEGORY}, name='delete_status'),
     path('statuses/create/', statuses.CreateStatus.as_view(), name='create_status'),
     path('labels/<int:pk>/update/', labels.ChangeLabel.as_view(), name='update_label'),
-    path('labels/<int:pk>/delete/', labels.DeleteLabel.as_view(), name='delete_label'),
+    path('labels/<int:pk>/delete/', general.SimpleDelete.as_view(),
+         kwargs={'category': LABEL_CATEGORY}, name='delete_label'),
     path('labels/create/', labels.CreateLabel.as_view(), name='create_label'),
     path('tasks/<int:pk>/update/', tasks.ChangeTask.as_view(), name='update_task'),
     path('tasks/<int:pk>/delete/', tasks.DeleteTask.as_view(), name='delete_task'),

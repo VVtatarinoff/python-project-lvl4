@@ -2,7 +2,6 @@ import logging
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, UpdateView, DeleteView
@@ -48,21 +47,17 @@ class DeleteLabel(DeleteView):
         context['message'] = msg
         return context
 
-    def get_success_url(self):
-        messages.success(self.request, _('Label was successfully deleted'))
-        return reverse_lazy('labels')
-
     def form_valid(self, form):
         object = self.get_object()
-        print(self.object)
-        tasks = Task.objects.filter(labels=object.id).first()
-        print('How many label used:', tasks)
-        if tasks:
+        inclusion = Task.objects.filter(labels=object.id).first()
+        if inclusion:
             msg = _('Unable to delete label as it is in use')
             messages.error(self.request, msg)
             return HttpResponseRedirect(reverse_lazy('labels'))
         self.object.delete()
-        return HttpResponseRedirect(self.get_success_url())
+        messages.success(self.request, _('Label was successfully deleted'))
+        return HttpResponseRedirect(reverse_lazy('labels'))
+
 
 class ChangeLabel(UpdateView):
     form_class = CreateLabelForm

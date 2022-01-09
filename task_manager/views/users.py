@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, UpdateView
@@ -11,6 +12,7 @@ from django.views.generic.edit import DeleteView
 
 from task_manager.forms.users_forms import RegisterUserForm
 from task_manager.forms.users_forms import LoginUserForm, ChangeUserForm
+from task_manager.models import Task
 from task_manager.views.general import LoginRequiredMessage, UserCanEditProfile, SimpleTableView
 from task_manager.views.general import USER_CATEGORY
 
@@ -41,23 +43,27 @@ class UserUpdate(LoginRequiredMessage, UserCanEditProfile, UpdateView):
 class UserDelete(LoginRequiredMessage, UserCanEditProfile, DeleteView):
     template_name = 'delete_page.html'
     model = User
-    user_to_delete = None
-    id_to_delete = None
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Delete user"
         context['btn_name'] = 'Yes, delete'
-        self.user_to_delete = self.get_object()
         full_name = self.get_object().get_full_name()
         msg = _('Are you sure you want to delete') + ' ' + full_name + '?'
         context['message'] = msg
         return context
 
-    def get_success_url(self):
+    def form_valid(self, form):
+        object = self.get_object()
+        inclusion_author = Task.objects.filter(author=object.id).first()
+        inclusion_executor = Task.objects.filter(executor=object.id).first()
+        if inclusion_author or inclusion_executor:
+            msg = _('Unable to delete user as it is in use')
+            messages.error(self.request, msg)
+            return HttpResponseRedirect(reverse_lazy('users'))
+        self.object.delete()
         messages.success(self.request, _('User was successfully deleted'))
-        logout(self.request)
-        return reverse_lazy('users')
+        return HttpResponseRedirect(reverse_lazy('users'))
 
 
 class RegisterUser(CreateView):

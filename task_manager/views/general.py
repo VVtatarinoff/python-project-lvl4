@@ -2,13 +2,16 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth.mixins import AccessMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import ListView
+from django.views.generic import ListView, DeleteView
 from task_manager.models import Status, Label, Task
 from django.contrib.auth.models import User
-from django.db.models import Value
+from django.db.models import Value, RestrictedError
 from django.db.models.functions import Concat
+from task_manager.views.constants import *
 
 logger = logging.getLogger(__name__)
 
@@ -33,69 +36,6 @@ class UserCanEditProfile(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-STATUS_CATEGORY = 'statuses'
-LABEL_CATEGORY = 'labels'
-TASK_CATEGORY = 'tasks'
-USER_CATEGORY = 'users'
-
-TITLES = {STATUS_CATEGORY: _("Statuses"),
-          LABEL_CATEGORY: _("Labels"),
-          TASK_CATEGORY: _("Tasks"),
-          USER_CATEGORY: _("Users")}
-
-TABLE_HEADS = {STATUS_CATEGORY: ('ID', _('Name'), _('Creation date')),
-               LABEL_CATEGORY: ('ID', _('Name'), _('Creation date')),
-               TASK_CATEGORY: ('ID', _('Name'), _('Status'), _('Author'), _('Executor'), _('Creation date')),
-               USER_CATEGORY: ('ID', _('User name'),
-                               _('Full name'), _('Creation date'))}
-
-CREATE_LINKS = {STATUS_CATEGORY: {'name': 'create_status', 'title': _('Create status')},
-                LABEL_CATEGORY: {'name': 'create_label', 'title': _('Create label')},
-                TASK_CATEGORY: {'name': 'create_task', 'title': _('Create task')},
-                USER_CATEGORY: {'name': '', 'title': ''}}
-DELETE_LINKS = {STATUS_CATEGORY: 'delete_status',
-                LABEL_CATEGORY: 'delete_label',
-                TASK_CATEGORY: 'delete_task',
-                USER_CATEGORY: 'delete_user'}
-UPDATE_LINKS = {STATUS_CATEGORY: 'update_status',
-                LABEL_CATEGORY: 'update_label',
-                TASK_CATEGORY: 'update_task',
-                USER_CATEGORY: 'update_user'}
-MODELS = {STATUS_CATEGORY: Status,
-          LABEL_CATEGORY: Label,
-          TASK_CATEGORY: Task,
-          USER_CATEGORY: User}
-
-QUARIES = {STATUS_CATEGORY: Status.objects.values_list('id', 'name',
-                                           'creation_date',
-                                           named=True),
-           LABEL_CATEGORY: Label.objects.values_list('id', 'name',
-                                           'creation_date',
-                                           named=True),
-           TASK_CATEGORY: Task.objects.values_list('id', 'name', 'status__name',
-                                           Concat('author__first_name',
-                                                  Value(' '), 'author__last_name'),
-                                           Concat('executor__first_name',
-                                                  Value(' '), 'executor__last_name'),
-                                           'creation_date',
-                                           named=True),
-           USER_CATEGORY: User.objects.values_list('id', 'username',
-                                           Concat('first_name',
-                                                  Value(' '), 'last_name'),
-                                           'date_joined',
-                                           named=True).exclude(
-            is_superuser=True)
-           }
-DETAIL_VIEW = {STATUS_CATEGORY: None,
-          LABEL_CATEGORY: None,
-          TASK_CATEGORY: 2,
-          USER_CATEGORY: None}
-DETAIL_VIEW_PATH = {STATUS_CATEGORY: None,
-          LABEL_CATEGORY: None,
-          TASK_CATEGORY: 'tasks_detail',
-          USER_CATEGORY: None}
-
-
 class SimpleTableView(ListView):
     def __init__(self, category, *arg, **kwargs):
         super(SimpleTableView, self).__init__(*arg, **kwargs)
@@ -116,4 +56,37 @@ class SimpleTableView(ListView):
         return context
 
     def get_queryset(self):
-        return QUARIES[self.category].all()
+        return QUARIES_LIST_VIEW[self.category].all()
+
+
+class SimpleDelete(DeleteView):
+    template_name = 'delete_page.html'
+    category = None
+    model = None
+    next_page = None
+
+    def setup(self, request, *args, **kwargs):
+        self.category = kwargs['category']
+        self.model = MODELS[self.category]
+        self.next_page = reverse_lazy(LIST_LINKS[self.category])
+        return super().setup(request, *args, **kwargs)
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = DELETE_TITLES[self.category]
+        context['btn_name'] = 'Yes, delete'
+        name = self.get_object().get_full_name()
+        msg = _('Are you sure you want to delete') + ' ' + name + '?'
+        context['message'] = msg
+        return context
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+        except RestrictedError:
+            msg = DELETE_CONSTRAINT_MESSAGE[self.category]
+            messages.error(self.request, msg)
+        else:
+            messages.success(self.request,
+                             DELETE_SUCCESS_MESSAGE[self.category])
+        return HttpResponseRedirect(self.next_page)
