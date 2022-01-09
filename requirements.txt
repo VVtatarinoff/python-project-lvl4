@@ -6,3 +6,4 @@ django-bootstrap4
 dj-database-url
 psycopg2
 whitenoise
+rollbar
