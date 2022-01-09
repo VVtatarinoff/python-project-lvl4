@@ -64,11 +64,12 @@ MIDDLEWARE = [
 ]
 
 ROLLBAR = {
-     'access_token': ROLL_KEY,
-     'environment': 'development' if DEBUG else 'production',
-     'root': BASE_DIR,
- }
+    'access_token': ROLL_KEY,
+    'environment': 'development' if DEBUG else 'production',
+    'root': BASE_DIR,
+}
 import rollbar
+
 rollbar.init(**ROLLBAR)
 
 ROOT_URLCONF = 'task_manager.urls'
@@ -114,7 +115,7 @@ DATABASES['default'].update(db_from_env)
 
 AUTH_PASSWORD_VALIDATORS = [{
     'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa 501
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa 501
 },
     {
         'NAME':
@@ -164,16 +165,24 @@ LOGGING = {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
-        }
+        },
+        'rollbar': {
+            'filters': ['require_debug_false'],
+            'access_token': ROLL_KEY,
+            'environment': 'production',
+            'class': 'rollbar.logger.RollbarHandler'
+        },
+
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", 'rollbar'],
             "level": "INFO",
             "propagate": True},
         "task_manager": {
-            "handlers": ["console"],
+            "handlers": ["console", 'rollbar'],
             "level": "DEBUG",
             "propagate": True},
+
     }
 }
