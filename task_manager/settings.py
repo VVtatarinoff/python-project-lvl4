@@ -27,6 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
+ROLL_KEY = os.getenv("ROLL_KEY")
 DEBUG = (os.getenv('DEBUG') == 'True')
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -63,7 +64,7 @@ MIDDLEWARE = [
 ]
 
 ROLLBAR = {
-     'access_token': 'fa8ab3be051f46fd92af1c5e3a0b999e',
+     'access_token': ROLL_KEY,
      'environment': 'development' if DEBUG else 'production',
      'root': BASE_DIR,
  }
