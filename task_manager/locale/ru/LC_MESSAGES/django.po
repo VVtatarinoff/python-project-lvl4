@@ -313,3 +313,6 @@ msgstr "Статус успешно удалён"
 
 msgid "Unable to delete status as it is in use"
 msgstr "Невозможно удалить статус, потому что он используется"
+
+msgid "Passwordd"
+msgstr "Пароль"
