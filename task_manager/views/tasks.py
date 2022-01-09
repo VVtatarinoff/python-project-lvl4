@@ -34,11 +34,10 @@ class FilterTaskMixin(LoginRequiredMessage, FormView):
         return kwargs
 
     def get(self, request, *args, **kwargs):
-        for key, value in self.filtered_data.items():
-            if key == 'self_tasks':
-                self.filtered_data[key] = bool(request.GET.get(key, 0))
-            else:
-                self.filtered_data[key] = request.GET.get(key, 0)
+        for key in self.filtered_data:
+            received = request.GET.get(key, 0)
+            self.filtered_data[key] = bool(received) if key == 'self_tasks'\
+                else received
         self.filter_Q['status'] = Q(status=self.filtered_data['status']) \
             if self.filtered_data['status'] else Q()
         self.filter_Q['executor'] = Q(executor=self.filtered_data['executor'])\

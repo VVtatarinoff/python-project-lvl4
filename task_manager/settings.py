@@ -13,6 +13,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
+import rollbar
 from django.utils.translation import gettext_lazy as _
 
 load_dotenv()
@@ -66,9 +67,9 @@ MIDDLEWARE = [
 ROLLBAR = {
     'access_token': ROLL_KEY,
     'environment': 'development' if DEBUG else 'production',
+    'branch': 'main',
     'root': BASE_DIR,
 }
-import rollbar
 
 rollbar.init(**ROLLBAR)
 
@@ -164,11 +165,15 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
         }
     },
     "handlers": {
         "console": {
             "level": "DEBUG",
+            'filters': ['require_debug_true'],
             "class": "logging.StreamHandler",
         },
         'rollbar': {
