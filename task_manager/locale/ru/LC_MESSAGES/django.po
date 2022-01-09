@@ -227,11 +227,8 @@ msgstr "Статус успешно создан"
 msgid "Status was successfully changed"
 msgstr "Статус успешно изменён"
 
-#: task_manager/views/tasks.py:44
-#, fuzzy
-#| msgid "Status was successfully created"
 msgid "Task was successfully created"
-msgstr "Статус успешно создан"
+msgstr "Задача успешно создана"
 
 msgid "Enter"
 msgstr "Войти"
