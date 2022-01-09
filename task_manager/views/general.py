@@ -38,6 +38,14 @@ class UserCanEditProfile(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
+class SetupMixin(object):
+    def setup(self, request, *args, **kwargs):
+        self.category = kwargs['category']
+        self.model = MODELS[self.category]  # noqa 405
+        self.next_page = reverse_lazy(LIST_LINKS[self.category])  # noqa 405
+        return super().setup(request, *args, **kwargs)
+
+
 class SimpleTableView(ListView):
     category = None
     template_name = 'table.html'
@@ -64,17 +72,11 @@ class SimpleTableView(ListView):
         return QUARIES_LIST_VIEW[self.category].all()  # noqa 405
 
 
-class SimpleDelete(LoginRequiredMessage, DeleteView):
+class SimpleDelete(SetupMixin, LoginRequiredMessage, DeleteView):
     template_name = 'delete_page.html'
     category = None
     model = None
     next_page = None
-
-    def setup(self, request, *args, **kwargs):
-        self.category = kwargs['category']
-        self.model = MODELS[self.category]  # noqa 405
-        self.next_page = reverse_lazy(LIST_LINKS[self.category])  # noqa 405
-        return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -97,15 +99,10 @@ class SimpleDelete(LoginRequiredMessage, DeleteView):
         return HttpResponseRedirect(self.next_page)
 
 
-class CreateMixin(LoginRequiredMessage, CreateView):
+class CreateMixin(LoginRequiredMessage, SetupMixin, CreateView):
     template_name = 'form_view.html'
     category = None
     next_page = None
-
-    def setup(self, request, *args, **kwargs):
-        self.category = kwargs['category']
-        self.next_page = reverse_lazy(LIST_LINKS[self.category]) # noqa 405
-        return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -118,17 +115,11 @@ class CreateMixin(LoginRequiredMessage, CreateView):
         return self.next_page
 
 
-class UpdateMixin(LoginRequiredMessage, UpdateView):
+class UpdateMixin(LoginRequiredMessage, SetupMixin, UpdateView):
     template_name = 'form_view.html'
     model = None
     category = None
     next_page = None
-
-    def setup(self, request, *args, **kwargs):
-        self.category = kwargs['category']
-        self.model = MODELS[self.category]  # noqa 405
-        self.next_page = reverse_lazy(LIST_LINKS[self.category])  # noqa 405
-        return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
