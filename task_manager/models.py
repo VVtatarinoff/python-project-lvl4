@@ -35,7 +35,7 @@ class Task(models.Model):
                                  verbose_name='Исполнитель')
     status = models.ForeignKey(Status, on_delete=models.RESTRICT,
                                verbose_name='Текущий статус')
-    labels = models.ManyToManyField(Label, through='StatusTaskIntermediate')
+    labels = models.ManyToManyField(Label, through='LabelTaskIntermediate')
 
     def __str__(self):
         return self.name
