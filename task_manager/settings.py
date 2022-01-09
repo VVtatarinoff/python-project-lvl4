@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [{
         'NAME':
             'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {'min_length': 3}
-    },
+    },  # noqa 125
 ]
 #  {
 #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', # noqa 501

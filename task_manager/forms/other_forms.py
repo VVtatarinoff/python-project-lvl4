@@ -116,8 +116,7 @@ class FilterTaskForm(ModelForm):
                                widget=forms.CheckboxInput(
                                    attrs={
                                        'class': 'form-check-input',
-                                       'name': 'self_tasks'}
-                               ),
+                                       'name': 'self_tasks'}),
                                initial=False)
 
     class Meta:

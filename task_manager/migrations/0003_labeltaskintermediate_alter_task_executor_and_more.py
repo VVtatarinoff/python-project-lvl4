@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('task_manager', '0002_alter_task_options_alter_task_author_and_more'),
@@ -39,13 +38,12 @@ class Migration(migrations.Migration):
             model_name='task',
             name='labels',
         ),
-        migrations.AddField(
-                model_name='task',
-                name='labels',
-                field=models.ManyToManyField(
-                    through='task_manager.LabelTaskIntermediate',
-                    to='task_manager.Label'),
-             ),
+        migrations.AddField(model_name='task',
+                            name='labels',
+                            field=models.ManyToManyField(
+                                through='task_manager.LabelTaskIntermediate',
+                                to='task_manager.Label'),
+                            ),
         migrations.AddField(
             model_name='labeltaskintermediate',
             name='task_link',

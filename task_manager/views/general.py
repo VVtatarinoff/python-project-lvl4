@@ -29,11 +29,9 @@ class UserCanEditProfile(AccessMixin):
     login_url = 'home'
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_superuser and (kwargs['pk']
-                                              != self.request.user.id):
-            messages.error(
-                self.request,
-                _('You have no authorization to handle this action'))
+        if not (kwargs['pk'] != self.request.user.id):
+            messages.error(self.request,
+                           _('You have no authorization to handle this action'))
             return redirect(self.login_url)
         return super().dispatch(request, *args, **kwargs)
 
@@ -57,10 +55,10 @@ class SimpleTableView(ListView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = TITLES[self.category] # noqa 405
-        context['table_heads'] = TABLE_HEADS[self.category] # noqa 405
+        context['title'] = TITLES[self.category]  # noqa 405
+        context['table_heads'] = TABLE_HEADS[self.category]  # noqa 405
         if self.category != USER_CATEGORY:  # noqa 405
-            context['create_path_name'] = CREATE_TITLES[self.category] # noqa 405
+            context['create_path_name'] = CREATE_TITLES[self.category]  # noqa 405
             context['create_path'] = CREATE_LINKS[self.category]  # noqa 405
         context['update_link'] = UPDATE_LINKS[self.category]  # noqa 405
         context['delete_link'] = DELETE_LINKS[self.category]  # noqa 405
