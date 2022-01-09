@@ -5,12 +5,13 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView
 
-from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
+from task_manager.forms.other_forms import CreateTaskForm, FilterTaskForm
 from task_manager.views.constants import DELETE_CONSTRAINT_MESSAGE, LIST_LINKS
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.views.general import SimpleDelete, CreateMixin, UpdateMixin
 from task_manager.models import Task
-from task_manager.views.general import TASK_CATEGORY, UPDATE_LINKS, DELETE_LINKS
+from task_manager.views.general import TASK_CATEGORY, UPDATE_LINKS
+from task_manager.views.general import DELETE_LINKS
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +75,7 @@ class CreateTask(CreateMixin):
 class DeleteTask(SimpleDelete):
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_superuser and (self.get_object().author_id
-                                              != self.request.user.id):
+        if self.get_object().author_id != self.request.user.id:
             messages.error(self.request,
                            DELETE_CONSTRAINT_MESSAGE[TASK_CATEGORY])
             return redirect(LIST_LINKS[TASK_CATEGORY])
@@ -100,8 +100,9 @@ class UpdateTask(UpdateMixin):
 
     def get_form_kwargs(self):
         """ Passes the request object to the form class.
-         This is necessary to only display members that belong to a given user"""
+         This is necessary to only display
+         members that belong to a given user"""
 
         kwargs = super().get_form_kwargs()
-        kwargs['id'] = self.request.user.id
+        kwargs['id'] = self.get_object().author_id
         return kwargs

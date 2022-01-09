@@ -6,7 +6,7 @@ tests:
 
 
 coverage:
-	poetry run pytest --cov=page_loader
+	poetry run pytest --cov=task_manager
 
 build:
 	poetry build
@@ -17,11 +17,11 @@ log:
 	heroku logs --tail
 
 lint:
-	poetry run flake8 page_loader
+	poetry run flake8 task_manager
 
 translate:
 	django-admin compilemessages
 
 command_prompt:
 	export PS1="\W ($(git branch 2>/dev/null | grep '^*' | colrm 1 2)) $ "
-.PHONY: install  build run tests log lint
+.PHONY: install  build run tests log lint translate

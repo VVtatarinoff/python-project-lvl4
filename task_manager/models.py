@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
+
 
 class Status(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -12,6 +13,7 @@ class Status(models.Model):
     def get_full_name(self):
         return self.name
 
+
 class Label(models.Model):
     name = models.CharField(max_length=100, unique=True)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -21,6 +23,7 @@ class Label(models.Model):
 
     def get_full_name(self):
         return self.name
+
 
 class Task(models.Model):
     name = models.CharField(max_length=150, unique=True,

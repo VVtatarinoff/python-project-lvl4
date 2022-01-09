@@ -9,7 +9,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
 from django.db.models import RestrictedError
-from task_manager.views.constants import *
+from task_manager.views.constants import *  # noqa 403
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +31,9 @@ class UserCanEditProfile(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_superuser and (kwargs['pk']
                                               != self.request.user.id):
-            messages.error(self.request,
-                           _('You have no authorization to handle this action'))
+            messages.error(
+                self.request,
+                _('You have no authorization to handle this action'))
             return redirect(self.login_url)
         return super().dispatch(request, *args, **kwargs)
 
@@ -48,18 +49,19 @@ class SimpleTableView(ListView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = TITLES[self.category]
-        context['table_heads'] = TABLE_HEADS[self.category]
-        context['create_path'] = CREATE_LINKS[self.category]['name']
-        context['create_path_name'] = CREATE_LINKS[self.category]['title']
-        context['update_link'] = UPDATE_LINKS[self.category]
-        context['delete_link'] = DELETE_LINKS[self.category]
-        context['detail'] = DETAIL_VIEW[self.category]
-        context['detail_path'] = DETAIL_VIEW_PATH[self.category]
+        context['title'] = TITLES[self.category] # noqa 405
+        context['table_heads'] = TABLE_HEADS[self.category] # noqa 405
+        if self.category != USER_CATEGORY:  # noqa 405
+            context['create_path_name'] = CREATE_TITLES[self.category] # noqa 405
+            context['create_path'] = CREATE_LINKS[self.category]  # noqa 405
+        context['update_link'] = UPDATE_LINKS[self.category]  # noqa 405
+        context['delete_link'] = DELETE_LINKS[self.category]  # noqa 405
+        context['detail'] = DETAIL_VIEW[self.category]  # noqa 405
+        context['detail_path'] = DETAIL_VIEW_PATH[self.category]  # noqa 405
         return context
 
     def get_queryset(self):
-        return QUARIES_LIST_VIEW[self.category].all()
+        return QUARIES_LIST_VIEW[self.category].all()  # noqa 405
 
 
 class SimpleDelete(LoginRequiredMessage, DeleteView):
@@ -70,13 +72,13 @@ class SimpleDelete(LoginRequiredMessage, DeleteView):
 
     def setup(self, request, *args, **kwargs):
         self.category = kwargs['category']
-        self.model = MODELS[self.category]
-        self.next_page = reverse_lazy(LIST_LINKS[self.category])
+        self.model = MODELS[self.category]  # noqa 405
+        self.next_page = reverse_lazy(LIST_LINKS[self.category])  # noqa 405
         return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = DELETE_TITLES[self.category]
+        context['title'] = DELETE_TITLES[self.category]  # noqa 405
         context['btn_name'] = 'Yes, delete'
         name = self.get_object().get_full_name()
         msg = _('Are you sure you want to delete') + ' ' + name + '?'
@@ -87,11 +89,11 @@ class SimpleDelete(LoginRequiredMessage, DeleteView):
         try:
             self.object.delete()
         except RestrictedError:
-            msg = DELETE_CONSTRAINT_MESSAGE[self.category]
+            msg = DELETE_CONSTRAINT_MESSAGE[self.category]  # noqa 405
             messages.error(self.request, msg)
         else:
             messages.success(self.request,
-                             DELETE_SUCCESS_MESSAGE[self.category])
+                             DELETE_SUCCESS_MESSAGE[self.category])  # noqa 405
         return HttpResponseRedirect(self.next_page)
 
 
@@ -102,17 +104,17 @@ class CreateMixin(LoginRequiredMessage, CreateView):
 
     def setup(self, request, *args, **kwargs):
         self.category = kwargs['category']
-        self.next_page = reverse_lazy(LIST_LINKS[self.category])
+        self.next_page = reverse_lazy(LIST_LINKS[self.category]) # noqa 405
         return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = CREATE_TITLES[self.category]
+        context['title'] = CREATE_TITLES[self.category]  # noqa 405
         context['btn_name'] = "Create"
         return context
 
     def get_success_url(self):
-        messages.success(self.request, CREATE_SUCCESS_MESSAGE[self.category])
+        messages.success(self.request, CREATE_SUCCESS_MESSAGE[self.category])  # noqa 405
         return self.next_page
 
 
@@ -124,16 +126,16 @@ class UpdateMixin(LoginRequiredMessage, UpdateView):
 
     def setup(self, request, *args, **kwargs):
         self.category = kwargs['category']
-        self.model = MODELS[self.category]
-        self.next_page = reverse_lazy(LIST_LINKS[self.category])
+        self.model = MODELS[self.category]  # noqa 405
+        self.next_page = reverse_lazy(LIST_LINKS[self.category])  # noqa 405
         return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = UPDATE_TITLES[self.category]
+        context['title'] = UPDATE_TITLES[self.category]  # noqa 405
         context['btn_name'] = "Change"
         return context
 
     def get_success_url(self):
-        messages.success(self.request, UPDATE_SUCCESS_MESSAGE[self.category])
+        messages.success(self.request, UPDATE_SUCCESS_MESSAGE[self.category])  # noqa 405
         return self.next_page

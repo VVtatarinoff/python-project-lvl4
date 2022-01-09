@@ -1,6 +1,6 @@
 import logging
 
-from task_manager.forms.statuses_forms import CreateStatusForm
+from task_manager.forms.other_forms import CreateStatusForm
 from task_manager.views.general import LoginRequiredMessage, SimpleTableView
 from task_manager.views.general import CreateMixin, UpdateMixin
 

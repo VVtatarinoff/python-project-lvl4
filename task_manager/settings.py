@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import logging
 from pathlib import Path
 import os
 import dj_database_url
@@ -103,11 +102,10 @@ DATABASES['default'].update(db_from_env)
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME':
-            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+AUTH_PASSWORD_VALIDATORS = [{
+    'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa 501
+},
     {
         'NAME':
             'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -115,12 +113,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 #  {
-#     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', # noqa 501
 #     },
 #     {
-#     NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', # noqa 501
 #     },
-# LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 LANGUAGES = (

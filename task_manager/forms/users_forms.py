@@ -1,6 +1,7 @@
 import logging
 
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
@@ -40,7 +41,8 @@ class UserMixin(ModelForm):
                                             'password for confirmation'),
                                 widget=forms.PasswordInput(attrs={
                                     'class': 'form-control',
-                                    'placeholder': _('Confirmation of password')}))
+                                    'placeholder': _(
+                                        'Confirmation of password')}))
 
     class Meta:
         model = User

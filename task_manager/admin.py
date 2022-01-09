@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from task_manager.models import Task, Status, Label, LabelTaskIntermediate
 
+
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', 'creation_date', 'author',
                     'author_id', 'executor', 'executor_id',
@@ -11,6 +12,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_editable = ('name', 'description')
     list_filter = ('author', 'status')
     save_on_top = True
+
 
 class LabelTaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'label_link', 'task_link')
