@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import CreateView, UpdateView, FormView, DetailView, DeleteView
 
 from task_manager.forms.statuses_forms import CreateTaskForm, FilterTaskForm
-from task_manager.views.general import LoginRequiredMessage, SimpleTableView
+from task_manager.views.general import LoginRequiredMessage, SimpleTableView, SimpleDelete
 from task_manager.models import Task
 from task_manager.views.general import TASK_CATEGORY, UPDATE_LINKS, DELETE_LINKS
 
@@ -83,9 +83,7 @@ class CreateTask(CreateView):
         return kwargs
 
 
-class DeleteTask(LoginRequiredMessage, DeleteView):
-    model = Task
-    template_name = 'delete_page.html'
+class DeleteTask(SimpleDelete):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_superuser and self.get_object().author_id != self.request.user.id:
@@ -93,18 +91,6 @@ class DeleteTask(LoginRequiredMessage, DeleteView):
             return redirect('tasks')
         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Delete task"
-        context['btn_name'] = 'Yes, delete'
-        name = self.get_object().name
-        msg = _('Are you sure you want to delete') + ' ' + name + '?'
-        context['message'] = msg
-        return context
-
-    def get_success_url(self):
-        messages.success(self.request, _('Task was successfully deleted'))
-        return reverse_lazy('tasks')
 
 class TasksDetail(DetailView):
     model = Task

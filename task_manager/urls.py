@@ -36,7 +36,8 @@ urlpatterns = [
     path('tasks/', tasks.Tasks.as_view(), name='tasks'),
     path('tasks/<int:pk>/', tasks.TasksDetail.as_view(), name='tasks_detail'),
     path('users/<int:pk>/update/', users.UserUpdate.as_view(), name='update_user'),
-    path('users/<int:pk>/delete/', users.UserDelete.as_view(), name='delete_user'),
+    path('users/<int:pk>/delete/', users.UserDelete.as_view(),
+         kwargs={'category': USER_CATEGORY}, name='delete_user'),
     path('statuses/<int:pk>/update/', statuses.ChangeStatus.as_view(), name='update_status'),
     path('statuses/<int:pk>/delete/', general.SimpleDelete.as_view(),
          kwargs={'category': STATUS_CATEGORY}, name='delete_status'),
@@ -46,7 +47,8 @@ urlpatterns = [
          kwargs={'category': LABEL_CATEGORY}, name='delete_label'),
     path('labels/create/', labels.CreateLabel.as_view(), name='create_label'),
     path('tasks/<int:pk>/update/', tasks.ChangeTask.as_view(), name='update_task'),
-    path('tasks/<int:pk>/delete/', tasks.DeleteTask.as_view(), name='delete_task'),
+    path('tasks/<int:pk>/delete/', tasks.DeleteTask.as_view(),
+         kwargs={'category': TASK_CATEGORY}, name='delete_task'),
     path('tasks/create/', tasks.CreateTask.as_view(), name='create_task'),
 
 ]

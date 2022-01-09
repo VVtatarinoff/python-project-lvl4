@@ -59,7 +59,7 @@ class SimpleTableView(ListView):
         return QUARIES_LIST_VIEW[self.category].all()
 
 
-class SimpleDelete(DeleteView):
+class SimpleDelete(LoginRequiredMessage, DeleteView):
     template_name = 'delete_page.html'
     category = None
     model = None
