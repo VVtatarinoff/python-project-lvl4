@@ -29,7 +29,7 @@ class UserCanEditProfile(AccessMixin):
     login_url = 'home'
 
     def dispatch(self, request, *args, **kwargs):
-        if not (kwargs['pk'] != self.request.user.id):
+        if kwargs['pk'] != self.request.user.id:
             messages.error(self.request,
                            _('You have no authorization to handle this action'))
             return redirect(self.login_url)
