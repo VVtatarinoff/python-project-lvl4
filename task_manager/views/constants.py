@@ -25,15 +25,29 @@ DELETE_TITLES = {STATUS_CATEGORY: _("Delete status"),
                  TASK_CATEGORY: _("Delete task"),
                  USER_CATEGORY: _("Delete user")}
 
+CREATE_TITLES = {STATUS_CATEGORY: _("Create status"),
+                 LABEL_CATEGORY: _("Create label"),
+                 TASK_CATEGORY: _("Create task"),
+                 USER_CATEGORY: _("Registration")}
+
+UPDATE_TITLES = {STATUS_CATEGORY: _("Change status"),
+                 LABEL_CATEGORY: _("Change label"),
+                 TASK_CATEGORY: _("Change task"),
+                 USER_CATEGORY: _("Change user data")}
+
 TABLE_HEADS = {STATUS_CATEGORY: ('ID', _('Name'), _('Creation date')),
                LABEL_CATEGORY: ('ID', _('Name'), _('Creation date')),
-               TASK_CATEGORY: ('ID', _('Name'), _('Status'), _('Author'), _('Executor'), _('Creation date')),
+               TASK_CATEGORY: ('ID', _('Name'), _('Status'), _('Author'),
+                               _('Executor'), _('Creation date')),
                USER_CATEGORY: ('ID', _('User name'),
                                _('Full name'), _('Creation date'))}
 
-CREATE_LINKS = {STATUS_CATEGORY: {'name': 'create_status', 'title': _('Create status')},
-                LABEL_CATEGORY: {'name': 'create_label', 'title': _('Create label')},
-                TASK_CATEGORY: {'name': 'create_task', 'title': _('Create task')},
+CREATE_LINKS = {STATUS_CATEGORY: {'name': 'create_status',
+                                  'title': _('Create status')},
+                LABEL_CATEGORY: {'name': 'create_label',
+                                 'title': _('Create label')},
+                TASK_CATEGORY: {'name': 'create_task',
+                                'title': _('Create task')},
                 USER_CATEGORY: {'name': '', 'title': ''}}
 
 DELETE_LINKS = {STATUS_CATEGORY: 'delete_status',
@@ -51,25 +65,32 @@ LIST_LINKS = {STATUS_CATEGORY: 'statuses',
               TASK_CATEGORY: 'tasks',
               USER_CATEGORY: 'users'}
 
-QUARIES_LIST_VIEW = {STATUS_CATEGORY: Status.objects.values_list('id', 'name',
-                                                                 'creation_date',
-                                                                 named=True),
-                     LABEL_CATEGORY: Label.objects.values_list('id', 'name',
-                                                               'creation_date',
-                                                               named=True),
-                     TASK_CATEGORY: Task.objects.values_list('id', 'name', 'status__name',
-                                                             Concat('author__first_name',
-                                                                    Value(' '), 'author__last_name'),
-                                                             Concat('executor__first_name',
-                                                                    Value(' '), 'executor__last_name'),
-                                                             'creation_date',
-                                                             named=True),
-                     USER_CATEGORY: User.objects.values_list('id', 'username',
-                                                             Concat('first_name',
-                                                                    Value(' '), 'last_name'),
-                                                             'date_joined',
-                                                             named=True).exclude(
-                         is_superuser=True)
+QUARIES_LIST_VIEW = {STATUS_CATEGORY:
+                         Status.objects.values_list('id', 'name',
+                                                    'creation_date',
+                                                    named=True),
+                     LABEL_CATEGORY:
+                         Label.objects.values_list('id', 'name',
+                                                   'creation_date',
+                                                   named=True),
+                     TASK_CATEGORY:
+                         Task.objects.values_list('id', 'name', 'status__name',
+                                                  Concat('author__first_name',
+                                                         Value(' '),
+                                                         'author__last_name'),
+                                                  Concat('executor__first_name',
+                                                         Value(' '),
+                                                         'executor__last_name'),
+                                                  'creation_date',
+                                                  named=True),
+                     USER_CATEGORY:
+                         User.objects.values_list('id', 'username',
+                                                  Concat('first_name',
+                                                         Value(' '),
+                                                         'last_name'),
+                                                  'date_joined',
+                                                  named=True).exclude(
+                             is_superuser=True)
                      }
 DETAIL_VIEW = {STATUS_CATEGORY: None,
                LABEL_CATEGORY: None,
@@ -81,11 +102,25 @@ DETAIL_VIEW_PATH = {STATUS_CATEGORY: None,
                     USER_CATEGORY: None}
 
 DELETE_SUCCESS_MESSAGE = {STATUS_CATEGORY: _('Status was successfully deleted'),
-                           LABEL_CATEGORY: _('Label was successfully deleted'),
-                           TASK_CATEGORY: _('Task was successfully deleted'),
-                           USER_CATEGORY: _('User was successfully deleted')}
+                          LABEL_CATEGORY: _('Label was successfully deleted'),
+                          TASK_CATEGORY: _('Task was successfully deleted'),
+                          USER_CATEGORY: _('User was successfully deleted')}
 
-DELETE_CONSTRAINT_MESSAGE = {STATUS_CATEGORY: _('Unable to delete status as it is in use'),
-                           LABEL_CATEGORY: _('Unable to delete label as it is in use'),
-                           TASK_CATEGORY: _('The task may be deleted only by author'),
-                           USER_CATEGORY: _('Unable to delete user as it is in use')}
+DELETE_CONSTRAINT_MESSAGE = {STATUS_CATEGORY:
+                                 _('Unable to delete status as it is in use'),
+                             LABEL_CATEGORY:
+                                 _('Unable to delete label as it is in use'),
+                             TASK_CATEGORY:
+                                 _('The task may be deleted only by author'),
+                             USER_CATEGORY:
+                                 _('Unable to delete user as it is in use')}
+
+CREATE_SUCCESS_MESSAGE = {STATUS_CATEGORY: _('Status was successfully created'),
+                          LABEL_CATEGORY: _('Label was successfully created'),
+                          TASK_CATEGORY: _('Task was successfully created'),
+                          USER_CATEGORY: _('Successful registration')}
+
+UPDATE_SUCCESS_MESSAGE = {STATUS_CATEGORY: _('Status was successfully changed'),
+                          LABEL_CATEGORY: _('Label was successfully changed'),
+                          TASK_CATEGORY: _('Task was successfully changed'),
+                          USER_CATEGORY: _('User data was changed')}

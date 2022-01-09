@@ -6,22 +6,21 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import ListView, DeleteView
-from task_manager.models import Status, Label, Task
-from django.contrib.auth.models import User
-from django.db.models import Value, RestrictedError
-from django.db.models.functions import Concat
+from django.views.generic import ListView, DeleteView, CreateView, UpdateView
+
+from django.db.models import RestrictedError
 from task_manager.views.constants import *
 
 logger = logging.getLogger(__name__)
 
 
 class LoginRequiredMessage(AccessMixin):
-    login_url = 'home'
+    login_url = 'login'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(self.request, _('You are not authorized. Please log in'))
+            messages.error(self.request,
+                           _('You are not authorized. Please log in'))
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
@@ -30,18 +29,22 @@ class UserCanEditProfile(AccessMixin):
     login_url = 'home'
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_superuser and kwargs['pk'] != self.request.user.id:
-            messages.error(self.request, _('You have no authorization to handle this action'))
+        if not request.user.is_superuser and (kwargs['pk']
+                                              != self.request.user.id):
+            messages.error(self.request,
+                           _('You have no authorization to handle this action'))
             return redirect(self.login_url)
         return super().dispatch(request, *args, **kwargs)
 
 
 class SimpleTableView(ListView):
-    def __init__(self, category, *arg, **kwargs):
-        super(SimpleTableView, self).__init__(*arg, **kwargs)
-        self.template_name = 'table.html'
-        self.context_object_name = 'table'
-        self.category = category
+    category = None
+    template_name = 'table.html'
+    context_object_name = 'table'
+
+    def setup(self, request, *args, **kwargs):
+        self.category = kwargs['category']
+        return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,3 +93,47 @@ class SimpleDelete(LoginRequiredMessage, DeleteView):
             messages.success(self.request,
                              DELETE_SUCCESS_MESSAGE[self.category])
         return HttpResponseRedirect(self.next_page)
+
+
+class CreateMixin(LoginRequiredMessage, CreateView):
+    template_name = 'form_view.html'
+    category = None
+    next_page = None
+
+    def setup(self, request, *args, **kwargs):
+        self.category = kwargs['category']
+        self.next_page = reverse_lazy(LIST_LINKS[self.category])
+        return super().setup(request, *args, **kwargs)
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = CREATE_TITLES[self.category]
+        context['btn_name'] = "Create"
+        return context
+
+    def get_success_url(self):
+        messages.success(self.request, CREATE_SUCCESS_MESSAGE[self.category])
+        return self.next_page
+
+
+class UpdateMixin(LoginRequiredMessage, UpdateView):
+    template_name = 'form_view.html'
+    model = None
+    category = None
+    next_page = None
+
+    def setup(self, request, *args, **kwargs):
+        self.category = kwargs['category']
+        self.model = MODELS[self.category]
+        self.next_page = reverse_lazy(LIST_LINKS[self.category])
+        return super().setup(request, *args, **kwargs)
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = UPDATE_TITLES[self.category]
+        context['btn_name'] = "Change"
+        return context
+
+    def get_success_url(self):
+        messages.success(self.request, UPDATE_SUCCESS_MESSAGE[self.category])
+        return self.next_page
