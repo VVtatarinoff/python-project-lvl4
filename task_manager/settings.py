@@ -13,7 +13,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
-import rollbar
+# import rollbar
 from django.utils.translation import gettext_lazy as _
 
 load_dotenv()
@@ -71,7 +71,7 @@ ROLLBAR = {
     'root': BASE_DIR,
 }
 
-rollbar.init(**ROLLBAR)
+# rollbar.init(**ROLLBAR)
 
 ROOT_URLCONF = 'task_manager.urls'
 

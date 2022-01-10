@@ -27,6 +27,7 @@ from task_manager.views.constants import LABEL_CATEGORY, TASK_CATEGORY
 from task_manager.views.constants import DELETE_LINKS, UPDATE_LINKS
 from task_manager.views.constants import LIST_LINKS, CREATE_LINKS
 
+kwargs = dict()
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='main.html'), name='home'),

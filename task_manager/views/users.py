@@ -11,7 +11,7 @@ from task_manager.forms.users_forms import RegisterUserForm
 from task_manager.forms.users_forms import LoginUserForm, ChangeUserForm
 from task_manager.views.constants import CREATE_TITLES, USER_CATEGORY
 from task_manager.views.constants import CREATE_SUCCESS_MESSAGE
-from task_manager.views.general import UserCanEditProfile
+from task_manager.views.general import UserCanEditProfile, LoginRequiredMessage
 from task_manager.views.general import SimpleDelete, UpdateMixin
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ class LoginUser(LoginView):
         return super().form_invalid(form)
 
 
-class LogOut(LogoutView):
+class LogOut(LoginRequiredMessage, LogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.success(self.request, _('You are logged out'))
         return super().dispatch(request, *args, **kwargs)

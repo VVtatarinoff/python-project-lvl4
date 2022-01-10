@@ -72,16 +72,16 @@ class CreateTask(CreateMixin):
 
 
 class DeleteTask(SimpleDelete):
-
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object().author_id != self.request.user.id:
+        if self.request.user.id and (
+                self.get_object().author_id != self.request.user.id):
             messages.error(self.request,
                            DELETE_CONSTRAINT_MESSAGE[TASK_CATEGORY])
             return redirect(LIST_LINKS[TASK_CATEGORY])
         return super().dispatch(request, *args, **kwargs)
 
 
-class TasksDetail(DetailView):
+class TasksDetail(LoginRequiredMessage, DetailView):
     model = Task
     template_name = 'detail_view.html'
     context_object_name = 'task'

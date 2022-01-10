@@ -1,19 +1,32 @@
-from django import test
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+import pytest
+
+from task_manager.test.conftest import NOLOGIN_PAGE, LOGIN_REQUIRED_PAGE
+from task_manager.test.conftest import LOGIN_REQUIRED_PAGE_PK
+from task_manager.urls import urlpatterns
 
 
-class URLTests(test.TestCase):
-    PAGES_FREE_ACCESS = ['home', 'users', 'login', 'registration']
-    PAGES_LOGIN_ACCESS = ['statuses', 'labels', 'tasks']
+@pytest.mark.django_db
+@pytest.mark.parametrize('page', NOLOGIN_PAGE)
+def test_free_access_pages(client, page):
+    response = client.get(reverse_lazy(page))
+    assert response.status_code == 200
 
-    def test_free_access(self):
-        for page in self.PAGES_FREE_ACCESS:
-            response = self.client.get(reverse_lazy(page))
-            self.assertEqual(response.status_code, 200)
 
-    def test_login_access(self):
-        for page in self.PAGES_LOGIN_ACCESS:
-            response = self.client.get(reverse_lazy(page))
-            self.assertEqual(response.status_code, 302)
-            expected_url = f'{reverse_lazy("home")}?next={reverse_lazy(page)}'
-            self.assertEqual(response.url, expected_url)
+@pytest.mark.django_db
+def test_login_access_pages(client, site_path, setup_users):
+    response = client.get(site_path)
+    assert response.status_code == 302
+    expected_url = reverse("login")
+    assert response.url == expected_url
+    client.force_login(setup_users[0])
+    response = client.get(site_path)
+    assert response.status_code == 200
+
+
+def test_coverage():
+    paths_tested = len(
+        NOLOGIN_PAGE + LOGIN_REQUIRED_PAGE + LOGIN_REQUIRED_PAGE_PK)
+    paths_patterns = len(urlpatterns)
+    ''' Admin and logout excluded from test'''
+    assert paths_patterns - 2 == paths_tested

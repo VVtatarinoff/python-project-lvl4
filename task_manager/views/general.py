@@ -21,7 +21,7 @@ class LoginRequiredMessage(AccessMixin):
         if not request.user.is_authenticated:
             messages.error(self.request,
                            _('You are not authorized. Please log in'))
-            return self.handle_no_permission()
+            return redirect(self.login_url)
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -70,7 +70,7 @@ class SimpleTableView(ListView):
         return QUARIES_LIST_VIEW[self.category].all()  # noqa 405
 
 
-class SimpleDelete(SetupMixin, LoginRequiredMessage, DeleteView):
+class SimpleDelete(LoginRequiredMessage, SetupMixin, DeleteView):
     template_name = 'delete_page.html'
     category = None
     model = None
