@@ -6,5 +6,5 @@ dj-database-url
 psycopg2
 whitenoise
 rollbar
-pytest-django = 4.5.2
-pytest-cov = 3.0.0
+pytest-django == 4.5.2
+pytest-cov == 3.0.0
