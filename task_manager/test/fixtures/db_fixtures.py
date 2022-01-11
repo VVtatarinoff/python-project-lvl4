@@ -48,7 +48,7 @@ TASKS_TEST = [
         "status": 1,
         "executor": 1,
         'author': 1,
-        "labels": [1, 3]
+        "labels": [1]
     },
     {
         "name": "second task name",

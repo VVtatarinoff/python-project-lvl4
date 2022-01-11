@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.urls import reverse
 
 from task_manager.models import Label, Task, Status
@@ -89,25 +90,23 @@ def log_user1(client, setup_users):
     return user
 
 
+@pytest.fixture(params=['author', 'executor'])
+def bound_user(client, setup_tasks, request):
+    if request.param == 'author':
+        bound_author = User.objects.annotate(
+            Count('author')).filter(author__count__gt=0).first()
+        client.force_login(bound_author)
+        return bound_author
+    else:
+        bound_executor = User.objects.annotate(
+            Count('author')).filter(author__count__gt=0).first()
+        client.force_login(bound_executor)
+        return bound_executor
+
+
 @pytest.fixture
 def user1_details():
     user1 = USERS_TEST[0].copy()
     user1['password1'] = user1['password']
     user1['password2'] = user1['password']
     return user1
-
-
-@pytest.fixture
-def bound_status(setup_tasks):
-    statuses = Status.objects.all()
-    for status in statuses:
-        if status.task_set.count() != 0:
-            return status
-
-
-@pytest.fixture
-def unbound_status(setup_tasks):
-    statuses = Status.objects.all()
-    for status in statuses:
-        if status.task_set.count() == 0:
-            return status

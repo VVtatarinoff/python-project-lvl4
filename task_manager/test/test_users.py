@@ -23,7 +23,7 @@ DELETE_PATH = DELETE_LINKS[USER_CATEGORY]
 LIST_TITLE = TITLES[USER_CATEGORY]
 UPDATE_TITLE = UPDATE_TITLES[USER_CATEGORY]
 CREATE_TITLE = CREATE_TITLES[USER_CATEGORY]
-" *************'C' from CRUD  ****************************"
+# *************'C' from CRUD  ****************************"
 
 
 @pytest.mark.django_db
@@ -65,7 +65,7 @@ def test_register_post_the_same_name(client, setup_users, user1_details):
     assert check_user.first_name == keep_name
 
 
-" *************'R' from CRUD  ****************************"
+# *************'R' from CRUD  ****************************"
 
 
 @pytest.mark.django_db
@@ -93,7 +93,7 @@ def test_view_users(client, setup_users, user):
     assert content.find(fullname) > 0
 
 
-" *************'U' from CRUD  ****************************"
+# *************'U' from CRUD  ****************************"
 
 
 @pytest.mark.django_db
@@ -144,7 +144,7 @@ def test_update_not_selfuser(client, setup_users, log_user1):
     assert user2_before_request == user2_after_request
 
 
-" *************'D' from CRUD  ****************************"
+# *************'D' from CRUD  ****************************"
 
 
 @pytest.mark.django_db
@@ -163,5 +163,16 @@ def test_delete_not_self(client, setup_users, log_user1):
     response = client.post(reverse(DELETE_PATH, kwargs={'pk': 2}))
     assert User.objects.all().count() == len(setup_users)
     assert User.objects.get(id=2)
+    assert response.status_code == 302
+    assert response.url == VIEW_PATH
+
+
+@pytest.mark.django_db
+def test_delete_bound(client, setup_tasks, bound_user):
+    initial_count = User.objects.all().count()
+    response = client.post(reverse(DELETE_PATH,
+                                   kwargs={'pk': bound_user.id}))
+    assert User.objects.all().count() == initial_count
+    assert User.objects.get(id=bound_user.id)
     assert response.status_code == 302
     assert response.url == VIEW_PATH
