@@ -65,7 +65,6 @@ class CreateTask(CreateMixin):
     def get_form_kwargs(self):
         """ Passes the request object to the form class.
          This is necessary to assign task to a logged user"""
-
         kwargs = super(CreateTask, self).get_form_kwargs()
         kwargs['id'] = self.request.user.id
         return kwargs

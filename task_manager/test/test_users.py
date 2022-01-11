@@ -3,7 +3,7 @@ import pytest
 import logging
 from django.urls import reverse
 
-from task_manager.test.fixtures.db_fixtures import TEST_DATA, USERS_TEST
+from task_manager.test.fixtures.db_fixtures import USERS_TEST, NEW_USER
 from task_manager.views.constants import CREATE_LINKS, USER_CATEGORY
 from task_manager.views.constants import UPDATE_TITLES, UPDATE_LINKS
 from task_manager.views.constants import DELETE_LINKS
@@ -12,7 +12,6 @@ from task_manager.views.constants import CREATE_TITLES
 
 logger = logging.getLogger(__name__)
 
-NEW_USER = TEST_DATA['users']['new']
 FIRST_USER = USERS_TEST[0]
 
 REGISTER_PATH = reverse(CREATE_LINKS[USER_CATEGORY])
