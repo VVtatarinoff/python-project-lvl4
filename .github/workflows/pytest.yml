@@ -27,5 +27,5 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           SECRET_KEY: topsecret
         with:
-          coverageCommand: poetry run pytest --cov=task_managerr --cov-report xml
+          coverageCommand: poetry run pytest --cov=task_manager --cov-report xml
           debug: true
