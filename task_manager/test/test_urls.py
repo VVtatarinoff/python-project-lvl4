@@ -26,7 +26,7 @@ def test_login_access_pages(client, site_path, setup_users):
 
 def test_coverage():
     paths_tested = len(
-        NOLOGIN_PAGE + LOGIN_REQUIRED_PAGE + LOGIN_REQUIRED_PAGE_PK)
+        NOLOGIN_PAGE | LOGIN_REQUIRED_PAGE | LOGIN_REQUIRED_PAGE_PK)
     paths_patterns = len(urlpatterns)
     ''' Admin and logout excluded from test'''
     assert paths_patterns - 2 == paths_tested

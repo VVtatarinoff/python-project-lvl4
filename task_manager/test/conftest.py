@@ -7,14 +7,26 @@ from task_manager.test.fixtures.db_fixtures import LABELS_TEST
 from task_manager.test.fixtures.db_fixtures import TASKS_TEST
 from task_manager.test.fixtures.db_fixtures import USERS_TEST
 from task_manager.test.fixtures.db_fixtures import STATUSES_TEST
+from task_manager.views.constants import *  # noqa 403
 
-NOLOGIN_PAGE = ['home', 'users', 'login', 'registration', ]
-LOGIN_REQUIRED_PAGE = ['statuses', 'labels', 'tasks', 'create_status',
-                       'create_label', 'create_task',]
-LOGIN_REQUIRED_PAGE_PK = ['tasks_detail', 'delete_status', 'delete_label',
-                          'delete_task', 'delete_user', 'update_status',
-                          'update_label', 'update_task', 'update_user',
-                          ]
+NOLOGIN_PAGE = {'home', LIST_LINKS[USER_CATEGORY],          # noqa 405
+                'login', CREATE_LINKS[USER_CATEGORY], }     # noqa 405
+LOGIN_REQUIRED_PAGE = {LIST_LINKS[STATUS_CATEGORY],         # noqa 405
+                       LIST_LINKS[LABEL_CATEGORY],          # noqa 405
+                       LIST_LINKS[TASK_CATEGORY],           # noqa 405
+                       CREATE_LINKS[STATUS_CATEGORY],       # noqa 405
+                       CREATE_LINKS[LABEL_CATEGORY],        # noqa 405
+                       CREATE_LINKS[TASK_CATEGORY], }       # noqa 405
+LOGIN_REQUIRED_PAGE_PK = {'tasks_detail',
+                          DELETE_LINKS[STATUS_CATEGORY],    # noqa 405
+                          DELETE_LINKS[LABEL_CATEGORY],     # noqa 405
+                          DELETE_LINKS[TASK_CATEGORY],      # noqa 405
+                          DELETE_LINKS[USER_CATEGORY],      # noqa 405
+                          UPDATE_LINKS[STATUS_CATEGORY],    # noqa 405
+                          UPDATE_LINKS[LABEL_CATEGORY],     # noqa 405
+                          UPDATE_LINKS[TASK_CATEGORY],      # noqa 405
+                          UPDATE_LINKS[USER_CATEGORY],      # noqa 405
+                          }
 
 
 @pytest.fixture
@@ -34,10 +46,10 @@ def setup_statuses(db):
 
 
 @pytest.fixture
-def setup_users(db):
+def setup_users(db, django_user_model):
     users = []
     for user in USERS_TEST:
-        users.append(User.objects.create(**user))
+        users.append(django_user_model.objects.create_user(**user))
     return users
 
 
@@ -59,7 +71,7 @@ def setup_tasks(db, setup_users, setup_labels, setup_statuses):
     return tasks
 
 
-@pytest.fixture(params=LOGIN_REQUIRED_PAGE + LOGIN_REQUIRED_PAGE_PK)
+@pytest.fixture(params=LOGIN_REQUIRED_PAGE | LOGIN_REQUIRED_PAGE_PK)
 def site_path(request, setup_tasks):
     if request.param in LOGIN_REQUIRED_PAGE:
         path = reverse(request.param)
@@ -69,6 +81,17 @@ def site_path(request, setup_tasks):
 
 
 @pytest.fixture
-def log_credential():
-    return {'username': USERS_TEST[0]['username'],
+def log_user1(client):
+    credetail = {'username': USERS_TEST[0]['username'],
             'password': USERS_TEST[0]['password']}
+    user = User.objects.get(username=credetail['username'])
+    client.login(**credetail)
+    return user
+
+
+@pytest.fixture
+def user1_details():
+    user1 = USERS_TEST[0].copy()
+    user1['password1'] = user1['password']
+    user1['password2'] = user1['password']
+    return user1
