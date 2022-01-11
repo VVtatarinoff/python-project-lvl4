@@ -81,7 +81,7 @@ def site_path(request, setup_tasks):
 
 
 @pytest.fixture
-def log_user1(client):
+def log_user1(client, setup_users):
     credetail = {'username': USERS_TEST[0]['username'],
                  'password': USERS_TEST[0]['password']}
     user = User.objects.get(username=credetail['username'])
@@ -95,3 +95,19 @@ def user1_details():
     user1['password1'] = user1['password']
     user1['password2'] = user1['password']
     return user1
+
+
+@pytest.fixture
+def bound_status(setup_tasks):
+    statuses = Status.objects.all()
+    for status in statuses:
+        if status.task_set.count() != 0:
+            return status
+
+
+@pytest.fixture
+def unbound_status(setup_tasks):
+    statuses = Status.objects.all()
+    for status in statuses:
+        if status.task_set.count() == 0:
+            return status
