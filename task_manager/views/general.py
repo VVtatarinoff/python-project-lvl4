@@ -31,7 +31,7 @@ class UserCanEditProfile(AccessMixin):
         if kwargs['pk'] != self.request.user.id:
             messages.error(self.request,
                            _('You have no authorization to handle this action'))
-            return redirect(LIST_LINKS[USER_CATEGORY])
+            return redirect(LIST_LINKS[USER_CATEGORY])          # noqa 405
         return super().dispatch(request, *args, **kwargs)
 
 

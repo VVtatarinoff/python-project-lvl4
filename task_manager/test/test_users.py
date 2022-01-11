@@ -4,7 +4,9 @@ import logging
 from django.urls import reverse
 
 from task_manager.test.fixtures.db_fixtures import TEST_DATA, USERS_TEST
-from task_manager.views.constants import CREATE_LINKS, USER_CATEGORY, UPDATE_TITLES, UPDATE_LINKS, DELETE_LINKS
+from task_manager.views.constants import CREATE_LINKS, USER_CATEGORY
+from task_manager.views.constants import UPDATE_TITLES, UPDATE_LINKS
+from task_manager.views.constants import DELETE_LINKS
 from task_manager.views.constants import LIST_LINKS, TITLES
 from task_manager.views.constants import CREATE_TITLES
 
@@ -25,10 +27,11 @@ CREATE_TITLE = CREATE_TITLES[USER_CATEGORY]
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('test_string', (
-        'method="post"', 'name="username"', 'name="first_name"',
-        'name="last_name"', 'name="password1"', 'name="password2"',
-        CREATE_TITLE))
+@pytest.mark.parametrize('test_string',
+                         ('method="post"', 'name="username"',
+                          'name="first_name"', 'name="last_name"',
+                          'name="password1"', 'name="password2"',
+                          CREATE_TITLE))
 def test_register_get(client, test_string):
     response = client.get(REGISTER_PATH)
     content = response.rendered_content
@@ -94,11 +97,12 @@ def test_view_users(client, setup_users, user):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('test_string', (
-        'method="post"', 'name="username"', 'name="first_name"',
-        'name="last_name"', 'name="password1"', 'name="password2"',
-        FIRST_USER['username'], FIRST_USER['first_name'],
-        FIRST_USER['last_name']))
+@pytest.mark.parametrize('test_string',
+                         ('method="post"', 'name="username"',
+                          'name="first_name"', 'name="last_name"',
+                          'name="password1"', 'name="password2"',
+                          FIRST_USER['username'], FIRST_USER['first_name'],
+                          FIRST_USER['last_name']))
 def test_update_html(client, setup_users, test_string, log_user1):
     response = client.get(reverse(UPDATE_PATH, kwargs={'pk': log_user1.id}))
     assert response.status_code == 200

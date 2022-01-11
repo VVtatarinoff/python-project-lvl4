@@ -9,23 +9,23 @@ from task_manager.test.fixtures.db_fixtures import USERS_TEST
 from task_manager.test.fixtures.db_fixtures import STATUSES_TEST
 from task_manager.views.constants import *  # noqa 403
 
-NOLOGIN_PAGE = {'home', LIST_LINKS[USER_CATEGORY],          # noqa 405
-                'login', CREATE_LINKS[USER_CATEGORY], }     # noqa 405
-LOGIN_REQUIRED_PAGE = {LIST_LINKS[STATUS_CATEGORY],         # noqa 405
-                       LIST_LINKS[LABEL_CATEGORY],          # noqa 405
-                       LIST_LINKS[TASK_CATEGORY],           # noqa 405
-                       CREATE_LINKS[STATUS_CATEGORY],       # noqa 405
-                       CREATE_LINKS[LABEL_CATEGORY],        # noqa 405
-                       CREATE_LINKS[TASK_CATEGORY], }       # noqa 405
+NOLOGIN_PAGE = {'home', LIST_LINKS[USER_CATEGORY],  # noqa 405
+                'login', CREATE_LINKS[USER_CATEGORY], }  # noqa 405
+LOGIN_REQUIRED_PAGE = {LIST_LINKS[STATUS_CATEGORY],  # noqa 405
+                       LIST_LINKS[LABEL_CATEGORY],  # noqa 405
+                       LIST_LINKS[TASK_CATEGORY],  # noqa 405
+                       CREATE_LINKS[STATUS_CATEGORY],  # noqa 405
+                       CREATE_LINKS[LABEL_CATEGORY],  # noqa 405
+                       CREATE_LINKS[TASK_CATEGORY], }  # noqa 405
 LOGIN_REQUIRED_PAGE_PK = {'tasks_detail',
-                          DELETE_LINKS[STATUS_CATEGORY],    # noqa 405
-                          DELETE_LINKS[LABEL_CATEGORY],     # noqa 405
-                          DELETE_LINKS[TASK_CATEGORY],      # noqa 405
-                          DELETE_LINKS[USER_CATEGORY],      # noqa 405
-                          UPDATE_LINKS[STATUS_CATEGORY],    # noqa 405
-                          UPDATE_LINKS[LABEL_CATEGORY],     # noqa 405
-                          UPDATE_LINKS[TASK_CATEGORY],      # noqa 405
-                          UPDATE_LINKS[USER_CATEGORY],      # noqa 405
+                          DELETE_LINKS[STATUS_CATEGORY],  # noqa 405
+                          DELETE_LINKS[LABEL_CATEGORY],  # noqa 405
+                          DELETE_LINKS[TASK_CATEGORY],  # noqa 405
+                          DELETE_LINKS[USER_CATEGORY],  # noqa 405
+                          UPDATE_LINKS[STATUS_CATEGORY],  # noqa 405
+                          UPDATE_LINKS[LABEL_CATEGORY],  # noqa 405
+                          UPDATE_LINKS[TASK_CATEGORY],  # noqa 405
+                          UPDATE_LINKS[USER_CATEGORY],  # noqa 405
                           }
 
 
@@ -83,7 +83,7 @@ def site_path(request, setup_tasks):
 @pytest.fixture
 def log_user1(client):
     credetail = {'username': USERS_TEST[0]['username'],
-            'password': USERS_TEST[0]['password']}
+                 'password': USERS_TEST[0]['password']}
     user = User.objects.get(username=credetail['username'])
     client.login(**credetail)
     return user
