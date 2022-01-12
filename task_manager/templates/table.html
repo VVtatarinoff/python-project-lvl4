@@ -56,7 +56,7 @@
     {% for u in table %}
 
 
-    <tr>
+    <tr class="d-table-row">
         {% for c in u %}
         {% if detail and detail == forloop.counter %}
 
@@ -71,7 +71,7 @@
             <br>
             <a href={% url delete_link  u.id %}>{% translate 'Delete' %}</a>
         </td>
-    </tr>
+    </tr class="d-table-row">
 
     {% endfor %}
     </tbody>
