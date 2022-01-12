@@ -4,11 +4,12 @@ import logging
 from django.urls import reverse
 
 from task_manager.test.fixtures.db_fixtures import USERS_TEST, NEW_USER
-from task_manager.views.constants import CREATE_LINKS, USER_CATEGORY
-from task_manager.views.constants import UPDATE_TITLES, UPDATE_LINKS
-from task_manager.views.constants import DELETE_LINKS
-from task_manager.views.constants import LIST_LINKS, TITLES
-from task_manager.views.constants import CREATE_TITLES
+from task_manager.views.constants import (CREATE_LINKS, USER_CATEGORY,
+                                          FLASH_NO_PERMISSION_EDIT,
+                                          UPDATE_TITLES, UPDATE_LINKS,
+                                          DELETE_LINKS, CREATE_TITLES,
+                                          LIST_LINKS, TITLES)
+
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,8 @@ DELETE_PATH = DELETE_LINKS[USER_CATEGORY]
 LIST_TITLE = TITLES[USER_CATEGORY]
 UPDATE_TITLE = UPDATE_TITLES[USER_CATEGORY]
 CREATE_TITLE = CREATE_TITLES[USER_CATEGORY]
+
+
 # *************'C' from CRUD  ****************************"
 
 
@@ -141,6 +144,10 @@ def test_update_not_selfuser(client, setup_users, log_user1):
     user2_after_request = list(User.objects.filter(id=other_id).values_list())
     assert response.wsgi_request.user.is_authenticated
     assert user2_before_request == user2_after_request
+    # force to flash message
+    response = client.get(response.url)
+    content = response.rendered_content
+    assert content.find(FLASH_NO_PERMISSION_EDIT) > 0
 
 
 # *************'D' from CRUD  ****************************"

@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import AccessMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.translation import gettext as _
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
 from django.db.models import RestrictedError
@@ -19,8 +18,7 @@ class LoginRequiredMessage(AccessMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(self.request,
-                           _('You are not authorized. Please log in'))
+            messages.error(self.request, FLASH_LOGINREQUIRED)  # noqa 405
             return redirect(self.login_url)
         return super().dispatch(request, *args, **kwargs)
 
@@ -30,7 +28,7 @@ class UserCanEditProfile(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         if kwargs['pk'] != self.request.user.id:
             messages.error(self.request,
-                           _('You have no authorization to handle this action'))
+                           (FLASH_NO_PERMISSION_EDIT))         # noqa 405
             return redirect(LIST_LINKS[USER_CATEGORY])          # noqa 405
         return super().dispatch(request, *args, **kwargs)
 
@@ -80,7 +78,7 @@ class SimpleDelete(LoginRequiredMessage, SetupMixin, DeleteView):
         context['title'] = DELETE_TITLES[self.category]  # noqa 405
         context['btn_name'] = 'Yes, delete'
         name = self.get_object().get_full_name()
-        msg = _('Are you sure you want to delete') + ' ' + name + '?'
+        msg = QUESTION_DELETE + ' ' + name + '?'        # noqa 405
         context['message'] = msg
         return context
 

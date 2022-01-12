@@ -1,6 +1,7 @@
 import itertools
 import pytest
 import logging
+
 from django.urls import reverse
 from django.db.models import Q
 
@@ -11,7 +12,8 @@ from task_manager.views.constants import (CREATE_LINKS, TASK_CATEGORY,
                                           UPDATE_TITLES, UPDATE_LINKS,
                                           DELETE_LINKS,
                                           LIST_LINKS, TITLES,
-                                          CREATE_TITLES)
+                                          CREATE_TITLES,
+                                          DELETE_CONSTRAINT_MESSAGE)
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +98,7 @@ def test_view_tasks(client, log_user1, setup_tasks, test_string, filter_data):
 
 
 @pytest.mark.django_db
-def test_delete_task(client, log_user1, setup_tasks):
+def test_delete_own_task(client, log_user1, setup_tasks):
     count_before = Task.objects.all().count()
     item = Task.objects.all().first()
     response = client.post(reverse(DELETE_PATH,
@@ -108,3 +110,20 @@ def test_delete_task(client, log_user1, setup_tasks):
     assert e.match('matching query does not exist')
     count_after = Task.objects.all().count()
     assert count_after == count_before - 1
+
+
+@pytest.mark.django_db
+def test_delete_not_own_task(client, log_user1, setup_tasks):
+    count_before = Task.objects.all().count()
+    item = Task.objects.exclude(author=log_user1.id).first()
+    response = client.post(reverse(DELETE_PATH,
+                                   kwargs={'pk': item.id}))
+    assert response.status_code == 302
+    assert response.url == VIEW_PATH
+    assert Task.objects.get(id=item.id)
+    count_after = Task.objects.all().count()
+    assert count_after == count_before
+    # force to flash message
+    response = client.get(response.url)
+    content = response.rendered_content
+    assert content.find(DELETE_CONSTRAINT_MESSAGE[TASK_CATEGORY]) > 0

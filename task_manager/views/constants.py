@@ -104,16 +104,6 @@ DELETE_SUCCESS_MESSAGE = {
     TASK_CATEGORY: _('Task was successfully deleted'),
     USER_CATEGORY: _('User was successfully deleted')}
 
-DELETE_CONSTRAINT_MESSAGE = {
-    STATUS_CATEGORY:
-        _('Unable to delete status as it is in use'),
-    LABEL_CATEGORY:
-        _('Unable to delete label as it is in use'),
-    TASK_CATEGORY:
-        _('The task may be deleted only by author'),
-    USER_CATEGORY:
-        _('Unable to delete user as it is in use')}
-
 CREATE_SUCCESS_MESSAGE = {
     STATUS_CATEGORY: _('Status was successfully created'),
     LABEL_CATEGORY: _('Label was successfully created'),
@@ -125,3 +115,18 @@ UPDATE_SUCCESS_MESSAGE = {
     LABEL_CATEGORY: _('Label was successfully changed'),
     TASK_CATEGORY: _('Task was successfully changed'),
     USER_CATEGORY: _('User data was changed')}
+
+FLASH_LOGINREQUIRED = _('You are not authorized. Please log in')
+FLASH_NO_PERMISSION_EDIT = _('You have no authorization to handle this action')
+
+DELETE_CONSTRAINT_MESSAGE = {
+    STATUS_CATEGORY:
+        _('Unable to delete status as it is in use'),
+    LABEL_CATEGORY:
+        _('Unable to delete label as it is in use'),
+    TASK_CATEGORY:
+        _('The task may be deleted only by author'),
+    USER_CATEGORY:
+        _('Unable to delete user as it is in use')}
+
+QUESTION_DELETE = _('Are you sure you want to delete')

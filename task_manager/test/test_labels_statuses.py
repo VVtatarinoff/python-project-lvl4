@@ -6,7 +6,8 @@ from task_manager.views.constants import (CREATE_LINKS, MODELS, LIST_LINKS,
                                           TITLES, UPDATE_LINKS, DELETE_LINKS,
                                           DELETE_TITLES, LABEL_CATEGORY,
                                           STATUS_CATEGORY, CREATE_TITLES,
-                                          TASK_CATEGORY)
+                                          TASK_CATEGORY, QUESTION_DELETE,
+                                          DELETE_CONSTRAINT_MESSAGE)
 
 # ************** tests for labels and statuses ***************
 # *************'C' from CRUD  ****************************"
@@ -104,6 +105,7 @@ def test_delete_html_labels_statuses(
     assert response.status_code == 200
     content = response.rendered_content
     assert content.find('method="post"') > 0
+    assert content.find(QUESTION_DELETE) > 0
     assert content.find(DELETE_TITLES[category]) > 0
     assert content.find(item.name) > 0
 
@@ -143,3 +145,7 @@ def test_delete_bound_labels_statuses(
     assert item_after.name == bound_item.name
     count_after = model.objects.all().count()
     assert count_after == count_before
+    # force to flash message
+    response = client.get(response.url)
+    content = response.rendered_content
+    assert content.find(DELETE_CONSTRAINT_MESSAGE[category])
