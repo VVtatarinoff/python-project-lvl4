@@ -47,7 +47,7 @@ def test_view_labels_statuses(client, log_user1, setup_tasks, category):
     model = MODELS[category]
     response = client.get(reverse(LIST_LINKS[category]))
     content = response.rendered_content
-    lines = content.count('<tr>')
+    lines = content.count('</tr')
     lines_expected = model.objects.all().count()
     assert lines == lines_expected
     assert content.find(TITLES[category]) > 0

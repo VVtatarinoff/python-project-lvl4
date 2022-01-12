@@ -88,7 +88,7 @@ def test_login_logout(client, setup_users, user1_details):
 def test_view_users(client, setup_users, user):
     response = client.get(VIEW_PATH)
     content = response.rendered_content
-    lines = content.count('<tr>')
+    lines = content.count('</tr')
     assert lines == len(setup_users)
     assert content.find(LIST_TITLE) > 0
     fullname = user['first_name'] + ' ' + user['last_name']

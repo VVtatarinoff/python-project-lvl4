@@ -79,7 +79,7 @@ def test_view_tasks(client, log_user1, setup_tasks, test_string, filter_data):
     get_request_args, q = filter_data
     response = client.get(VIEW_PATH, get_request_args)
     content = response.rendered_content
-    lines = content.count('<tr>')
+    lines = content.count('</tr')
     lines_expected = Task.objects.all().filter(Q(**q)).count()
     assert lines == lines_expected
     assert content.find(LIST_TITLE) > 0

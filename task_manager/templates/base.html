@@ -12,7 +12,7 @@
     <title>{% translate 'Task manager Hexlet' %}</title>
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 bg-highlight">
 <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar bg-primary font-weight-bold">
     <div class="navbar-nav-scroll">
         {% main_menu authorized=request.user.is_authenticated as menu %}
@@ -33,37 +33,7 @@
     {% for m in l_menu %}
         <a type="button" class="btn btn-outline-warning ml-md-3 font-weight-bold pr-3" href="{% url m.path %}">{{ m.title }}</a>
     {% endfor %}
-<!--
-<div>
-    <div class="row">
-        <div class="col-xl-8 col-md-8 col-sm-12 align-self-center">
-                <nav class="nav">
-                    {% main_menu authorized=request.user.is_authenticated as menu %}
-                    {% for m in menu %}
-                    <li class="nav-item">
-                        <a class="nav-link {{ m.active }} text-light" href="{% url m.path %}">{{ m.title }}</a>
-                    </li>
-                    {% endfor %}
-                </nav>
-
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-12">
-            <div class="d-flex flex-row-reverse">
-                <nav class="nav mb-2 pb-3 pt-2">
-                    {% login_menu authorized=request.user.is_authenticated as l_menu %}
-                    {% for m in l_menu %}
-                    <li class="nav-item">
-                        <a class="btn btn-bd-download d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3 text-light" href="{% url m.path %}">{{ m.title }}</a>
-                    </li>
-                    {% endfor %}
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
--->
-    </header>
+</header>
 <div class="container mt-5 pt-4">
     {% bootstrap_messages %}
         {% block title %}
