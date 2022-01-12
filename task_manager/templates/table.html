@@ -42,9 +42,9 @@
     </div>
     {% endif %}
 {% endblock filter %}
-<table class="table table-striped">
+<table class="table table-striped table-hover table-responsive-md">
 
-        <thead>
+        <thead class="thead-dark" scope="col">
         {% for t_head in table_heads %}
         <th>{{ t_head }}</th>
         {% endfor %}
@@ -54,20 +54,25 @@
 
     <tbody>
     {% for u in table %}
+
+
     <tr>
         {% for c in u %}
         {% if detail and detail == forloop.counter %}
+
         <td><a href = {% url detail_path u.id %}> {{ c }} </a></td>
         {% else %}
         <td>{{ c }}</td>
         {% endif %}
         {% endfor %}
+
         <td>
             <a href={% url update_link u.id %}>{% translate 'Change' %}</a>
             <br>
             <a href={% url delete_link  u.id %}>{% translate 'Delete' %}</a>
         </td>
     </tr>
+
     {% endfor %}
     </tbody>
 

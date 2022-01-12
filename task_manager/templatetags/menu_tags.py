@@ -1,16 +1,20 @@
 from django import template
 from django.utils.translation import gettext as _
 
+from task_manager.views.constants import (LIST_LINKS, USER_CATEGORY,
+                                          STATUS_CATEGORY, LABEL_CATEGORY,
+                                          TASK_CATEGORY, CREATE_LINKS)
+
 register = template.Library()
 
 MAIN_MENU = [{'title': _('Task manager'), 'path': 'home', 'active': 'active'},
-             {'title': _('Users'), 'path': 'users'},
-             {'title': _('Statuses'), 'path': 'statuses'},
-             {'title': _('Labels'), 'path': 'labels'},
-             {'title': _('Tasks'), 'path': 'tasks'}]
+             {'title': _('Users'), 'path': LIST_LINKS[USER_CATEGORY]},
+             {'title': _('Statuses'), 'path': LIST_LINKS[STATUS_CATEGORY]},
+             {'title': _('Labels'), 'path': LIST_LINKS[LABEL_CATEGORY]},
+             {'title': _('Tasks'), 'path': LIST_LINKS[TASK_CATEGORY]}]
 
 LOGIN_MENU = [{'title': _('Login'), 'path': 'login'},
-              {'title': _('Register'), 'path': 'registration'}]
+              {'title': _('Register'), 'path': CREATE_LINKS[USER_CATEGORY]}]
 
 LOGGED_MENU = [{'title': _('Logout'), 'path': 'logout'}, ]
 
