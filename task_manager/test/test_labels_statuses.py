@@ -5,7 +5,8 @@ from django.urls import reverse
 from task_manager.views.constants import (CREATE_LINKS, MODELS, LIST_LINKS,
                                           TITLES, UPDATE_LINKS, DELETE_LINKS,
                                           DELETE_TITLES, LABEL_CATEGORY,
-                                          STATUS_CATEGORY, CREATE_TITLES)
+                                          STATUS_CATEGORY, CREATE_TITLES,
+                                          TASK_CATEGORY)
 
 # ************** tests for labels and statuses ***************
 # *************'C' from CRUD  ****************************"
@@ -55,10 +56,11 @@ def test_view_labels_statuses(client, log_user1, setup_tasks, category):
 
 
 # *************'U' from CRUD  ****************************
-
+#               also tasks update html tested in next function
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY])
+@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY,
+                                      TASK_CATEGORY])
 def test_update_html_labels_statuses(client, log_user1, setup_tasks, category):
     model = MODELS[category]
     item = model.objects.all().first()
@@ -88,10 +90,11 @@ def test_update_post_labels_statuses(
 
 
 # *************'D' from CRUD  ****************************"
-
+#               also tasks delete html tested in next function
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY])
+@pytest.mark.parametrize('category', [
+    LABEL_CATEGORY, STATUS_CATEGORY, TASK_CATEGORY])
 def test_delete_html_labels_statuses(
         client, log_user1, setup_tasks, category):
     model = MODELS[category]

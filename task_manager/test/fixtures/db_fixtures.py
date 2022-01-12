@@ -55,7 +55,7 @@ TASKS_TEST = [
         "description": "second task description",
         "status": 2,
         "executor": 2,
-        'author': 1,
+        'author': 3,
         "labels": [1, 2]
 
     },
@@ -63,7 +63,7 @@ TASKS_TEST = [
         "name": "third task name",
         "description": "third task description",
         "status": 2,
-        "executor": 3,
+        "executor": 2,
         'author': 1
     }
 ]
