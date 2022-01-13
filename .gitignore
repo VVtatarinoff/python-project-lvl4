@@ -7,3 +7,5 @@
 __pycache__/
 .run
 .coverage
+test.html
+copybase.html

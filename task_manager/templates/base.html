@@ -34,22 +34,33 @@
         <a type="button" class="btn btn-outline-warning ml-md-3 font-weight-bold pr-3" href="{% url m.path %}">{{ m.title }}</a>
     {% endfor %}
 </header>
-<div class="container mt-5 pt-4">
-    {% bootstrap_messages %}
+<div class="container-fluid pt-4 flex-grow-1 bd-highlight">
+<div class="row justify-content-md-center align-items-center">
+    <div class="col-md-4">
+        {% bootstrap_messages %}
         {% block title %}
-
-     <h1 class="my-4">{% translate title %}</h1>
+         <h1 class="my-4">{% translate title %}</h1>
         {% endblock title %}
- </div>
-<div class="container wrapper flex-grow-1 bd-highlight">
+    </div>
+</div>
+<div class="row pt-5">
 
-{% block content %}
+
     <p>{{ message }}</p>
-    {% block filter %}
-    {% endblock filter %}
 
+    <div class="col-md-2 bd-sidebar">
 
-{% endblock content %}
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-6">
+        {% block content %}
+        {% block filter %}
+        {% endblock filter %}
+        {% endblock content %}
+    </div>
+</div>
+
 </div>
 <footer>
 {% block footer %}

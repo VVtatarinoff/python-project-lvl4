@@ -2,8 +2,28 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% block content %}
+<div class="row pt-5">
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-8">
+                    <div class="card ">
+                        <div class="card-header bg-primary text-light">
+                            <h1>{% translate 'Hello from Hexlet!' %}</h1>
+                        </div>
+                        <div class="card-bordy mr-2 pt-5 mb-5 ">
+                            <h5 class="ml-5">{% translate 'Practical courses for coding' %}</h5>
+
+
+                            <a class="btn btn-success mt-5 ml-5" href="https://ru.hexlet.io/" role="button">Lear more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--
 <h1 class="display-4">{% translate 'Hello from Hexlet!' %}</h1>
 <hr class="my-4">
 <p>{% translate 'Practical courses for coding' %}</p>
 <a class="btn btn-primary btn-lg" href="https://ru.hexlet.io/" role="button">{% translate 'Learn more' %}</a>
+-->
 {% endblock content %}
