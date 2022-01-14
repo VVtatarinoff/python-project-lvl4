@@ -21,18 +21,18 @@ import task_manager.views.labels as labels
 import task_manager.views.statuses as statuses
 import task_manager.views.tasks as tasks
 import task_manager.views.general as general
-from task_manager.views.constants import USER_CATEGORY, STATUS_CATEGORY
+from task_manager.views.constants import STATUS_CATEGORY
 from task_manager.views.constants import LABEL_CATEGORY, TASK_CATEGORY
 from task_manager.views.constants import DELETE_LINKS, UPDATE_LINKS
 from task_manager.views.constants import LIST_LINKS, CREATE_LINKS
 import users.views
+
 kwargs = dict()
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='main.html'), name='home'),
-    path('users/', general.SimpleTableView.as_view(),
-         kwargs={'category': USER_CATEGORY},
-         name=LIST_LINKS[USER_CATEGORY]),
+    path('users/', users.views.UserList.as_view(),
+         name=users.views.LIST_VIEW),
     path('login/', users.views.LoginUser.as_view(), name='login'),
     path('logout/', users.views.LogOut.as_view(), name='logout'),
     path('users/create/', users.views.CreateUser.as_view(),

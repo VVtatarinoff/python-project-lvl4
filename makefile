@@ -17,7 +17,7 @@ log:
 	heroku logs --tail
 
 lint:
-	poetry run flake8 task_manager
+	poetry run flake8
 
 translate:
 	django-admin compilemessages

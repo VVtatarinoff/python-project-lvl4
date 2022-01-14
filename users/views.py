@@ -5,11 +5,12 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import RestrictedError
+from django.db.models import RestrictedError, Value
+from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
 from .forms import RegisterUserForm
 from .forms import LoginUserForm, UpdateUserForm
@@ -38,7 +39,31 @@ DELETE_CONSTRAINT_MESSAGE = _('Unable to delete user as it is in use')
 QUESTION_DELETE = _('Are you sure you want to delete')
 
 
-class UpdateUser(LoginRequiredMessage, UserCanEditProfile, SuccessMessageMixin, UpdateView):
+class UserList(ListView):
+    template_name = 'table.html'
+    context_object_name = 'table'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = LIST_VIEW
+        context['table_heads'] = ('ID', _('User name'),
+                                  _('Full name'), _('Creation date'))
+        context['update_link'] = UPDATE_VIEW
+        context['delete_link'] = DELETE_VIEW
+        return context
+
+    def get_queryset(self):
+        return User.objects.values_list('id', 'username',
+                                        Concat('first_name',
+                                               Value(' '),
+                                               'last_name'),
+                                        'date_joined',
+                                        named=True).exclude(
+            is_superuser=True)
+
+
+class UpdateUser(LoginRequiredMessage, UserCanEditProfile,
+                 SuccessMessageMixin, UpdateView):
     form_class = UpdateUserForm
     template_name = 'form_view.html'
     model = User
@@ -55,7 +80,9 @@ class UpdateUser(LoginRequiredMessage, UserCanEditProfile, SuccessMessageMixin, 
         logout(self.request)
         return super().get_success_url()
 
-class UserDelete(LoginRequiredMessage, UserCanEditProfile, SuccessMessageMixin, DeleteView):
+
+class UserDelete(LoginRequiredMessage, UserCanEditProfile,
+                 SuccessMessageMixin, DeleteView):
     template_name = 'delete_page.html'
     success_url = reverse_lazy(LIST_VIEW)
     success_message = MESSAGE_DELETE_SUCCESS
@@ -118,4 +145,3 @@ class LogOut(LoginRequiredMessage, LogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.success(self.request, MESSAGE_LOGOUT_SUCCESS)
         return super().dispatch(request, *args, **kwargs)
-
