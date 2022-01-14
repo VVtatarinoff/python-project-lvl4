@@ -44,7 +44,6 @@ class Task(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        print('request for link recieved', self.id)
         return reverse('tasks_detail', kwargs={'pk': self.id})
 
     def get_full_name(self):

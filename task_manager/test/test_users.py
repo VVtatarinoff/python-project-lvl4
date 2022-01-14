@@ -25,9 +25,6 @@ UPDATE_TITLE = UPDATE_TITLES[USER_CATEGORY]
 CREATE_TITLE = CREATE_TITLES[USER_CATEGORY]
 
 
-# *************'C' from CRUD  ****************************"
-
-
 @pytest.mark.django_db
 @pytest.mark.parametrize('test_string',
                          ('method="post"', 'name="username"',
@@ -67,9 +64,6 @@ def test_register_post_the_same_name(client, setup_users, user1_details):
     assert check_user.first_name == keep_name
 
 
-# *************'R' from CRUD  ****************************"
-
-
 @pytest.mark.django_db
 def test_login_logout(client, setup_users, user1_details):
     response = client.get(reverse("login"))
@@ -93,9 +87,6 @@ def test_view_users(client, setup_users, user):
     assert content.find(LIST_TITLE) > 0
     fullname = user['first_name'] + ' ' + user['last_name']
     assert content.find(fullname) > 0
-
-
-# *************'U' from CRUD  ****************************"
 
 
 @pytest.mark.django_db
@@ -148,9 +139,6 @@ def test_update_not_selfuser(client, setup_users, log_user1):
     response = client.get(response.url)
     content = response.rendered_content
     assert content.find(FLASH_NO_PERMISSION_EDIT) > 0
-
-
-# *************'D' from CRUD  ****************************"
 
 
 @pytest.mark.django_db

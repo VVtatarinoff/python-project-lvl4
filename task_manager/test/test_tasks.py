@@ -28,9 +28,6 @@ CREATE_TITLE = CREATE_TITLES[TASK_CATEGORY]
 DELETE_TITLE = DELETE_TITLES[TASK_CATEGORY]
 
 
-# *************'C' from CRUD  ****************************"
-
-
 @pytest.mark.django_db
 def test_create_get(client, log_user1):
     response = client.get(CREATE_PATH)
@@ -67,9 +64,6 @@ def test_create_update_task_post(client, log_user1,
     assert assigned_labels == NEW_TASK['labels']
 
 
-# *************'R' from CRUD  ****************************"
-
-
 @pytest.mark.django_db
 @pytest.mark.parametrize('test_string',
                          ['name', 'author__first_name', 'author__last_name',
@@ -86,15 +80,6 @@ def test_view_tasks(client, log_user1, setup_tasks, test_string, filter_data):
     names = Task.objects.filter(Q(**q)).values_list(test_string).all()
     inclusions = list(map(lambda x: content.find(str(*x)) > 0, names))
     assert all(inclusions)
-
-
-# *************'U' from CRUD  ****************************
-#                  html tested in test_labels_statuses.py
-#         update view tested in 'C'reate section this module
-
-
-# *************'D' from CRUD  ****************************"
-#                  html tested in test_labels_statuses.py
 
 
 @pytest.mark.django_db

@@ -34,7 +34,7 @@
         <a type="button" class="btn btn-outline-warning ml-md-3 font-weight-bold pr-3" href="{% url m.path %}">{{ m.title }}</a>
     {% endfor %}
 </header>
-<div class="container-fluid pt-4 flex-grow-1 bd-highlight">
+<div class="container-fluid pt-4 flex-grow-1">
 <div class="row justify-content-md-center align-items-center">
     <div class="col-md-4">
         {% bootstrap_messages %}
@@ -65,7 +65,7 @@
 <footer>
 {% block footer %}
     <div class="container my-5 pt-4 border-top">
-        <a href="https://ru.hexlet.io" target="_blank">
+        <a class="text-warnings" href="https://ru.hexlet.io" target="_blank">
         Hexlet
         </a>
     </div>

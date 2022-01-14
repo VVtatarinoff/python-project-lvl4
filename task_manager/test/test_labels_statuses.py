@@ -56,9 +56,6 @@ def test_view_labels_statuses(client, log_user1, setup_tasks, category):
     assert all(inclusions)
 
 
-# *************'U' from CRUD  ****************************
-#               also tasks update html tested in next function
-
 @pytest.mark.django_db
 @pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY,
                                       TASK_CATEGORY])
@@ -89,9 +86,6 @@ def test_update_post_labels_statuses(
     updated_item = model.objects.get(id=item.id)
     assert updated_item.name == new_name
 
-
-# *************'D' from CRUD  ****************************"
-#               also tasks delete html tested in next function
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('category', [
