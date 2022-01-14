@@ -4,7 +4,7 @@ import pytest
 from task_manager.test.conftest import NOLOGIN_PAGE, LOGIN_REQUIRED_PAGE
 from task_manager.test.conftest import LOGIN_REQUIRED_PAGE_PK
 from task_manager.urls import urlpatterns
-from task_manager.views.constants import FLASH_LOGINREQUIRED
+from task_manager.views.general import FLASH_LOGINREQUIRED
 
 
 @pytest.mark.django_db

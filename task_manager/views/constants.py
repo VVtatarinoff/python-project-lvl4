@@ -116,8 +116,6 @@ UPDATE_SUCCESS_MESSAGE = {
     TASK_CATEGORY: _('Task was successfully changed'),
     USER_CATEGORY: _('User data was changed')}
 
-FLASH_LOGINREQUIRED = _('You are not authorized. Please log in')
-FLASH_NO_PERMISSION_EDIT = _('You have no authorization to handle this action')
 
 DELETE_CONSTRAINT_MESSAGE = {
     STATUS_CATEGORY:

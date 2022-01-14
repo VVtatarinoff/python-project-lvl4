@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'task_manager.apps.TMConfig',
+    'users.apps.UsersConfig',
+
     'bootstrap4',
 ]
 

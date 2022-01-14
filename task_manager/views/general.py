@@ -6,11 +6,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
+from django.utils.translation import gettext as _
 
 from django.db.models import RestrictedError
 from task_manager.views.constants import *  # noqa 403
 
 logger = logging.getLogger(__name__)
+
+FLASH_NO_PERMISSION_EDIT = _('You have no authorization to handle this action')
+FLASH_LOGINREQUIRED = _('You are not authorized. Please log in')
 
 
 class LoginRequiredMessage(AccessMixin):
@@ -28,7 +32,7 @@ class UserCanEditProfile(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         if kwargs['pk'] != self.request.user.id:
             messages.error(self.request,
-                           (FLASH_NO_PERMISSION_EDIT))         # noqa 405
+                           (FLASH_NO_PERMISSION_EDIT))
             return redirect(LIST_LINKS[USER_CATEGORY])          # noqa 405
         return super().dispatch(request, *args, **kwargs)
 

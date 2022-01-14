@@ -4,25 +4,16 @@ import logging
 from django.urls import reverse
 
 from task_manager.test.fixtures.db_fixtures import USERS_TEST, NEW_USER
-from task_manager.views.constants import (CREATE_LINKS, USER_CATEGORY,
-                                          FLASH_NO_PERMISSION_EDIT,
-                                          UPDATE_TITLES, UPDATE_LINKS,
-                                          DELETE_LINKS, CREATE_TITLES,
-                                          LIST_LINKS, TITLES)
-
+from task_manager.views.general import FLASH_NO_PERMISSION_EDIT
+from users.views import (CREATE_VIEW, LIST_VIEW, DELETE_VIEW, UPDATE_VIEW,
+                         LIST_TITLE, UPDATE_TITLE, CREATE_TITLE)
 
 logger = logging.getLogger(__name__)
 
 FIRST_USER = USERS_TEST[0]
 
-REGISTER_PATH = reverse(CREATE_LINKS[USER_CATEGORY])
-VIEW_PATH = reverse(LIST_LINKS[USER_CATEGORY])
-UPDATE_PATH = UPDATE_LINKS[USER_CATEGORY]
-DELETE_PATH = DELETE_LINKS[USER_CATEGORY]
-
-LIST_TITLE = TITLES[USER_CATEGORY]
-UPDATE_TITLE = UPDATE_TITLES[USER_CATEGORY]
-CREATE_TITLE = CREATE_TITLES[USER_CATEGORY]
+REGISTER_PATH = reverse(CREATE_VIEW)
+VIEW_PATH = reverse(LIST_VIEW)
 
 
 @pytest.mark.django_db
@@ -97,10 +88,11 @@ def test_view_users(client, setup_users, user):
                           FIRST_USER['username'], FIRST_USER['first_name'],
                           FIRST_USER['last_name']))
 def test_update_html(client, setup_users, test_string, log_user1):
-    response = client.get(reverse(UPDATE_PATH, kwargs={'pk': log_user1.id}))
+    response = client.get(reverse(UPDATE_VIEW, kwargs={'pk': log_user1.id}))
     assert response.status_code == 200
     content = response.rendered_content
     assert content.find(test_string) > 0
+    assert content.find(UPDATE_TITLE) > 0
 
 
 @pytest.mark.django_db
@@ -112,7 +104,7 @@ def test_update_self(client, setup_users, update_field,
     updated_user_data[update_field] = updated_user_data[update_field] + 'test'
     updated_user_data['password1'] = updated_user_data['password']
     updated_user_data['password2'] = updated_user_data['password']
-    response = client.post(reverse(UPDATE_PATH, kwargs={'pk': log_user1.id}),
+    response = client.post(reverse(UPDATE_VIEW, kwargs={'pk': log_user1.id}),
                            updated_user_data)
     user_db = User.objects.get(id=log_user1.id)
     assert not response.wsgi_request.user.is_authenticated
@@ -130,7 +122,7 @@ def test_update_self(client, setup_users, update_field,
 def test_update_not_selfuser(client, setup_users, log_user1):
     other_id = 2
     user2_before_request = list(User.objects.filter(id=other_id).values_list())
-    response = client.post(reverse(UPDATE_PATH, kwargs={'pk': other_id}),
+    response = client.post(reverse(UPDATE_VIEW, kwargs={'pk': other_id}),
                            NEW_USER)
     user2_after_request = list(User.objects.filter(id=other_id).values_list())
     assert response.wsgi_request.user.is_authenticated
@@ -143,7 +135,7 @@ def test_update_not_selfuser(client, setup_users, log_user1):
 
 @pytest.mark.django_db
 def test_delete_self(client, setup_users, log_user1):
-    response = client.post(reverse(DELETE_PATH, kwargs={'pk': log_user1.id}))
+    response = client.post(reverse(DELETE_VIEW, kwargs={'pk': log_user1.id}))
     with pytest.raises(Exception) as e:
         User.objects.get(username=log_user1.username)
     assert e.match('User matching query does not exist')
@@ -154,7 +146,7 @@ def test_delete_self(client, setup_users, log_user1):
 
 @pytest.mark.django_db
 def test_delete_not_self(client, setup_users, log_user1):
-    response = client.post(reverse(DELETE_PATH, kwargs={'pk': 2}))
+    response = client.post(reverse(DELETE_VIEW, kwargs={'pk': 2}))
     assert User.objects.all().count() == len(setup_users)
     assert User.objects.get(id=2)
     assert response.status_code == 302
@@ -164,7 +156,7 @@ def test_delete_not_self(client, setup_users, log_user1):
 @pytest.mark.django_db
 def test_delete_bound(client, setup_tasks, bound_user):
     initial_count = User.objects.all().count()
-    response = client.post(reverse(DELETE_PATH,
+    response = client.post(reverse(DELETE_VIEW,
                                    kwargs={'pk': bound_user.id}))
     assert User.objects.all().count() == initial_count
     assert User.objects.get(id=bound_user.id)

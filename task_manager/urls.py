@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-import task_manager.views.users as users
 import task_manager.views.labels as labels
 import task_manager.views.statuses as statuses
 import task_manager.views.tasks as tasks
@@ -26,7 +25,7 @@ from task_manager.views.constants import USER_CATEGORY, STATUS_CATEGORY
 from task_manager.views.constants import LABEL_CATEGORY, TASK_CATEGORY
 from task_manager.views.constants import DELETE_LINKS, UPDATE_LINKS
 from task_manager.views.constants import LIST_LINKS, CREATE_LINKS
-
+import users.views
 kwargs = dict()
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,16 +33,14 @@ urlpatterns = [
     path('users/', general.SimpleTableView.as_view(),
          kwargs={'category': USER_CATEGORY},
          name=LIST_LINKS[USER_CATEGORY]),
-    path('login/', users.LoginUser.as_view(), name='login'),
-    path('logout/', users.LogOut.as_view(), name='logout'),
-    path('users/create/', users.RegisterUser.as_view(),
-         name=CREATE_LINKS[USER_CATEGORY]),
-    path('users/<int:pk>/update/', users.UpdateUser.as_view(),
-         kwargs={'category': USER_CATEGORY},
-         name=UPDATE_LINKS[USER_CATEGORY]),
-    path('users/<int:pk>/delete/', users.UserDelete.as_view(),
-         kwargs={'category': USER_CATEGORY},
-         name=DELETE_LINKS[USER_CATEGORY]),
+    path('login/', users.views.LoginUser.as_view(), name='login'),
+    path('logout/', users.views.LogOut.as_view(), name='logout'),
+    path('users/create/', users.views.CreateUser.as_view(),
+         name=users.views.CREATE_VIEW),
+    path('users/<int:pk>/update/', users.views.UpdateUser.as_view(),
+         name=users.views.UPDATE_VIEW),
+    path('users/<int:pk>/delete/', users.views.UserDelete.as_view(),
+         name=users.views.DELETE_VIEW),
 
     path('statuses/', statuses.Statuses.as_view(),
          kwargs={'category': STATUS_CATEGORY},
