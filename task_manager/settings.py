@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'task_manager.apps.TMConfig',
     'users.apps.UsersConfig',
     'labels.apps.LabelsConfig',
+    'statuses.apps.StatusesConfig',
     'bootstrap4',
 ]
 

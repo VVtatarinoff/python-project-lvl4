@@ -8,30 +8,30 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.translation import gettext as _
 
-from labels.forms import CreateLabelForm
-from task_manager.models import Label
+from .forms import CreateStatusForm
 from task_manager.views.general import LoginRequiredMessage
+from task_manager.models import Status
 
 logger = logging.getLogger(__name__)
 
-LIST_TITLE = _("Labels")
-CREATE_TITLE = _("Create label")
-DELETE_TITLE = _("Delete label")
-UPDATE_TITLE = _("Change label")
+LIST_TITLE = _("Statuses")
+CREATE_TITLE = _("Create status")
+DELETE_TITLE = _("Delete status")
+UPDATE_TITLE = _("Change status")
 
-LIST_VIEW = 'labels'
-UPDATE_VIEW = 'update_label'
-DELETE_VIEW = 'delete_label'
-CREATE_VIEW = 'create_label'
+LIST_VIEW = 'statuses'
+UPDATE_VIEW = 'update_status'
+DELETE_VIEW = 'delete_status'
+CREATE_VIEW = 'create_status'
 
-MESSAGE_UPDATE_SUCCESS = _('Label was successfully changed')
-MESSAGE_DELETE_SUCCESS = _('Label was successfully deleted')
-MESSAGE_CREATE_SUCCESS = _('Label was successfully created')
-DELETE_CONSTRAINT_MESSAGE = _('Unable to delete label as it is in use')
+MESSAGE_UPDATE_SUCCESS = _('Status was successfully changed')
+MESSAGE_DELETE_SUCCESS = _('Status was successfully deleted')
+MESSAGE_CREATE_SUCCESS = _('Status was successfully created')
+DELETE_CONSTRAINT_MESSAGE = _('Unable to delete status as it is in use')
 QUESTION_DELETE = _('Are you sure you want to delete')
 
 
-class Labels(LoginRequiredMessage, ListView):
+class Statuses(LoginRequiredMessage, ListView):
     template_name = 'table.html'
     context_object_name = 'table'
 
@@ -46,15 +46,15 @@ class Labels(LoginRequiredMessage, ListView):
         return context
 
     def get_queryset(self):
-        return Label.objects.values_list('id', 'name',
-                                         'creation_date',
-                                         named=True)
+        return Status.objects.values_list('id', 'name',
+                                          'creation_date',
+                                          named=True)
 
 
-class CreateLabel(LoginRequiredMessage, SuccessMessageMixin, CreateView):
-    form_class = CreateLabelForm
+class CreateStatus(LoginRequiredMessage, SuccessMessageMixin, CreateView):
+    form_class = CreateStatusForm
     template_name = 'form_view.html'
-    model = Label
+    model = Status
     success_url = reverse_lazy(LIST_VIEW)
     success_message = MESSAGE_CREATE_SUCCESS
 
@@ -65,10 +65,10 @@ class CreateLabel(LoginRequiredMessage, SuccessMessageMixin, CreateView):
         return context
 
 
-class UpdateLabel(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
-    form_class = CreateLabelForm
+class UpdateStatus(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
+    form_class = CreateStatusForm
     template_name = 'form_view.html'
-    model = Label
+    model = Status
     success_url = reverse_lazy(LIST_VIEW)
     success_message = MESSAGE_UPDATE_SUCCESS
 
@@ -79,9 +79,9 @@ class UpdateLabel(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
         return context
 
 
-class DeleteLabel(LoginRequiredMessage, DeleteView):
+class DeleteStatus(LoginRequiredMessage, DeleteView):
     template_name = 'delete_page.html'
-    model = Label
+    model = Status
     success_url = reverse_lazy(LIST_VIEW)
     success_message = MESSAGE_DELETE_SUCCESS
 
