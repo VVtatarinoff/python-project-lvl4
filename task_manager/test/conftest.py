@@ -10,25 +10,28 @@ from task_manager.test.fixtures.db_fixtures import LABELS_TEST
 from task_manager.test.fixtures.db_fixtures import TASKS_TEST
 from task_manager.test.fixtures.db_fixtures import USERS_TEST
 from task_manager.test.fixtures.db_fixtures import STATUSES_TEST
-from task_manager.views.constants import *  # noqa 403
+import statuses.views
+import labels.views
+import users.views
+import tasks.views
 
-NOLOGIN_PAGE = {'home', LIST_LINKS[USER_CATEGORY],  # noqa 405
-                'login', CREATE_LINKS[USER_CATEGORY], }  # noqa 405
-LOGIN_REQUIRED_PAGE = {LIST_LINKS[STATUS_CATEGORY],  # noqa 405
-                       LIST_LINKS[LABEL_CATEGORY],  # noqa 405
-                       LIST_LINKS[TASK_CATEGORY],  # noqa 405
-                       CREATE_LINKS[STATUS_CATEGORY],  # noqa 405
-                       CREATE_LINKS[LABEL_CATEGORY],  # noqa 405
-                       CREATE_LINKS[TASK_CATEGORY], }  # noqa 405
-LOGIN_REQUIRED_PAGE_PK = {'tasks_detail',
-                          DELETE_LINKS[STATUS_CATEGORY],  # noqa 405
-                          DELETE_LINKS[LABEL_CATEGORY],  # noqa 405
-                          DELETE_LINKS[TASK_CATEGORY],  # noqa 405
-                          DELETE_LINKS[USER_CATEGORY],  # noqa 405
-                          UPDATE_LINKS[STATUS_CATEGORY],  # noqa 405
-                          UPDATE_LINKS[LABEL_CATEGORY],  # noqa 405
-                          UPDATE_LINKS[TASK_CATEGORY],  # noqa 405
-                          UPDATE_LINKS[USER_CATEGORY],  # noqa 405
+NOLOGIN_PAGE = {'home', users.views.LIST_VIEW,
+                'login', users.views.CREATE_VIEW, }
+LOGIN_REQUIRED_PAGE = {statuses.views.LIST_VIEW,
+                       labels.views.LIST_VIEW,
+                       tasks.views.LIST_VIEW,
+                       statuses.views.CREATE_VIEW,
+                       labels.views.CREATE_VIEW,
+                       tasks.views.CREATE_VIEW}
+LOGIN_REQUIRED_PAGE_PK = {tasks.views.DETAIL_VIEW,
+                          statuses.views.DELETE_VIEW,
+                          labels.views.DELETE_VIEW,
+                          tasks.views.DELETE_VIEW,
+                          users.views.DELETE_VIEW,
+                          statuses.views.UPDATE_VIEW,
+                          labels.views.UPDATE_VIEW,
+                          tasks.views.UPDATE_VIEW,
+                          users.views.UPDATE_VIEW,
                           }
 
 

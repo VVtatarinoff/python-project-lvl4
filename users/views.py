@@ -2,19 +2,21 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import RestrictedError, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
 from .forms import RegisterUserForm
 from .forms import LoginUserForm, UpdateUserForm
-from task_manager.views.general import UserCanEditProfile, LoginRequiredMessage
+from task_manager.views.general import LoginRequiredMessage
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +37,18 @@ MESSAGE_CREATE_SUCCESS = _('Successful registration')
 MESSAGE_LOGIN_SUCCESS = _('Successful login')
 MESSAGE_LOGOUT_SUCCESS = _('You are logged out')
 MESSAGE_INVALID_PASSWORD = _('Invalid pair user-password')
+MESSAGE_NO_PERMISSION = _('You have no authorization to handle this action')
 DELETE_CONSTRAINT_MESSAGE = _('Unable to delete user as it is in use')
 QUESTION_DELETE = _('Are you sure you want to delete')
+
+
+class UserCanEditProfile(AccessMixin):
+
+    def dispatch(self, request, *args, **kwargs):
+        if kwargs['pk'] != self.request.user.id:
+            messages.error(self.request, MESSAGE_NO_PERMISSION)
+            return redirect(reverse_lazy(LIST_VIEW))
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserList(ListView):

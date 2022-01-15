@@ -4,9 +4,9 @@ import logging
 from django.urls import reverse
 
 from task_manager.test.fixtures.db_fixtures import USERS_TEST, NEW_USER
-from task_manager.views.general import FLASH_NO_PERMISSION_EDIT
 from users.views import (CREATE_VIEW, LIST_VIEW, DELETE_VIEW, UPDATE_VIEW,
-                         LIST_TITLE, UPDATE_TITLE, CREATE_TITLE)
+                         LIST_TITLE, UPDATE_TITLE, CREATE_TITLE,
+                         MESSAGE_NO_PERMISSION)
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +130,7 @@ def test_update_not_selfuser(client, setup_users, log_user1):
     # force to flash message
     response = client.get(response.url)
     content = response.rendered_content
-    assert content.find(FLASH_NO_PERMISSION_EDIT) > 0
+    assert content.find(MESSAGE_NO_PERMISSION) > 0
 
 
 @pytest.mark.django_db
