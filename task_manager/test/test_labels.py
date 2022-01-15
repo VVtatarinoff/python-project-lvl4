@@ -47,6 +47,7 @@ def test_view_labels(client, log_user1, setup_tasks):
     names = Label.objects.values_list('name').all()
     inclusions = list(map(lambda x: content.find(*x) > 0, names))
     assert all(inclusions)
+    assert content.find(reverse(CREATE_VIEW)) > 0
 
 
 @pytest.mark.django_db

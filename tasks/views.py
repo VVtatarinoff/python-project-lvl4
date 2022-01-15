@@ -21,6 +21,7 @@ LIST_TITLE = _("Tasks")
 CREATE_TITLE = _("Create task")
 DELETE_TITLE = _("Delete task")
 UPDATE_TITLE = _("Change task")
+DETAIL_TITLE = _("Task page")
 
 LIST_VIEW = 'tasks'
 UPDATE_VIEW = 'update_task'
@@ -91,6 +92,8 @@ class Tasks(FilterTaskMixin, ListView):
         context['title'] = LIST_TITLE
         context['table_heads'] = ('ID', _('Name'), _('Status'), _('Author'),
                                   _('Executor'), _('Creation date'))
+        context['create_path_name'] = CREATE_TITLE
+        context['create_path'] = CREATE_VIEW
         context['update_link'] = UPDATE_VIEW
         context['delete_link'] = DELETE_VIEW
         context['detail'] = 2
@@ -161,7 +164,7 @@ class TasksDetail(LoginRequiredMessage, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Task page"
+        context['title'] = DETAIL_TITLE
         context['update_link'] = UPDATE_VIEW
         context['delete_link'] = DELETE_VIEW
         return context

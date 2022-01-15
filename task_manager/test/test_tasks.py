@@ -7,8 +7,10 @@ from django.db.models import Q
 
 from task_manager.models import Task
 from task_manager.test.fixtures.db_fixtures import NEW_TASK
-from tasks.views import CREATE_VIEW, LIST_VIEW, UPDATE_VIEW, DELETE_VIEW
-from tasks.views import LIST_TITLE, CREATE_TITLE, DELETE_TITLE, UPDATE_TITLE
+from tasks.views import (CREATE_VIEW, LIST_VIEW, UPDATE_VIEW,
+                         DELETE_VIEW, DETAIL_VIEW)
+from tasks.views import (LIST_TITLE, CREATE_TITLE, DELETE_TITLE,
+                         UPDATE_TITLE, DETAIL_TITLE)
 from tasks.views import (MESSAGE_UPDATE_SUCCESS, MESSAGE_DELETE_SUCCESS,
                          MESSAGE_CREATE_SUCCESS, DELETE_CONSTRAINT_MESSAGE,
                          QUESTION_DELETE)
@@ -85,6 +87,7 @@ def test_view_tasks(client, log_user1, setup_tasks, test_string, filter_data):
     names = Task.objects.filter(Q(**q)).values_list(test_string).all()
     inclusions = list(map(lambda x: content.find(str(*x)) > 0, names))
     assert all(inclusions)
+    assert content.find(reverse(CREATE_VIEW)) > 0
 
 
 @pytest.mark.django_db
@@ -135,3 +138,24 @@ def test_delete_not_own_task(client, log_user1, setup_tasks):
     response = client.get(response.url)
     content = response.rendered_content
     assert content.find(DELETE_CONSTRAINT_MESSAGE) > 0
+
+
+@pytest.mark.django_db
+def test_detail_view_task(client, log_user1, setup_tasks):
+    item = Task.objects.get(id=1)
+    response = client.get(reverse(DETAIL_VIEW,
+                                  kwargs={'pk': 1}))
+    assert response.status_code == 200
+    content = response.rendered_content
+    assert content.find(DETAIL_TITLE) > 0
+    assert content.find(item.name) > 0
+    assert content.find(item.description) > 0
+    assert content.find(item.author.get_full_name()) > 0
+    assert content.find(item.executor.get_full_name()) > 0
+    assert content.find(item.status.name) > 0
+    labels = list(itertools.chain(
+        *item.labels.values_list('name')))
+    inclusions = list(map(lambda x: content.find(str(x)) > 0, labels))
+    assert all(inclusions)
+    assert content.find(reverse(DELETE_VIEW, kwargs={'pk': 1})) > 0
+    assert content.find(reverse(UPDATE_VIEW, kwargs={'pk': 1})) > 0
