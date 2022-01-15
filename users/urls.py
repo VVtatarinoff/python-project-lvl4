@@ -1,16 +1,15 @@
 from django.urls import path
 
-import users
+import users.views as views
 
-urlpatterns = {
-    path('users/', users.views.UserList.as_view(),
-         name=users.views.LIST_VIEW),
-    path('login/', users.views.LoginUser.as_view(), name='login'),
-    path('logout/', users.views.LogOut.as_view(), name='logout'),
-    path('users/create/', users.views.CreateUser.as_view(),
-         name=users.views.CREATE_VIEW),
-    path('users/<int:pk>/update/', users.views.UpdateUser.as_view(),
-         name=users.views.UPDATE_VIEW),
-    path('users/<int:pk>/delete/', users.views.UserDelete.as_view(),
-         name=users.views.DELETE_VIEW)
-}
+
+urlpatterns = [
+    path('', views.UserList.as_view(),
+         name=views.LIST_VIEW),
+    path('<int:pk>/update/', views.UpdateUser.as_view(),
+         name=views.UPDATE_VIEW),
+    path('<int:pk>/delete/', views.DeleteUser.as_view(),
+         name=views.DELETE_VIEW),
+    path('create/', views.CreateUser.as_view(),
+         name=views.CREATE_VIEW)
+]

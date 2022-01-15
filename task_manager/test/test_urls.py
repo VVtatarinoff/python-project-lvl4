@@ -3,7 +3,11 @@ import pytest
 
 from task_manager.test.conftest import NOLOGIN_PAGE, LOGIN_REQUIRED_PAGE
 from task_manager.test.conftest import LOGIN_REQUIRED_PAGE_PK
-from task_manager.urls import urlpatterns
+from task_manager.urls import urlpatterns as rooturls
+from tasks.urls import urlpatterns as tasksurls
+from labels.urls import urlpatterns as labelssurls
+from statuses.urls import urlpatterns as statusesurls
+from users.urls import urlpatterns as usersurls
 from task_manager.views.general import FLASH_LOGINREQUIRED
 
 
@@ -32,6 +36,8 @@ def test_login_access_pages(client, site_path, setup_users):
 def test_coverage():
     paths_tested = len(
         NOLOGIN_PAGE | LOGIN_REQUIRED_PAGE | LOGIN_REQUIRED_PAGE_PK)
-    paths_patterns = len(urlpatterns)
+    paths_patterns = len(
+        rooturls + tasksurls + labelssurls + statusesurls + usersurls)
+    paths_patterns -= (4 + 2)
     ''' Admin and logout excluded from test'''
-    assert paths_patterns - 2 == paths_tested
+    assert paths_patterns == paths_tested

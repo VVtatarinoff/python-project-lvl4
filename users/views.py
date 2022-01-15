@@ -81,7 +81,7 @@ class UpdateUser(LoginRequiredMessage, UserCanEditProfile,
         return super().get_success_url()
 
 
-class UserDelete(LoginRequiredMessage, UserCanEditProfile,
+class DeleteUser(LoginRequiredMessage, UserCanEditProfile,
                  SuccessMessageMixin, DeleteView):
     template_name = 'delete_page.html'
     success_url = reverse_lazy(LIST_VIEW)
