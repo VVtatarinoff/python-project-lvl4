@@ -17,12 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-import task_manager.views.tasks as tasks
 import labels.views
 import statuses.views
-from task_manager.views.constants import TASK_CATEGORY
-from task_manager.views.constants import DELETE_LINKS, UPDATE_LINKS
-from task_manager.views.constants import LIST_LINKS, CREATE_LINKS
+import tasks.views
 import users.views
 
 kwargs = dict()
@@ -58,17 +55,14 @@ urlpatterns = [
     path('labels/create/', labels.views.CreateLabel.as_view(),
          name=labels.views.CREATE_VIEW),
 
-    path('tasks/', tasks.Tasks.as_view(),
-         kwargs={'category': TASK_CATEGORY},
-         name=LIST_LINKS[TASK_CATEGORY]),
-    path('tasks/<int:pk>/', tasks.TasksDetail.as_view(), name='tasks_detail'),
-    path('tasks/<int:pk>/update/', tasks.UpdateTask.as_view(),
-         kwargs={'category': TASK_CATEGORY},
-         name=UPDATE_LINKS[TASK_CATEGORY]),
-    path('tasks/<int:pk>/delete/', tasks.DeleteTask.as_view(),
-         kwargs={'category': TASK_CATEGORY},
-         name=DELETE_LINKS[TASK_CATEGORY]),
-    path('tasks/create/', tasks.CreateTask.as_view(),
-         kwargs={'category': TASK_CATEGORY},
-         name=CREATE_LINKS[TASK_CATEGORY])
+    path('tasks/', tasks.views.Tasks.as_view(),
+         name=tasks.views.LIST_VIEW),
+    path('tasks/<int:pk>/', tasks.views.TasksDetail.as_view(),
+         name=tasks.views.DETAIL_VIEW),
+    path('tasks/<int:pk>/update/', tasks.views.UpdateTask.as_view(),
+         name=tasks.views.UPDATE_VIEW),
+    path('tasks/<int:pk>/delete/', tasks.views.DeleteTask.as_view(),
+         name=tasks.views.DELETE_VIEW),
+    path('tasks/create/', tasks.views.CreateTask.as_view(),
+         name=tasks.views.CREATE_VIEW)
 ]

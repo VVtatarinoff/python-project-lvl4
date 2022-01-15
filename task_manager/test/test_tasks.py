@@ -7,30 +7,18 @@ from django.db.models import Q
 
 from task_manager.models import Task
 from task_manager.test.fixtures.db_fixtures import NEW_TASK
-from task_manager.views.constants import (CREATE_LINKS, TASK_CATEGORY,
-                                          DELETE_TITLES,
-                                          UPDATE_TITLES, UPDATE_LINKS,
-                                          DELETE_LINKS,
-                                          LIST_LINKS, TITLES,
-                                          CREATE_TITLES,
-                                          DELETE_CONSTRAINT_MESSAGE)
+from tasks.views import CREATE_VIEW, LIST_VIEW, UPDATE_VIEW, DELETE_VIEW
+from tasks.views import LIST_TITLE, CREATE_TITLE, DELETE_TITLE, UPDATE_TITLE
+from tasks.views import (MESSAGE_UPDATE_SUCCESS, MESSAGE_DELETE_SUCCESS,
+                         MESSAGE_CREATE_SUCCESS, DELETE_CONSTRAINT_MESSAGE,
+                         QUESTION_DELETE)
 
 logger = logging.getLogger(__name__)
-
-CREATE_PATH = reverse(CREATE_LINKS[TASK_CATEGORY])
-VIEW_PATH = reverse(LIST_LINKS[TASK_CATEGORY])
-UPDATE_PATH = UPDATE_LINKS[TASK_CATEGORY]
-DELETE_PATH = DELETE_LINKS[TASK_CATEGORY]
-
-LIST_TITLE = TITLES[TASK_CATEGORY]
-UPDATE_TITLE = UPDATE_TITLES[TASK_CATEGORY]
-CREATE_TITLE = CREATE_TITLES[TASK_CATEGORY]
-DELETE_TITLE = DELETE_TITLES[TASK_CATEGORY]
 
 
 @pytest.mark.django_db
 def test_create_get(client, log_user1):
-    response = client.get(CREATE_PATH)
+    response = client.get(reverse(CREATE_VIEW))
     content = response.rendered_content
     assert content.find('method="post"') > 0
     assert content.find('name="description"') > 0
@@ -43,17 +31,17 @@ def test_create_get(client, log_user1):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('configuration', [
-    (CREATE_PATH, 1),
-    (reverse(UPDATE_PATH, kwargs={'pk': 1}), 0)])
+    (reverse(CREATE_VIEW), 1, MESSAGE_CREATE_SUCCESS),
+    (reverse(UPDATE_VIEW, kwargs={'pk': 1}), 0, MESSAGE_UPDATE_SUCCESS)])
 def test_create_update_task_post(client, log_user1,
                                  setup_tasks, configuration):
-    """ in this test two vies are tested : update and create"""
-    path, incremental = configuration
+    """ in this test two views are tested : update and create"""
+    path, incremental, msg = configuration
     initial_count = Task.objects.all().count()
     response = client.post(path, NEW_TASK)
     created_item = Task.objects.get(name=NEW_TASK['name'])
     assert response.status_code == 302
-    assert response.url == VIEW_PATH
+    assert response.url == reverse(LIST_VIEW)
     assert Task.objects.all().count() == initial_count + incremental
     assert created_item.description == NEW_TASK['description']
     assert created_item.executor.id == NEW_TASK['executor']
@@ -62,6 +50,23 @@ def test_create_update_task_post(client, log_user1,
     assigned_labels = list(itertools.chain(
         *created_item.labels.values_list('id')))
     assert assigned_labels == NEW_TASK['labels']
+    # force flashing of message
+    response = client.get(response.url)
+    content = response.rendered_content
+    assert content.find(msg)
+
+
+@pytest.mark.django_db
+def test_update_html_tasks(client, log_user1, setup_tasks):
+    item = Task.objects.all().first()
+    response = client.get(reverse(UPDATE_VIEW,
+                                  kwargs={'pk': item.id}))
+    assert response.status_code == 200
+    content = response.rendered_content
+    assert content.find('method="post"') > 0
+    assert content.find('name="name"') > 0
+    assert content.find(UPDATE_TITLE) > 0
+    assert content.find(item.name) > 0
 
 
 @pytest.mark.django_db
@@ -71,7 +76,7 @@ def test_create_update_task_post(client, log_user1,
                           'status__name'])
 def test_view_tasks(client, log_user1, setup_tasks, test_string, filter_data):
     get_request_args, q = filter_data
-    response = client.get(VIEW_PATH, get_request_args)
+    response = client.get(reverse(LIST_VIEW), get_request_args)
     content = response.rendered_content
     lines = content.count('</tr')
     lines_expected = Task.objects.all().filter(Q(**q)).count()
@@ -83,32 +88,50 @@ def test_view_tasks(client, log_user1, setup_tasks, test_string, filter_data):
 
 
 @pytest.mark.django_db
+def test_delete_html_task(
+        client, log_user1, setup_tasks):
+    item = Task.objects.all().first()
+    response = client.get(reverse(DELETE_VIEW,
+                                  kwargs={'pk': item.id}))
+    assert response.status_code == 200
+    content = response.rendered_content
+    assert content.find('method="post"') > 0
+    assert content.find(QUESTION_DELETE) > 0
+    assert content.find(DELETE_TITLE) > 0
+    assert content.find(item.name) > 0
+
+
+@pytest.mark.django_db
 def test_delete_own_task(client, log_user1, setup_tasks):
     count_before = Task.objects.all().count()
     item = Task.objects.all().first()
-    response = client.post(reverse(DELETE_PATH,
+    response = client.post(reverse(DELETE_VIEW,
                                    kwargs={'pk': item.id}))
     assert response.status_code == 302
-    assert response.url == VIEW_PATH
+    assert response.url == reverse(LIST_VIEW)
     with pytest.raises(Exception) as e:
         Task.objects.get(id=item.id)
     assert e.match('matching query does not exist')
     count_after = Task.objects.all().count()
     assert count_after == count_before - 1
+    # force flashing of message
+    response = client.get(response.url)
+    content = response.rendered_content
+    assert content.find(MESSAGE_DELETE_SUCCESS)
 
 
 @pytest.mark.django_db
 def test_delete_not_own_task(client, log_user1, setup_tasks):
     count_before = Task.objects.all().count()
     item = Task.objects.exclude(author=log_user1.id).first()
-    response = client.post(reverse(DELETE_PATH,
+    response = client.post(reverse(DELETE_VIEW,
                                    kwargs={'pk': item.id}))
     assert response.status_code == 302
-    assert response.url == VIEW_PATH
+    assert response.url == reverse(LIST_VIEW)
     assert Task.objects.get(id=item.id)
     count_after = Task.objects.all().count()
     assert count_after == count_before
     # force to flash message
     response = client.get(response.url)
     content = response.rendered_content
-    assert content.find(DELETE_CONSTRAINT_MESSAGE[TASK_CATEGORY]) > 0
+    assert content.find(DELETE_CONSTRAINT_MESSAGE) > 0
