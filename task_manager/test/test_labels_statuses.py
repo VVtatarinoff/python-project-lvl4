@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from task_manager.views.constants import (CREATE_LINKS, MODELS, LIST_LINKS,
                                           TITLES, UPDATE_LINKS, DELETE_LINKS,
-                                          DELETE_TITLES, LABEL_CATEGORY,
+                                          DELETE_TITLES,
                                           STATUS_CATEGORY, CREATE_TITLES,
                                           TASK_CATEGORY, QUESTION_DELETE,
                                           DELETE_CONSTRAINT_MESSAGE)
@@ -14,7 +14,7 @@ from task_manager.views.constants import (CREATE_LINKS, MODELS, LIST_LINKS,
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY])
+@pytest.mark.parametrize('category', [STATUS_CATEGORY])
 def test_create_get(client, log_user1, category):
     response = client.get(reverse(CREATE_LINKS[category]))
     content = response.rendered_content
@@ -24,7 +24,7 @@ def test_create_get(client, log_user1, category):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY])
+@pytest.mark.parametrize('category', [STATUS_CATEGORY])
 def test_create_status_post(client, log_user1, setup_tasks, category):
     model = MODELS[category]
     initial_count = model.objects.all().count()
@@ -42,7 +42,7 @@ def test_create_status_post(client, log_user1, setup_tasks, category):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY])
+@pytest.mark.parametrize('category', [STATUS_CATEGORY])
 def test_view_labels_statuses(client, log_user1, setup_tasks, category):
     model = MODELS[category]
     response = client.get(reverse(LIST_LINKS[category]))
@@ -57,7 +57,7 @@ def test_view_labels_statuses(client, log_user1, setup_tasks, category):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY,
+@pytest.mark.parametrize('category', [STATUS_CATEGORY,
                                       TASK_CATEGORY])
 def test_update_html_labels_statuses(client, log_user1, setup_tasks, category):
     model = MODELS[category]
@@ -72,7 +72,7 @@ def test_update_html_labels_statuses(client, log_user1, setup_tasks, category):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [LABEL_CATEGORY, STATUS_CATEGORY])
+@pytest.mark.parametrize('category', [STATUS_CATEGORY])
 def test_update_post_labels_statuses(
         client, log_user1, setup_tasks, category):
     model = MODELS[category]
@@ -89,7 +89,7 @@ def test_update_post_labels_statuses(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('category', [
-    LABEL_CATEGORY, STATUS_CATEGORY, TASK_CATEGORY])
+    STATUS_CATEGORY, TASK_CATEGORY])
 def test_delete_html_labels_statuses(
         client, log_user1, setup_tasks, category):
     model = MODELS[category]
@@ -105,7 +105,7 @@ def test_delete_html_labels_statuses(
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [STATUS_CATEGORY, LABEL_CATEGORY])
+@pytest.mark.parametrize('category', [STATUS_CATEGORY])
 def test_delete_unbound_labels_statuses(
         client, log_user1, setup_tasks, category):
     model = MODELS[category]
@@ -124,7 +124,7 @@ def test_delete_unbound_labels_statuses(
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('category', [STATUS_CATEGORY, LABEL_CATEGORY])
+@pytest.mark.parametrize('category', [STATUS_CATEGORY])
 def test_delete_bound_labels_statuses(
         client, log_user1, setup_tasks, category):
     model = MODELS[category]

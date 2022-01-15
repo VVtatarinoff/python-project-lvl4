@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'task_manager.apps.TMConfig',
     'users.apps.UsersConfig',
-
+    'labels.apps.LabelsConfig',
     'bootstrap4',
 ]
 
