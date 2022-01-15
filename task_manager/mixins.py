@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 
 logger = logging.getLogger(__name__)
 
-FLASH_LOGINREQUIRED = _('You are not authorized. Please log in')
+LOGIN_REQUIRED_MESSAGE = _('You are not authorized. Please log in')
 
 
 class LoginRequiredMessage(AccessMixin):
@@ -15,6 +15,6 @@ class LoginRequiredMessage(AccessMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(self.request, FLASH_LOGINREQUIRED)
+            messages.error(self.request, LOGIN_REQUIRED_MESSAGE)
             return redirect(self.login_url)
         return super().dispatch(request, *args, **kwargs)

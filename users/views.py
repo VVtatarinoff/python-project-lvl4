@@ -16,7 +16,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
 from .forms import RegisterUserForm
 from .forms import LoginUserForm, UpdateUserForm
-from task_manager.views.general import LoginRequiredMessage
+from task_manager.mixins import LoginRequiredMessage
 
 logger = logging.getLogger(__name__)
 

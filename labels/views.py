@@ -10,7 +10,7 @@ from django.utils.translation import gettext as _
 
 from labels.forms import CreateLabelForm
 from task_manager.models import Label
-from task_manager.views.general import LoginRequiredMessage
+from task_manager.mixins import LoginRequiredMessage
 
 logger = logging.getLogger(__name__)
 

@@ -12,7 +12,7 @@ from django.views.generic import (FormView, DetailView, ListView,
 from django.utils.translation import gettext as _
 
 from .forms import CreateTaskForm, FilterTaskForm
-from task_manager.views.general import LoginRequiredMessage
+from task_manager.mixins import LoginRequiredMessage
 from task_manager.models import Task
 
 logger = logging.getLogger(__name__)

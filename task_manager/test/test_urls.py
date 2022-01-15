@@ -8,7 +8,7 @@ from tasks.urls import urlpatterns as tasksurls
 from labels.urls import urlpatterns as labelssurls
 from statuses.urls import urlpatterns as statusesurls
 from users.urls import urlpatterns as usersurls
-from task_manager.views.general import FLASH_LOGINREQUIRED
+from task_manager.mixins import LOGIN_REQUIRED_MESSAGE
 
 
 @pytest.mark.django_db
@@ -27,7 +27,7 @@ def test_login_access_pages(client, site_path, setup_users):
     # force to flash message
     response = client.get(response.url)
     content = response.rendered_content
-    assert content.find(FLASH_LOGINREQUIRED) > 0
+    assert content.find(LOGIN_REQUIRED_MESSAGE) > 0
     client.force_login(setup_users[0])
     response = client.get(site_path)
     assert response.status_code == 200
