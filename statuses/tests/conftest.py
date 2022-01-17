@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-import statuses
+import statuses.views
 from task_manager.tests.conftest import (log_user1, setup_users,   # noqa F401
                                          setup_tasks, setup_labels,
                                          setup_statuses, )

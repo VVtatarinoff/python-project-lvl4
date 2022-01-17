@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.db.models import Q
 
 from tasks.models import Task
-from task_manager.tests.fixtures.db_fixtures import NEW_TASK
 from tasks.views import (CREATE_VIEW, LIST_VIEW, UPDATE_VIEW,
                          DELETE_VIEW, DETAIL_VIEW)
 from tasks.views import (LIST_TITLE, CREATE_TITLE, DELETE_TITLE,
@@ -16,6 +15,14 @@ from tasks.views import (MESSAGE_UPDATE_SUCCESS, MESSAGE_DELETE_SUCCESS,
                          QUESTION_DELETE)
 
 logger = logging.getLogger(__name__)
+
+NEW_TASK = {
+    "name": "forth task name",
+    "description": "forth task description",
+    "status": 1,
+    "executor": 1,
+    "labels": [1, 3]
+}
 
 
 @pytest.mark.django_db

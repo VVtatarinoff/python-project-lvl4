@@ -67,20 +67,3 @@ TASKS_TEST = [
         'author': 1
     }
 ]
-
-NEW_USER = {
-    "first_name": "Malika",
-    "last_name": "Hodkiewicz",
-    "full_name": "Malika Hodkiewicz",
-    "username": "malika-hodkiewicz",
-    "password1": "8RvGr5wWTu",
-    "password2": "8RvGr5wWTu"
-
-}
-NEW_TASK = {
-    "name": "forth task name",
-    "description": "forth task description",
-    "status": 1,
-    "executor": 1,
-    "labels": [1, 3]
-}

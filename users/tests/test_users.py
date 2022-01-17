@@ -3,7 +3,7 @@ import pytest
 import logging
 from django.urls import reverse
 
-from task_manager.tests.fixtures.db_fixtures import USERS_TEST, NEW_USER
+from task_manager.tests.fixtures.db_fixtures import USERS_TEST
 from users.views import (CREATE_VIEW, LIST_VIEW, DELETE_VIEW, UPDATE_VIEW,
                          LIST_TITLE, UPDATE_TITLE, CREATE_TITLE,
                          MESSAGE_NO_PERMISSION)
@@ -14,6 +14,16 @@ FIRST_USER = USERS_TEST[0]
 
 REGISTER_PATH = reverse(CREATE_VIEW)
 VIEW_PATH = reverse(LIST_VIEW)
+
+NEW_USER = {
+    "first_name": "Malika",
+    "last_name": "Hodkiewicz",
+    "full_name": "Malika Hodkiewicz",
+    "username": "malika-hodkiewicz",
+    "password1": "8RvGr5wWTu",
+    "password2": "8RvGr5wWTu"
+
+}
 
 
 @pytest.mark.django_db
