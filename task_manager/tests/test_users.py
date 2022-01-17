@@ -3,7 +3,7 @@ import pytest
 import logging
 from django.urls import reverse
 
-from task_manager.test.fixtures.db_fixtures import USERS_TEST, NEW_USER
+from task_manager.tests.fixtures.db_fixtures import USERS_TEST, NEW_USER
 from users.views import (CREATE_VIEW, LIST_VIEW, DELETE_VIEW, UPDATE_VIEW,
                          LIST_TITLE, UPDATE_TITLE, CREATE_TITLE,
                          MESSAGE_NO_PERMISSION)
@@ -47,7 +47,7 @@ def test_register_post_normal(client):
 @pytest.mark.django_db
 def test_register_post_the_same_name(client, setup_users, user1_details):
     keep_name = user1_details['first_name']
-    user1_details['first_name'] = user1_details['first_name'] + 'test'
+    user1_details['first_name'] = user1_details['first_name'] + 'tests'
     response = client.post(REGISTER_PATH, user1_details)
     assert User.objects.all().count() == len(setup_users)
     assert response.status_code == 200
@@ -101,7 +101,7 @@ def test_update_html(client, setup_users, test_string, log_user1):
 def test_update_self(client, setup_users, update_field,
                      log_user1, user1_details):
     updated_user_data = user1_details.copy()
-    updated_user_data[update_field] = updated_user_data[update_field] + 'test'
+    updated_user_data[update_field] = updated_user_data[update_field] + 'tests'
     updated_user_data['password1'] = updated_user_data['password']
     updated_user_data['password2'] = updated_user_data['password']
     response = client.post(reverse(UPDATE_VIEW, kwargs={'pk': log_user1.id}),

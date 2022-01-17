@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from tasks.models import Task
-from task_manager.test.fixtures.db_fixtures import NEW_TASK
+from task_manager.tests.fixtures.db_fixtures import NEW_TASK
 from tasks.views import (CREATE_VIEW, LIST_VIEW, UPDATE_VIEW,
                          DELETE_VIEW, DETAIL_VIEW)
 from tasks.views import (LIST_TITLE, CREATE_TITLE, DELETE_TITLE,
@@ -37,7 +37,7 @@ def test_create_get(client, log_user1):
     (reverse(UPDATE_VIEW, kwargs={'pk': 1}), 0, MESSAGE_UPDATE_SUCCESS)])
 def test_create_update_task_post(client, log_user1,
                                  setup_tasks, configuration):
-    """ in this test two views are tested : update and create"""
+    """ in this tests two views are tested : update and create"""
     path, incremental, msg = configuration
     initial_count = Task.objects.all().count()
     response = client.post(path, NEW_TASK)

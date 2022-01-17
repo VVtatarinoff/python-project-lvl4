@@ -8,10 +8,10 @@ from django.urls import reverse
 from tasks.models import Task
 from statuses.models import Status
 from labels.models import Label
-from task_manager.test.fixtures.db_fixtures import LABELS_TEST
-from task_manager.test.fixtures.db_fixtures import TASKS_TEST
-from task_manager.test.fixtures.db_fixtures import USERS_TEST
-from task_manager.test.fixtures.db_fixtures import STATUSES_TEST
+from task_manager.tests.fixtures.db_fixtures import LABELS_TEST
+from task_manager.tests.fixtures.db_fixtures import TASKS_TEST
+from task_manager.tests.fixtures.db_fixtures import USERS_TEST
+from task_manager.tests.fixtures.db_fixtures import STATUSES_TEST
 import statuses.views
 import labels.views
 import users.views
@@ -117,7 +117,7 @@ def bound_user(client, setup_tasks, request):
     authors_only = authors_set - executors_set
     executors_only = executors_set - authors_set
     if not authors_only or not executors_only:
-        raise Exception('wrong test configuration:'
+        raise Exception('wrong tests configuration:'
                         ' no unique author and executor')
     if request.param == 'author':
         user = User.objects.get(id=list(authors_only)[0])

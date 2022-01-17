@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy, reverse
 import pytest
 
-from task_manager.test.conftest import NOLOGIN_PAGE, LOGIN_REQUIRED_PAGE
-from task_manager.test.conftest import LOGIN_REQUIRED_PAGE_PK
+from task_manager.tests.conftest import NOLOGIN_PAGE, LOGIN_REQUIRED_PAGE
+from task_manager.tests.conftest import LOGIN_REQUIRED_PAGE_PK
 from task_manager.urls import urlpatterns as rooturls
 from tasks.urls import urlpatterns as tasksurls
 from labels.urls import urlpatterns as labelssurls
@@ -39,5 +39,5 @@ def test_coverage():
     paths_patterns = len(
         rooturls + tasksurls + labelssurls + statusesurls + usersurls)
     paths_patterns -= (4 + 2)
-    ''' Admin and logout excluded from test'''
+    ''' Admin and logout excluded from tests'''
     assert paths_patterns == paths_tested

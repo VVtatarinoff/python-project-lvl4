@@ -96,7 +96,7 @@ class DeleteTask(LoginRequiredMessage, DeleteView):
 
 class TasksDetail(LoginRequiredMessage, DetailView):
     model = Task
-    template_name = 'detail_view.html'
+    template_name = 'tasks/detail_view.html'
     context_object_name = 'task'
 
     def get_context_data(self, *, object_list=None, **kwargs):
