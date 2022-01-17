@@ -12,7 +12,7 @@ from task_manager.tests.conftest import (log_user1, setup_users,   # noqa F401
 from task_manager.tests.fixtures.db_fixtures import USERS_TEST
 import users.views
 
-NOLOGIN_PAGE = {users.views.LIST_VIEW, users.views.CREATE_VIEW, }
+NOLOGIN_PAGE = {users.views.LIST_VIEW, users.views.CREATE_VIEW, 'login'}
 
 LOGIN_REQUIRED_PAGE_PK = {users.views.DELETE_VIEW,
                           users.views.UPDATE_VIEW,

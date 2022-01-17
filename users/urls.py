@@ -13,3 +13,7 @@ urlpatterns = [
     path('create/', views.CreateUser.as_view(),
          name=views.CREATE_VIEW)
 ]
+extra_patterns = [
+    path('login/', views.LoginUser.as_view(), name='login'),
+    path('logout/', views.LogOut.as_view(), name='logout'),
+]
