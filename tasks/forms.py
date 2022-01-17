@@ -9,7 +9,7 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 from django_filters import filters
 
-from task_manager.models import Label, Task
+from task_manager.models import Label, Task, Status
 
 logger = logging.getLogger(__name__)
 
@@ -55,12 +55,17 @@ class CreateTaskForm(ModelForm):
 
 
 class TaskFilter(django_filters.FilterSet):
+    st_choices = Status.objects.values_list('id', 'name', named=True).all()
+    status = filters.ChoiceFilter(label=_('Status'),
+                                  choices=st_choices)
     lb_choices = Label.objects.values_list('id', 'name', named=True).all()
-    labels = filters.ChoiceFilter(choices=lb_choices)
+    labels = filters.ChoiceFilter(label=_('Label'),
+                                  choices=lb_choices)
     ex_choices = User.objects.values_list(
         'id', Concat('first_name', Value(' '), 'last_name'),
         named=True).all()
-    executor = filters.ChoiceFilter(choices=ex_choices)
+    executor = filters.ChoiceFilter(label=_('Executor'),
+                                    choices=ex_choices)
     self_task = filters.BooleanFilter(label=_('Only my tasks'),
                                       widget=forms.CheckboxInput(),
                                       method='filter_self',

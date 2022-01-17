@@ -40,6 +40,8 @@ MESSAGE_INVALID_PASSWORD = _('Invalid pair user-password')
 MESSAGE_NO_PERMISSION = _('You have no authorization to handle this action')
 DELETE_CONSTRAINT_MESSAGE = _('Unable to delete user as it is in use')
 QUESTION_DELETE = _('Are you sure you want to delete')
+TABLE_HEADS = ('ID', _('User name'),
+               _('Full name'), _('Creation date'))
 
 
 class UserCanEditProfile(AccessMixin):
@@ -57,9 +59,8 @@ class UserList(ListView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = LIST_VIEW
-        context['table_heads'] = ('ID', _('User name'),
-                                  _('Full name'), _('Creation date'))
+        context['title'] = LIST_TITLE
+        context['table_heads'] = TABLE_HEADS
         context['update_link'] = UPDATE_VIEW
         context['delete_link'] = DELETE_VIEW
         return context

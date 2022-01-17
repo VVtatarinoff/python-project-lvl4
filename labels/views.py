@@ -29,6 +29,7 @@ MESSAGE_DELETE_SUCCESS = _('Label was successfully deleted')
 MESSAGE_CREATE_SUCCESS = _('Label was successfully created')
 DELETE_CONSTRAINT_MESSAGE = _('Unable to delete label as it is in use')
 QUESTION_DELETE = _('Are you sure you want to delete')
+TABLE_HEADS = ('ID', _('Name'), _('Creation date'))
 
 
 class Labels(LoginRequiredMessage, ListView):
@@ -38,7 +39,7 @@ class Labels(LoginRequiredMessage, ListView):
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = LIST_TITLE
-        context['table_heads'] = ('ID', _('Name'), _('Creation date'))
+        context['table_heads'] = TABLE_HEADS
         context['create_path_name'] = CREATE_TITLE
         context['create_path'] = CREATE_VIEW
         context['update_link'] = UPDATE_VIEW

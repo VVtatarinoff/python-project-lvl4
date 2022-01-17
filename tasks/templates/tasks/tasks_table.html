@@ -4,19 +4,30 @@
 {% block content %}
 <a class="nav-link" href={% url create_path %}>{{ create_path_name }}</a>
 {% block filter %}
-<form method="get">
-      {% for f in filter.form %}
-                <div class="form-group">
-                     <label class="form-label" for ="{{ f.id_for_label }}">{{ f.label }}</label>
-                        {{ f }}
-                    <div class="form-error text-danger">{{ f.errors }}</div>
-                    {% if f.help_text %}
-                        <small class="form-text text-muted">{{ f.help_text }}</small>
-                    {% endif %}
-                </div>
-        {% endfor %}
-        <input type="submit" class="btn btn-primary" value = {% translate "Show" %}>
-    </form>
+<div class="card mb-3 bg-secondary">
+    <div class="card-body bg-light>">
+        <form class="form-inline center" method="get">
+
+              {% for f in filter.form %}
+
+                    <div class="form-group">
+                         <label class="form-label text-light" for ="{{ f.id_for_label }}">{{ f.label }}</label>
+                        <div class="mr-3 ml-2">
+                            {{ f }}
+                        </div>
+                        <div class="form-error text-danger">{{ f.errors }}</div>
+                        {% if f.help_text %}
+                            <small class="form-text text-muted">{{ f.help_text }}</small>
+                        {% endif %}
+                    </div>
+              {% endfor %}
+
+              <input type="submit" class="btn btn-primary" value = {% translate "Show" %}>
+
+
+        </form>
+    </div>
+</div>
 {% endblock filter %}
 <table class="table table-striped table-bordered table-hover table-sm table-responsive-md">
 

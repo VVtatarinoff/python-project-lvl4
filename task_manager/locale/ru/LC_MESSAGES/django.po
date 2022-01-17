@@ -56,7 +56,7 @@ msgstr ""
 #: task_manager/forms/users_forms.py:33 task_manager/forms/users_forms.py:79
 #: task_manager/forms/users_forms.py:82
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: task_manager/forms.py:29 task_manager/forms/users_forms.py:29
 msgid "Your password should be at least 3 symbols"
@@ -73,7 +73,7 @@ msgstr "Для подтверждения введите, пожалуйста, 
 
 #: task_manager/forms.py:61 task_manager/forms/users_forms.py:61
 msgid "The two password fields didn’t match."
-msgstr ""
+msgstr "Повтор пароля не совпадает с первым полем"
 
 #: task_manager/forms/statuses_forms.py:52 task_manager/views/general.py:43
 msgid "Status"
@@ -81,11 +81,11 @@ msgstr "Статус"
 
 #: task_manager/settings.py:126
 msgid "English"
-msgstr ""
+msgstr "Английский"
 
 #: task_manager/settings.py:127
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: task_manager/templates/base.html:12
 msgid "Task manager Hexlet"
