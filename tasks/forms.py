@@ -111,7 +111,10 @@ class TaskFilter(django_filters.FilterSet):
         'id', Concat('first_name', Value(' '), 'last_name'),
         named=True).all()
     executor = filters.ChoiceFilter(choices=ex_choices)
-    self_task = filters.BooleanFilter(label=_('Only my tasks'), widget=forms.CheckboxInput, method='filter_self', field_name='self_task')
+    self_task = filters.BooleanFilter(label=_('Only my tasks'),
+                                      widget=forms.CheckboxInput(),
+                                      method='filter_self',
+                                      field_name='self_task')
 
     def filter_self(self, queryset, name, value):
         if value:
@@ -122,11 +125,3 @@ class TaskFilter(django_filters.FilterSet):
     class Meta:
         model = Task
         fields = ['status', 'executor', 'labels']
-"""
-    @property
-    def qs(self):
-        parent = super().qs
-        author = getattr(self.request, 'user', None)
-
-        return parent.filter(author=author)
-"""

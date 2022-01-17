@@ -9,41 +9,7 @@
 {% if create_path %}
 <a class="nav-link" href={% url create_path %}>{{ create_path_name }}</a>
 {% endif %}
-<!--
-{% block filter %}
-    {% if form %}
-    {% csrf_token %}
-    <div class="card mb-3">
-        <div class="card-body">
-                <form class="form-inline center" method="get">
-                {% for f in form %}
-                <div class="form-group">
-                     <label class="form-label" for ="{{ f.id_for_label }}">{{ f.label }}</label>
 
-                        {{ f }}
-
-                    <div class="form-error text-danger">{{ f.errors }}</div>
-                    {% if f.help_text %}
-                        <small class="form-text text-muted">{{ f.help_text }}</small>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                    <div class="form-group">
-                        <div class="mr-3">
-                            <div class="form-check">
-
-                            </div>
-                        </div>
-                    </div>
-                <div class="form-group">
-                    <input class="btn btn-primary" type="submit" value={% translate "Show" %}>
-                </div>
-                </form>
-        </div>
-    </div>
-    {% endif %}
-{% endblock filter %}
--->
 <table class="table table-striped table-bordered table-hover table-sm table-responsive-md">
     <thead class="table-primary" scope="col">
         {% for t_head in table_heads %}

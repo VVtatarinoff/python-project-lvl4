@@ -36,72 +36,9 @@ MESSAGE_DELETE_SUCCESS = _('Task was successfully deleted')
 MESSAGE_CREATE_SUCCESS = _('Task was successfully created')
 DELETE_CONSTRAINT_MESSAGE = _('The task may be deleted only by author')
 QUESTION_DELETE = _('Are you sure you want to delete')
+TABLE_HEADS = ('ID', _('Name'), _('Status'), _('Author'),
+               _('Executor'), _('Creation date'))
 
-"""
-class FilterTaskMixin(LoginRequiredMessage, FormView):
-    model = Task
-    form_class = FilterTaskForm
-    filter_Q = {'status': Q(),
-                'executor': Q(),
-                'labels': Q(),
-                'self_tasks': Q()}
-    filtered_data = {'status': '',
-                     'executor': '',
-                     'labels': '',
-                     'self_tasks': False}
-
-    def get_form_kwargs(self):
-        kwargs = super(FilterTaskMixin, self).get_form_kwargs()
-        kwargs['initial'].update(self.filtered_data)
-        return kwargs
-
-    def get(self, request, *args, **kwargs):
-        for key in self.filtered_data:
-            received = request.GET.get(key, 0)
-            self.filtered_data[key] = bool(received) if key == 'self_tasks' \
-                else received
-        self.filter_Q['status'] = Q(status=self.filtered_data['status']) \
-            if self.filtered_data['status'] else Q()
-        self.filter_Q['executor'] = Q(executor=self.filtered_data['executor']) \
-            if self.filtered_data['executor'] else Q()
-        self.filter_Q['labels'] = Q(labels=self.filtered_data['labels']) \
-            if self.filtered_data['labels'] else Q()
-        self.filter_Q['self_tasks'] = Q(author=request.user.id) \
-            if self.filtered_data['self_tasks'] else Q()
-        return super().get(request, *args, **kwargs)
-
-    def get_queryset(self, *args, **kwargs):
-        status_query = Task.objects.values_list('id', 'name', 'status__name',
-                                                Concat('author__first_name',
-                                                       Value(' '),
-                                                       'author__last_name'),
-                                                Concat('executor__first_name',
-                                                       Value(' '),
-                                                       'executor__last_name'),
-                                                'creation_date',
-                                                named=True)
-        for q in self.filter_Q.values():
-            status_query = status_query.filter(q)
-        return status_query
-
-
-class Tasks(FilterTaskMixin, ListView):
-    template_name = 'table.html'
-    context_object_name = 'table'
-
-    def get_context_data(self, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = LIST_TITLE
-        context['table_heads'] = ('ID', _('Name'), _('Status'), _('Author'),
-                                  _('Executor'), _('Creation date'))
-        context['create_path_name'] = CREATE_TITLE
-        context['create_path'] = CREATE_VIEW
-        context['update_link'] = UPDATE_VIEW
-        context['delete_link'] = DELETE_VIEW
-        context['detail'] = 2
-        context['detail_path'] = DETAIL_VIEW
-        return context
-"""
 
 class CreateTask(LoginRequiredMessage, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
@@ -195,22 +132,23 @@ class UpdateTask(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class Tasks(ListView):
+class Tasks(LoginRequiredMessage, ListView):
     template_name = 'tasks/tasks_table.html'
     model = Task
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = LIST_TITLE
-        context['table_heads'] = ('ID', _('Name'), _('Status'), _('Author'),
-                                  _('Executor'), _('Creation date'))
+        context['table_heads'] = TABLE_HEADS
         context['create_path_name'] = CREATE_TITLE
         context['create_path'] = CREATE_VIEW
         context['update_link'] = UPDATE_VIEW
         context['delete_link'] = DELETE_VIEW
         context['detail'] = 2
         context['detail_path'] = DETAIL_VIEW
-        context['filter'] = TaskFilter(self.request.GET, request=self.request, queryset=self.get_queryset())
+        context['filter'] = TaskFilter(self.request.GET,
+                                       request=self.request,
+                                       queryset=self.get_queryset())
         return context
 
     def get_queryset(self, *args, **kwargs):
