@@ -9,7 +9,7 @@ from task_manager.models import Status
 logger = logging.getLogger(__name__)
 
 
-class CreateStatusForm(ModelForm):
+class StatusForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': _('Name')}),

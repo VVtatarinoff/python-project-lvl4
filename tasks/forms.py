@@ -14,11 +14,11 @@ from task_manager.models import Label, Task, Status
 logger = logging.getLogger(__name__)
 
 
-class CreateTaskForm(ModelForm):
+class TaskForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.aor_id = kwargs.pop('id', None)
-        super(CreateTaskForm, self).__init__(*args, **kwargs)
+        super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['name'] = forms.CharField(label=_('Name'),
                                               max_length=150,
                                               widget=forms.TextInput(attrs={

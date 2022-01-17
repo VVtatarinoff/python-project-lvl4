@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.translation import gettext as _
 
-from .forms import CreateStatusForm
+from .forms import StatusForm
 from task_manager.mixins import LoginRequiredMessage
 from task_manager.models import Status
 
@@ -53,7 +53,7 @@ class Statuses(LoginRequiredMessage, ListView):
 
 
 class CreateStatus(LoginRequiredMessage, SuccessMessageMixin, CreateView):
-    form_class = CreateStatusForm
+    form_class = StatusForm
     template_name = 'form_view.html'
     model = Status
     success_url = reverse_lazy(LIST_VIEW)
@@ -67,7 +67,7 @@ class CreateStatus(LoginRequiredMessage, SuccessMessageMixin, CreateView):
 
 
 class UpdateStatus(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
-    form_class = CreateStatusForm
+    form_class = StatusForm
     template_name = 'form_view.html'
     model = Status
     success_url = reverse_lazy(LIST_VIEW)

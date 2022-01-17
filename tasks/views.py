@@ -11,7 +11,7 @@ from django.views.generic import (DetailView, ListView,
                                   CreateView, DeleteView, UpdateView)
 from django.utils.translation import gettext as _
 
-from .forms import CreateTaskForm, TaskFilter
+from .forms import TaskForm, TaskFilter
 from task_manager.mixins import LoginRequiredMessage
 from task_manager.models import Task
 
@@ -39,7 +39,7 @@ TABLE_HEADS = ('ID', _('Name'), _('Status'), _('Author'),
 
 
 class CreateTask(LoginRequiredMessage, SuccessMessageMixin, CreateView):
-    form_class = CreateTaskForm
+    form_class = TaskForm
     template_name = 'form_view.html'
     model = Task
     success_url = reverse_lazy(LIST_VIEW)
@@ -108,7 +108,7 @@ class TasksDetail(LoginRequiredMessage, DetailView):
 
 
 class UpdateTask(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
-    form_class = CreateTaskForm
+    form_class = TaskForm
     template_name = 'form_view.html'
     model = Task
     success_url = reverse_lazy(LIST_VIEW)

@@ -9,7 +9,7 @@ from task_manager.models import Label
 logger = logging.getLogger(__name__)
 
 
-class CreateLabelForm(ModelForm):
+class LabelForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': _('Name')}),

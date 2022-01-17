@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.translation import gettext as _
 
-from labels.forms import CreateLabelForm
+from labels.forms import LabelForm
 from task_manager.models import Label
 from task_manager.mixins import LoginRequiredMessage
 
@@ -53,7 +53,7 @@ class Labels(LoginRequiredMessage, ListView):
 
 
 class CreateLabel(LoginRequiredMessage, SuccessMessageMixin, CreateView):
-    form_class = CreateLabelForm
+    form_class = LabelForm
     template_name = 'form_view.html'
     model = Label
     success_url = reverse_lazy(LIST_VIEW)
@@ -67,7 +67,7 @@ class CreateLabel(LoginRequiredMessage, SuccessMessageMixin, CreateView):
 
 
 class UpdateLabel(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
-    form_class = CreateLabelForm
+    form_class = LabelForm
     template_name = 'form_view.html'
     model = Label
     success_url = reverse_lazy(LIST_VIEW)
