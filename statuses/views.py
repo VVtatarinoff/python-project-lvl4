@@ -10,7 +10,7 @@ from django.utils.translation import gettext as _
 
 from .forms import StatusForm
 from task_manager.mixins import LoginRequiredMessage
-from task_manager.models import Status
+from statuses.models import Status
 
 logger = logging.getLogger(__name__)
 

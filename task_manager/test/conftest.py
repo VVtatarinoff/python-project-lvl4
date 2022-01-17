@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.urls import reverse
 
-from task_manager.models import Label, Task, Status
+from tasks.models import Task
+from statuses.models import Status
+from labels.models import Label
 from task_manager.test.fixtures.db_fixtures import LABELS_TEST
 from task_manager.test.fixtures.db_fixtures import TASKS_TEST
 from task_manager.test.fixtures.db_fixtures import USERS_TEST

@@ -5,7 +5,7 @@ import logging
 from django.urls import reverse
 from django.db.models import Q
 
-from task_manager.models import Task
+from tasks.models import Task
 from task_manager.test.fixtures.db_fixtures import NEW_TASK
 from tasks.views import (CREATE_VIEW, LIST_VIEW, UPDATE_VIEW,
                          DELETE_VIEW, DETAIL_VIEW)

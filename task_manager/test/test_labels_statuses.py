@@ -4,7 +4,8 @@ from django.urls import reverse
 
 import statuses.views
 import labels.views
-from task_manager.models import Status, Label
+from statuses.models import Status
+from labels.models import Label
 
 TEST_CONFIGURATIONS = [(Label, labels.views), (Status, statuses.views)]
 

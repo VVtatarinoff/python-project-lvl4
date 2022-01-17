@@ -9,7 +9,9 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 from django_filters import filters
 
-from task_manager.models import Label, Task, Status
+from tasks.models import Task
+from statuses.models import Status
+from labels.models import Label
 
 logger = logging.getLogger(__name__)
 

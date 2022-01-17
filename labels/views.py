@@ -9,7 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.translation import gettext as _
 
 from labels.forms import LabelForm
-from task_manager.models import Label
+from labels.models import Label
 from task_manager.mixins import LoginRequiredMessage
 
 logger = logging.getLogger(__name__)
