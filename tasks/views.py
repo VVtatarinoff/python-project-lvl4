@@ -2,16 +2,14 @@ import logging
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Q, Value, RestrictedError
+from django.db.models import Value, RestrictedError
 from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import (FormView, DetailView, ListView,
+from django.views.generic import (DetailView, ListView,
                                   CreateView, DeleteView, UpdateView)
 from django.utils.translation import gettext as _
-
-import django_filters
 
 from .forms import CreateTaskForm, TaskFilter
 from task_manager.mixins import LoginRequiredMessage

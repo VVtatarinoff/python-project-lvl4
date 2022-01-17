@@ -9,7 +9,7 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 from django_filters import filters
 
-from task_manager.models import Status, Label, Task
+from task_manager.models import Label, Task
 
 logger = logging.getLogger(__name__)
 
@@ -52,56 +52,6 @@ class CreateTaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ('name', 'description', 'status', 'executor', 'labels')
-
-"""
-class FilterTaskForm(ModelForm):
-    EMPTY = [('', '-------------')]
-
-    def __init__(self, *args, **kwargs):
-        super(FilterTaskForm, self).__init__(*args, **kwargs)
-        form_class = {'class': 'form-control'}
-        st_choices = self.EMPTY + list(
-            Status.objects.values_list('id', 'name', named=True).all())
-        self.fields['status'] = \
-            forms.ChoiceField(label=_('Status'), required=False,
-                              widget=forms.Select(attrs=form_class),
-                              choices=st_choices,
-                              initial=kwargs['initial']['status'])
-        ex_choices = self.EMPTY + list(User.objects.values_list(
-            'id', Concat('first_name', Value(' '), 'last_name'),
-            named=True).all())
-        self.fields['executor'] = \
-            forms.ChoiceField(label=_('Executor'), required=False,
-                              widget=forms.Select(
-                                  attrs=form_class),
-                              choices=ex_choices,
-                              initial=kwargs['initial']
-                              ['executor'])
-        lbl_choices = self.EMPTY + list(
-            Label.objects.values_list('id',
-                                      'name',
-                                      named=True).all())
-        self.fields['labels'] = forms.ChoiceField(label=_('Label'),
-                                                  required=False,
-                                                  widget=forms.Select(
-                                                      attrs=form_class, ),
-                                                  choices=lbl_choices,
-                                                  initial=kwargs['initial']
-                                                  ['labels'])
-        self.fields['self_tasks'] = \
-            forms.BooleanField(label=_('Only my tasks'),
-                               required=False,
-                               widget=forms.CheckboxInput(
-                                   attrs={
-                                       'class': 'form-check-input',
-                                       'name': 'self_tasks'}),
-                               initial=False)
-
-    class Meta:
-        model = Task
-        fields = ('status', 'executor', 'labels')
-
-"""
 
 
 class TaskFilter(django_filters.FilterSet):
