@@ -1,11 +1,13 @@
 import logging
 
+import django_filters
 from django import forms
 from django.db.models import Value
 from django.db.models.functions import Concat
 from django.forms import ModelForm
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
+from django_filters import filters
 
 from task_manager.models import Status, Label, Task
 
@@ -51,7 +53,7 @@ class CreateTaskForm(ModelForm):
         model = Task
         fields = ('name', 'description', 'status', 'executor', 'labels')
 
-
+"""
 class FilterTaskForm(ModelForm):
     EMPTY = [('', '-------------')]
 
@@ -98,3 +100,33 @@ class FilterTaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ('status', 'executor', 'labels')
+
+"""
+
+
+class TaskFilter(django_filters.FilterSet):
+    lb_choices = Label.objects.values_list('id', 'name', named=True).all()
+    labels = filters.ChoiceFilter(choices=lb_choices)
+    ex_choices = User.objects.values_list(
+        'id', Concat('first_name', Value(' '), 'last_name'),
+        named=True).all()
+    executor = filters.ChoiceFilter(choices=ex_choices)
+    self_task = filters.BooleanFilter(label=_('Only my tasks'), widget=forms.CheckboxInput, method='filter_self', field_name='self_task')
+
+    def filter_self(self, queryset, name, value):
+        if value:
+            author = getattr(self.request, 'user', None)
+            queryset = queryset.filter(author=author)
+        return queryset
+
+    class Meta:
+        model = Task
+        fields = ['status', 'executor', 'labels']
+"""
+    @property
+    def qs(self):
+        parent = super().qs
+        author = getattr(self.request, 'user', None)
+
+        return parent.filter(author=author)
+"""

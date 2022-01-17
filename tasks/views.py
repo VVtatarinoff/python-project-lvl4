@@ -11,7 +11,9 @@ from django.views.generic import (FormView, DetailView, ListView,
                                   CreateView, DeleteView, UpdateView)
 from django.utils.translation import gettext as _
 
-from .forms import CreateTaskForm, FilterTaskForm
+import django_filters
+
+from .forms import CreateTaskForm, TaskFilter
 from task_manager.mixins import LoginRequiredMessage
 from task_manager.models import Task
 
@@ -35,7 +37,7 @@ MESSAGE_CREATE_SUCCESS = _('Task was successfully created')
 DELETE_CONSTRAINT_MESSAGE = _('The task may be deleted only by author')
 QUESTION_DELETE = _('Are you sure you want to delete')
 
-
+"""
 class FilterTaskMixin(LoginRequiredMessage, FormView):
     model = Task
     form_class = FilterTaskForm
@@ -99,7 +101,7 @@ class Tasks(FilterTaskMixin, ListView):
         context['detail'] = 2
         context['detail_path'] = DETAIL_VIEW
         return context
-
+"""
 
 class CreateTask(LoginRequiredMessage, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
@@ -191,3 +193,33 @@ class UpdateTask(LoginRequiredMessage, SuccessMessageMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs['id'] = self.get_object().author_id
         return kwargs
+
+
+class Tasks(ListView):
+    template_name = 'tasks/tasks_table.html'
+    model = Task
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = LIST_TITLE
+        context['table_heads'] = ('ID', _('Name'), _('Status'), _('Author'),
+                                  _('Executor'), _('Creation date'))
+        context['create_path_name'] = CREATE_TITLE
+        context['create_path'] = CREATE_VIEW
+        context['update_link'] = UPDATE_VIEW
+        context['delete_link'] = DELETE_VIEW
+        context['detail'] = 2
+        context['detail_path'] = DETAIL_VIEW
+        context['filter'] = TaskFilter(self.request.GET, request=self.request, queryset=self.get_queryset())
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        return Task.objects.values_list('id', 'name', 'status__name',
+                                        Concat('author__first_name',
+                                               Value(' '),
+                                               'author__last_name'),
+                                        Concat('executor__first_name',
+                                               Value(' '),
+                                               'executor__last_name'),
+                                        'creation_date',
+                                        named=True)
