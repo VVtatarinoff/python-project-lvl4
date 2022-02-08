@@ -23,10 +23,6 @@ services:
       - "8000:8000"
     environment:
       - SECRET_KEY='your secret here there'
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=mydb
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
     depends_on:
       - db
