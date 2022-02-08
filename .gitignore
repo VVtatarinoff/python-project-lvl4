@@ -9,3 +9,4 @@ __pycache__/
 .coverage
 test.html
 copybase.html
+data/

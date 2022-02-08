@@ -1,0 +1,13 @@
+.venv/
+.idea/
+.env/
+.env
+*.sqlite3
+*.pyc
+__pycache__/
+.run
+.coverage
+test.html
+copybase.html
+*tests/
+data/

@@ -1,12 +1,33 @@
-version: '3.8'
+version: "3.3"
 
 services:
-  web:
-    build: ./
-    command: python manage.py runserver 0.0.0.0:8000
+  db:
+    image: postgres
+    restart: always
     volumes:
-      - ./app/:/usr/src/app/
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
-      - 8000:8000
-    env_file:
-      - ./.env
+      - 5432:5432
+  web:
+    container_name: django_task_manager
+    build: .
+    command: bash -c "python manage.py migrate --noinput && 
+              python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY='your secret here there'
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mydb
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+    depends_on:
+      - db
+

@@ -36,7 +36,8 @@ DEBUG = (os.getenv('DEBUG') == 'True')
 ALLOWED_HOSTS = ['localhost',
                  'ancient-gorge-78100.herokuapp.com',
                  'www.ancient-gorge-78100.herokuapp.com',
-                 '127.0.0.1']
+                 '127.0.0.1',
+                 '0.0.0.0']
 CSRF_TRUSTED_ORIGINS = ['http://webserver:9000']
 # Application definition
 
