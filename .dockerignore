@@ -11,3 +11,6 @@ test.html
 copybase.html
 *tests/
 data/
+README.md
+poetry.lock
+pyproject.toml
