@@ -10,3 +10,8 @@ class Label(models.Model):
 
     def get_full_name(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Метки'
+        verbose_name_plural = 'Метки'
+        ordering = ['id']

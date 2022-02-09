@@ -14,12 +14,16 @@ Task manager is a tool to help tracking progress and statuses other various task
 to install locally you should clone the repository:
 ##### python3 -m pip install --user git+https://github.com/VVtatarinoff/python-project-lvl4
 
-After this the file ".env" should be created in root directory
+You could launch the project either in docker or locally:
+###### To start locally:
+The file ".env" should be created in root directory
 You should list there local variables:
     SECRET_KEY='your secret here there'
     ENGINE='django.db.backends.sqlite3' - if you want to use sqlite
     DB_NAME='db.sqlite3'    -name of the database 
     DEBUG=True   - if you want to enter a debug environment
+to install dependencies:
+    pip install -r requirements.txt
 
 After creation of .env file the migration should be started by two commands:
 python manage.py makemigrations
@@ -29,6 +33,9 @@ To launch the program:
 python manage.py runserver
 
 usually it started at address http://127.0.0.1:8000/
+###### To start in docker:
+Check the instructions in docker folder
+
 
 This project was built using these tools:
 
@@ -38,3 +45,4 @@ This project was built using these tools:
 | [poetry](https://poetry.eustace.io/)         | "Python dependency management and packaging made easy"  |
 | [flake](https://flake8.pycqa.org/en/latest/) | "Tool For Style Guide Enforcement"                      |
 | [pytest](https://pytest.org/en/latest/)      | "Helps you write better programs"                       |
+| [docker](https://www.docker.com/)            | "Developers Love Docker.Businesses Trust It."   

@@ -15,6 +15,7 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
+    tty: true
     command: docker/start.sh
     ports:
       - "8000:8000"

@@ -10,3 +10,8 @@ class Status(models.Model):
 
     def get_full_name(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Статусы'
+        verbose_name_plural = 'Статусы'
+        ordering = ['id']
