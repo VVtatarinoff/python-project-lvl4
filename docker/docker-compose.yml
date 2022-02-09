@@ -6,10 +6,8 @@ services:
     restart: always
     volumes:
       - postgres_tm:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env_example
     ports:
       - 5432:5432
   web:
@@ -20,9 +18,8 @@ services:
     command: docker/start.sh
     ports:
       - "8000:8000"
-    environment:
-      - SECRET_KEY='your secret here there'
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+    env_file:
+      - .env_example
     depends_on:
       - db
 
