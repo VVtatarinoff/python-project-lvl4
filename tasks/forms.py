@@ -57,8 +57,7 @@ class TaskForm(ModelForm):
 
 
 class TaskFilter(django_filters.FilterSet):
-    st_choices = Status.objects.values_list('id',
-                                            'name', named=True).all()
+    st_choices = Status.objects.values_list('id', 'name', named=True).all()
     status = filters.ChoiceFilter(label=_('Status'),
                                   choices=st_choices)
     lb_choices = Label.objects.values_list('id', 'name', named=True).all()
